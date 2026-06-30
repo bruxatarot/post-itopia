@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Post-itopia 🌈✨</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pink:#f9c8d8;--yellow:#fff3b8;--blue:#c8e4f8;--lavender:#e2d4f8;
+  --mint:#c8f0dc;--peach:#ffd8c0;--cork:#e8d5b0;--cork-dark:#d4bc8e;
+  --text:#5a4a6a;--text-soft:#8a7a9a;--radius-note:14px;--font:'Nunito',sans-serif;
+}
+html,body{height:100%;width:100%}
+body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100vh;overflow-x:hidden}
+
+.screen{display:none;width:100%;min-height:100vh;flex-direction:column}
+.screen.active{display:flex}
+
+/* Header */
+.site-header{background:linear-gradient(135deg,#fce4ec 0%,#f3e5f5 40%,#e8eaf6 100%);border-bottom:2px dashed #e0c8e8;padding:1.2rem 2rem 1rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.header-left{display:flex;align-items:center;gap:1rem}
+.logo{display:flex;align-items:center;gap:.5rem}
+.logo-icon{font-size:2rem}
+.logo-text{font-size:1.6rem;font-weight:800;background:linear-gradient(135deg,#f48fb1,#ce93d8,#90caf9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.tagline{font-size:.85rem;color:var(--text-soft);font-weight:600}
+.header-right{display:flex;gap:1rem;align-items:center}
+.btn{padding:0.5rem 1rem;border-radius:50px;border:none;font-family:var(--font);font-weight:700;cursor:pointer;transition:transform .15s,box-shadow .15s;font-size:0.9rem}
+.btn-primary{background:linear-gradient(135deg,#ce93d8,#90caf9);color:white;box-shadow:0 4px 12px rgba(180,130,220,.3)}
+.btn-primary:hover{transform:translateY(-2px) scale(1.04);box-shadow:0 6px 16px rgba(180,130,220,.4)}
+.btn-secondary{background:var(--pink);color:#c06090;border:2px solid #f0a8c0;padding:0.4rem 0.8rem;font-size:0.85rem}
+.btn-secondary:hover{transform:scale(1.06);box-shadow:0 4px 12px rgba(240,168,192,.4)}
+.user-info{display:flex;align-items:center;gap:0.8rem;font-size:0.9rem}
+.user-name{font-weight:700;color:var(--text)}
+.mood-badge{font-size:1.2rem}
+
+/* Main content */
+.main-content{flex:1;display:flex;flex-direction:column;padding:1.5rem 2rem;max-width:1200px;margin:0 auto;width:100%}
+
+/* Filter bar */
+.filter-bar{background:white;border:2px solid #e8d0f0;border-radius:16px;padding:1rem;display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;margin-bottom:1.5rem}
+.filter-label{font-size:0.85rem;font-weight:700;color:var(--text-soft)}
+.filter-btn{background:white;border:2px solid #e8d0f0;border-radius:50px;padding:0.3rem 0.85rem;font-family:var(--font);font-size:0.8rem;font-weight:700;color:var(--text-soft);cursor:pointer;transition:all .15s}
+.filter-btn:hover{border-color:#c090e0;color:var(--text)}
+.filter-btn.active{background:var(--lavender);border-color:#c090e0;color:var(--text)}
+
+/* Corkboard */
+.corkboard{background:var(--cork);border-radius:24px;border:3px solid var(--cork-dark);padding:1.5rem;min-height:400px;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.2rem;align-content:start;position:relative}
+
+/* Post-it note */
+.note-card{position:relative;border-radius:var(--radius-note);padding:1.1rem 1rem 1.5rem;min-height:170px;box-shadow:3px 4px 12px rgba(0,0,0,.13);transform:rotate(var(--rot,0deg));transition:transform .2s,box-shadow .2s;cursor:pointer;display:flex;flex-direction:column;gap:.5rem;animation:dropIn .4s cubic-bezier(.34,1.56,.64,1)}
+.note-card::before{content:'';position:absolute;top:0;left:0;right:0;height:28px;background:rgba(255,255,255,.28);border-radius:var(--radius-note) var(--radius-note) 0 0}
+.note-card::after{content:'';position:absolute;bottom:0;right:0;width:22px;height:22px;background:rgba(0,0,0,.06);clip-path:polygon(100% 0,100% 100%,0 100%);border-radius:0 0 var(--radius-note) 0}
+.note-card:hover{transform:rotate(0deg) scale(1.03) translateY(-4px);box-shadow:5px 8px 22px rgba(0,0,0,.18);z-index:10}
+.note-card.hidden{display:none}
+.note-mood-emoji{font-size:1.6rem;line-height:1}
+.note-text{font-size:.88rem;font-weight:600;color:#4a3a5a;line-height:1.5;flex:1;word-break:break-word}
+.note-footer{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:0.5rem;border-top:1px solid rgba(0,0,0,.08)}
+.note-author{font-size:.72rem;font-weight:700;color:rgba(80,60,100,.5)}
+.note-reactions{display:flex;gap:.3rem}
+.reaction-sticker{font-size:1rem;cursor:pointer;transition:transform .15s;line-height:1}
+.reaction-sticker:hover{transform:scale(1.3)}
+.note-pin{position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ff9ea0,#e05060);box-shadow:0 2px 4px rgba(0,0,0,.25);z-index:2}
+
+/* Modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(200,160,220,.4);backdrop-filter:blur(8px);z-index:100;align-items:center;justify-content:center;padding:1rem}
+.modal-overlay.active{display:flex}
+.modal-card{background:white;border-radius:24px;padding:2rem;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;position:relative;border:2px solid #e8d0f0;animation:popIn .35s cubic-bezier(.34,1.56,.64,1)}
+.modal-close{position:absolute;top:1rem;right:1.2rem;background:none;border:none;font-size:1.5rem;cursor:pointer;color:#c0a0d0;font-weight:700;line-height:1}
+.modal-close:hover{color:#9060b0}
+.modal-title{font-size:1.3rem;font-weight:800;color:var(--text);margin-bottom:1rem;text-align:center}
+.postiboo-writer{position:absolute;top:-52px;right:2rem;font-size:2.8rem;animation:float 2.5s ease-in-out infinite;pointer-events:none;user-select:none;z-index:5}
+
+/* Mood grid */
+.mood-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-bottom:1.2rem}
+.mood-btn{display:flex;flex-direction:column;align-items:center;gap:.2rem;padding:.5rem .3rem;border-radius:14px;border:2px solid transparent;background:var(--lavender);cursor:pointer;font-family:var(--font);font-size:1.4rem;transition:transform .15s,border-color .15s}
+.mood-btn span{font-size:.65rem;font-weight:700;color:var(--text-soft);line-height:1}
+.mood-btn:hover{transform:scale(1.08)}
+.mood-btn.selected{border-color:#c090e0;background:var(--pink);transform:scale(1.1);box-shadow:0 4px 12px rgba(200,150,220,.3)}
+
+/* Text area */
+.prompt-text{font-size:.9rem;font-weight:700;color:#b080d0;margin-bottom:.5rem}
+.modal-textarea{width:100%;height:110px;border:2px solid #e8d0f0;border-radius:14px;padding:.8rem;font-family:var(--font);font-size:.95rem;color:var(--text);resize:none;outline:none;transition:border-color .2s;background:#fdfaff}
+.modal-textarea:focus{border-color:#c090e0}
+.char-count{text-align:right;font-size:.75rem;color:#c0a8d8;margin-top:.3rem}
+
+/* Response type */
+.section-label{font-size:.85rem;font-weight:700;color:var(--text-soft);margin-bottom:.5rem;margin-top:1rem}
+.response-options{display:flex;flex-wrap:wrap;gap:.4rem}
+.resp-opt{background:#f8f0ff;border:2px solid #e0caf8;border-radius:50px;padding:.3rem .8rem;font-size:.8rem;font-weight:600;color:var(--text);cursor:pointer;display:flex;align-items:center;gap:.3rem;transition:all .15s}
+.resp-opt:has(input:checked){background:var(--lavender);border-color:#c090e0}
+.resp-opt input{display:none}
+
+/* Modal footer */
+.modal-footer{display:flex;align-items:center;justify-content:space-between;margin-top:1.5rem;gap:1rem;flex-wrap:wrap}
+.anon-toggle{font-size:.85rem;font-weight:600;color:var(--text-soft);display:flex;align-items:center;gap:.4rem;cursor:pointer}
+.anon-toggle input{accent-color:#c090e0}
+.btn-drop{background:linear-gradient(135deg,#f48fb1,#ce93d8);border:none;color:white;padding:.65rem 1.6rem;border-radius:50px;font-family:var(--font);font-weight:800;cursor:pointer;box-shadow:0 4px 14px rgba(240,100,160,.35);transition:transform .15s,box-shadow .15s}
+.btn-drop:hover{transform:translateY(-2px) scale(1.04);box-shadow:0 6px 20px rgba(240,100,160,.45)}
+
+/* Auth modal */
+.auth-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:white;border-radius:24px;padding:2rem;border:2px solid #e8d0f0;z-index:150;max-width:400px;width:90%;box-shadow:0 10px 40px rgba(0,0,0,.2);display:none}
+.auth-modal.active{display:block}
+.auth-form{display:flex;flex-direction:column;gap:1rem;margin-bottom:1rem}
+.auth-input{padding:.8rem;border:2px solid #e8d0f0;border-radius:12px;font-family:var(--font);font-size:.95rem;outline:none;transition:border-color .2s}
+.auth-input:focus{border-color:#c090e0}
+.auth-error{color:#e05060;font-size:.85rem;margin:0.5rem 0;display:none}
+.auth-toggle{text-align:center;font-size:.9rem;color:var(--text-soft);margin-top:1rem}
+.auth-toggle button{background:none;border:none;color:#c090e0;font-weight:700;cursor:pointer;text-decoration:underline}
+
+/* Response modal */
+.response-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:white;border-radius:20px;padding:2rem;border:2px solid #e8d0f0;z-index:150;max-width:400px;width:90%;box-shadow:0 10px 40px rgba(0,0,0,.2);display:none}
+.response-modal.active{display:block}
+.response-option{padding:1rem;background:#f8f0ff;border:2px solid #e8d0f0;border-radius:12px;margin-bottom:.8rem;cursor:pointer;transition:all .15s}
+.response-option:hover{background:var(--lavender);border-color:#c090e0}
+.response-option strong{color:var(--text);display:block;margin-bottom:.3rem}
+.response-option small{color:var(--text-soft)}
+
+/* Animations */
+@keyframes dropIn{0%{transform:translateY(-40px) rotate(var(--rot,0deg));opacity:0}100%{transform:translateY(0) rotate(var(--rot,0deg));opacity:1}}
+@keyframes popIn{0%{transform:scale(.7);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes float{0%,100%{transform:translateY(0px) rotate(-3deg)}50%{transform:translateY(-8px) rotate(3deg)}}
+
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-thumb{background:#e0c8f0;border-radius:10px}
+
+@media(max-width:600px){
+  .site-header{flex-direction:column;gap:1rem;text-align:center}
+  .logo-text{font-size:1.4rem}
+  .tagline{display:none}
+  .mood-grid{grid-template-columns:repeat(3,1fr)}
+  .modal-card{padding:1.5rem 1.2rem}
+  .corkboard{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));padding:1rem;gap:.8rem}
+}
+</style>
+</head>
+<body>
+
+<!-- MAIN SCREEN -->
+<div class="screen active" id="mainScreen">
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-left">
+      <div class="logo">
+        <span class="logo-icon">🌈</span>
+        <span class="logo-text">Post-itopia</span>
+      </div>
+      <div class="tagline">Tu rinconcito emocional pastel.</div>
+    </div>
+    <div class="header-right">
+      <button class="btn btn-primary" id="newNoteBtn">+ Drop it</button>
+      <button class="btn btn-secondary" id="profileBtn">👤 Perfil</button>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <div class="main-content">
+    <!-- Filter bar -->
+    <div class="filter-bar">
+      <span class="filter-label">Mood:</span>
+      <button class="filter-btn active" data-filter="all">Todas ✨</button>
+      <button class="filter-btn" data-filter="sad">😔 Sad</button>
+      <button class="filter-btn" data-filter="calm">😌 Calm</button>
+      <button class="filter-btn" data-filter="hopeful">🌈 Hopeful</button>
+      <button class="filter-btn" data-filter="grateful">✨ Grateful</button>
+      <button class="filter-btn" data-filter="motivated">🔥 Motivated</button>
+    </div>
+
+    <!-- Corkboard -->
+    <div class="corkboard" id="corkboard"></div>
+  </div>
+</div>
+
+<!-- CREATE NOTE MODAL -->
+<div class="modal-overlay" id="createNoteModal">
+  <div class="modal-card">
+    <button class="modal-close" id="closeCreateModal">×</button>
+    <div class="postiboo-writer" id="postibooWriter"></div>
+    <h2 class="modal-title">¿Cómo te sientes hoy?</h2>
+
+    <div class="mood-grid" id="moodGrid"></div>
+
+    <div class="note-prompt">
+      <p class="prompt-text" id="promptText">Cuéntale a tu notita qué pasó… 💛</p>
+      <textarea class="modal-textarea" id="noteText" placeholder="Escribe aquí, este es tu espacio seguro…" maxlength="280"></textarea>
+      <div class="char-count"><span id="charCount">0</span>/280</div>
+    </div>
+
+    <div class="response-type">
+      <p class="section-label">¿Qué tipo de compañía quieres?</p>
+      <div class="response-options">
+        <label class="resp-opt"><input type="radio" name="respType" value="apoyo" checked/> 💞 Solo apoyo</label>
+        <label class="resp-opt"><input type="radio" name="respType" value="consejos"/> 🌱 Consejos suaves</label>
+        <label class="resp-opt"><input type="radio" name="respType" value="historias"/> 🫂 Historias similares</label>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <label class="anon-toggle"><input type="checkbox" id="anonCheck" checked/> Anónima 🫧</label>
+      <button class="btn-drop" id="dropBtn">Drop it ✨</button>
+    </div>
+  </div>
+</div>
+
+<!-- AUTH MODAL (para login/registro) -->
+<div class="auth-modal" id="authModal">
+  <div style="position:relative">
+    <button class="modal-close" onclick="closeAuthModal()">×</button>
+    <h2 class="modal-title">Mi perfil</h2>
+    <div id="authContent"></div>
+  </div>
+</div>
+
+<!-- RESPONSE MODAL -->
+<div class="response-modal" id="responseModal">
+  <button class="modal-close" onclick="closeResponseModal()">×</button>
+  <h3 id="responseTitle" style="margin-bottom:1rem;color:var(--text);font-size:1.1rem"></h3>
+  <p id="responseText" style="margin-bottom:1.5rem;color:var(--text);line-height:1.6"></p>
+  <div id="responseOptions"></div>
+</div>
+
+<script>
+const JSONBIN_ID='6a43ff66da38895dfe174ee1';
+const JSONBIN_KEY='$2a$.MPz.hKIGgyMouTFoHGu9udCba9WU7b96ecbeHmz3m6Ha0lHbphSG';
+const API_URL=`https://api.jsonbin.io/v3/b/${JSONBIN_ID}`;
+
+const MOOD_COLORS={calm:'#c8f0dc',sad:'#b3c6e8',overwhelmed:'#e8c3e8',angry:'#f4b8b8',confused:'#ffd9a8',lonely:'#dce8f0',anxious:'#c9d4f0',grateful:'#fff0b8',motivated:'#ffe0b8',drained:'#cfd8dc',hopeful:'#b8eaf4'};
+const MOOD_EMOJIS={calm:'😌',sad:'😔',overwhelmed:'😵',angry:'😡',confused:'😕',lonely:'🤍',anxious:'🧿',grateful:'✨',motivated:'🔥',drained:'🌧️',hopeful:'🌈'};
+const PROMPTS={sad:'¿Qué te apachurró el corazón hoy? 💙',calm:'Qué bien que estés tranqui… ¿qué te dio paz hoy? 🌿',overwhelmed:'Respira. Cuéntale a tu notita qué te tiene así 💜',angry:'¿Qué te hizo enojar? Aquí puedes soltarlo todo 🔴',confused:'¿Qué te tiene con la cabeza hecha bola? 🌀',lonely:'No estás sola/solo. Cuéntame qué sientes 🤍',anxious:'Respira suavito. ¿Qué te está preocupando? 🫧',grateful:'¡Qué bonito! ¿Qué te hizo sonreír hoy? ✨',motivated:'¡Eso! ¿Qué te está llenando de energía? 🔥',drained:'Está bien descansar. ¿Qué te dejó sin pilas? 🌧️',hopeful:'Se siente bien tener esperanza 🌈 ¿Qué la generó?'};
+const RESPONSES_PACK={apoyo:['🐻 Estoy contigo','☁️ Respira conmigo','🐥 Yo también pasé por eso','⭐ Lo estás haciendo bien'],consejos:['🌱 Un paso a la vez','🫧 Habla con alguien de confianza','🌸 Date un momento para ti','✨ Está bien pedir ayuda'],historias:['🫂 Una vez yo también…','💜 Pasé algo similar','🌈 Salí adelante, tú puedes','🐣 No eres la única']};
+const POSTIBOO=`<svg width="56" height="62" viewBox="0 0 56 62" xmlns="http://www.w3.org/2000/svg"><ellipse cx="8" cy="34" rx="9" ry="6" fill="#fde68a" opacity=".85"/><ellipse cx="48" cy="34" rx="9" ry="6" fill="#fde68a" opacity=".85"/><rect x="10" y="12" width="36" height="36" rx="10" fill="#fef08a"/><rect x="10" y="12" width="36" height="36" rx="10" fill="none" stroke="#fbbf24" stroke-width="1.5"/><polygon points="38,12 46,12 46,20" fill="#fde047"/><line x1="38" y1="12" x2="46" y2="20" stroke="#fbbf24" stroke-width="1"/><ellipse cx="21" cy="32" rx="4.5" ry="5" fill="white"/><ellipse cx="35" cy="32" rx="4.5" ry="5" fill="white"/><circle cx="22" cy="32" r="2.5" fill="#3b2a4a"/><circle cx="36" cy="32" r="2.5" fill="#3b2a4a"/><circle cx="23" cy="31" r="1" fill="white"/><circle cx="37" cy="31" r="1" fill="white"/><ellipse cx="17" cy="38" rx="4" ry="2.5" fill="#fda4af" opacity=".6"/><ellipse cx="39" cy="38" rx="4" ry="2.5" fill="#fda4af" opacity=".6"/><path d="M23 41 Q28 45 33 41" stroke="#a16207" stroke-width="1.5" fill="none" stroke-linecap="round"/><line x1="28" y1="12" x2="28" y2="6" stroke="#fbbf24" stroke-width="1.5"/><circle cx="28" cy="5" r="2.5" fill="#f472b6"/></svg>`;
+const ROTS=[-3,-1.5,0,1.5,2.5,-2,1,-1,3,-2.5];
+
+let data={users:[],notes:[]};
+let currentUser=null;
+let selectedMood=null;
+let currentFilter='all';
+let isAuthLogin=true;
+
+async function fetchData(){
+  try{
+    const res=await fetch(API_URL,{headers:{'X-Access-Key':JSONBIN_KEY}});
+    const json=await res.json();
+    data=json.record||{users:[],notes:[]};
+    return data;
+  }catch(e){console.error('Fetch error:',e);return data}
+}
+
+async function saveData(){
+  try{
+    await fetch(API_URL,{
+      method:'PUT',
+      headers:{'Content-Type':'application/json','X-Access-Key':JSONBIN_KEY},
+      body:JSON.stringify(data)
+    });
+  }catch(e){console.error('Save error:',e)}
+}
+
+function hashPassword(p){
+  let h=0;for(let i=0;i<p.length;i++){h=((h<<5)-h)+p.charCodeAt(i);h=h&h}
+  return h.toString(36);
+}
+
+async function init(){
+  await fetchData();
+  renderMoodGrid();
+  document.getElementById('postibooWriter').innerHTML=POSTIBOO;
+
+  document.getElementById('newNoteBtn').onclick=()=>document.getElementById('createNoteModal').classList.add('active');
+  document.getElementById('closeCreateModal').onclick=()=>closeCreateModal();
+  document.getElementById('createNoteModal').onclick=(e)=>{
+    if(e.target===document.getElementById('createNoteModal'))closeCreateModal();
+  };
+
+  document.getElementById('profileBtn').onclick=showProfileModal;
+
+  document.getElementById('noteText').oninput=function(){document.getElementById('charCount').textContent=this.value.length};
+  document.getElementById('dropBtn').onclick=dropNote;
+
+  document.querySelectorAll('.filter-btn').forEach(btn=>{
+    btn.onclick=()=>{
+      document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter=btn.dataset.filter;
+      renderFeed();
+    };
+  });
+
+  checkSession();
+  renderFeed();
+}
+
+function checkSession(){
+  const u=localStorage.getItem('postopia_user');
+  if(u){
+    currentUser=JSON.parse(u);
+    updateProfileButton();
+  }
+}
+
+function updateProfileButton(){
+  const btn=document.getElementById('profileBtn');
+  if(currentUser){
+    btn.textContent='👤 '+currentUser.username;
+  }else{
+    btn.textContent='👤 Entrar';
+  }
+}
+
+function showProfileModal(){
+  const modal=document.getElementById('authModal');
+  const content=document.getElementById('authContent');
+
+  if(currentUser){
+    // Usuario logueado - mostrar dashboard
+    content.innerHTML=`
+      <div style="margin:1rem 0">
+        <p style="color:var(--text);margin-bottom:1rem">Hola, <strong>${currentUser.username}</strong></p>
+        <button onclick="logout()" class="btn btn-secondary" style="width:100%;margin-top:1rem">Salir</button>
+      </div>
+    `;
+  }else{
+    // No logueado - mostrar login/registro
+    content.innerHTML=`
+      <form id="authForm" style="display:flex;flex-direction:column;gap:1rem;margin:1rem 0">
+        <input class="auth-input" id="authUsername" type="text" placeholder="Tu nombre de usuario" required/>
+        <input class="auth-input" id="authPassword" type="password" placeholder="Contraseña" required/>
+        <button type="submit" class="btn btn-primary" style="width:100%">${isAuthLogin?'Entrar':'Crear cuenta'}</button>
+        <div id="authError" class="auth-error"></div>
+      </form>
+      <div class="auth-toggle">
+        ${isAuthLogin?'¿Sin cuenta?':'¿Ya tienes cuenta?'} <button type="button" onclick="toggleAuthMode()">Click aquí</button>
+      </div>
+    `;
+
+    document.getElementById('authForm').onsubmit=handleAuth;
+  }
+
+  modal.classList.add('active');
+}
+
+async function handleAuth(e){
+  e.preventDefault();
+  const un=document.getElementById('authUsername').value.trim();
+  const pw=document.getElementById('authPassword').value;
+  const err=document.getElementById('authError');
+
+  if(!un||!pw){err.textContent='Completa todos los campos';err.style.display='block';return}
+
+  if(isAuthLogin){
+    const u=data.users.find(x=>x.username===un);
+    if(!u||u.password!==hashPassword(pw)){
+      err.textContent='Usuario o contraseña incorrectos';
+      err.style.display='block';
+      return;
+    }
+    currentUser={id:u.id,username:u.username};
+  }else{
+    if(data.users.find(x=>x.username===un)){
+      err.textContent='Este usuario ya existe';
+      err.style.display='block';
+      return;
+    }
+    const newUser={id:Date.now().toString(),username:un,password:hashPassword(pw)};
+    data.users.push(newUser);
+    await saveData();
+    currentUser={id:newUser.id,username:newUser.username};
+  }
+
+  localStorage.setItem('postopia_user',JSON.stringify(currentUser));
+  updateProfileButton();
+  closeAuthModal();
+  renderFeed();
+}
+
+function toggleAuthMode(){
+  isAuthLogin=!isAuthLogin;
+  showProfileModal();
+}
+
+function closeAuthModal(){
+  document.getElementById('authModal').classList.remove('active');
+}
+
+function logout(){
+  localStorage.removeItem('postopia_user');
+  currentUser=null;
+  updateProfileButton();
+  closeAuthModal();
+  renderFeed();
+}
+
+function renderMoodGrid(){
+  const grid=document.getElementById('moodGrid');
+  grid.innerHTML='';
+  Object.entries(MOOD_EMOJIS).forEach(([mood,emoji])=>{
+    const btn=document.createElement('button');
+    btn.className='mood-btn';
+    btn.dataset.mood=mood;
+    btn.innerHTML=`${emoji}<span>${mood}</span>`;
+    btn.type='button';
+    btn.onclick=()=>{
+      document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedMood=mood;
+      document.getElementById('promptText').textContent=PROMPTS[mood];
+    };
+    grid.appendChild(btn);
+  });
+}
+
+function closeCreateModal(){
+  document.getElementById('createNoteModal').classList.remove('active');
+  selectedMood=null;
+  document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('selected'));
+  document.getElementById('noteText').value='';
+  document.getElementById('charCount').textContent='0';
+  document.getElementById('anonCheck').checked=true;
+  document.querySelector('input[name="respType"][value="apoyo"]').checked=true;
+}
+
+async function dropNote(){
+  const text=document.getElementById('noteText').value.trim();
+  if(!selectedMood){alert('Elige un mood');return}
+
+  const anon=document.getElementById('anonCheck').checked;
+  const respType=document.querySelector('input[name="respType"]:checked').value;
+
+  const note={
+    id:Date.now().toString(),
+    userId:currentUser?currentUser.id:null,
+    mood:selectedMood,
+    text:text||'…',
+    color:MOOD_COLORS[selectedMood],
+    emoji:MOOD_EMOJIS[selectedMood],
+    author:anon?'Anónima 🫧':(currentUser?currentUser.username:'Anónima 🫧'),
+    anonymous:anon,
+    timestamp:Date.now(),
+    responseType:respType,
+    responses:[],
+    rot:ROTS[data.notes.length%ROTS.length]
+  };
+
+  data.notes.unshift(note);
+  await saveData();
+  closeCreateModal();
+  renderFeed();
+}
+
+function renderFeed(){
+  const board=document.getElementById('corkboard');
+  board.innerHTML='';
+
+  let notes=data.notes;
+
+  if(currentFilter!=='all'){
+    notes=notes.filter(n=>n.mood===currentFilter);
+  }
+
+  notes.forEach(n=>{
+    const card=document.createElement('div');
+    card.className='note-card';
+    card.style.setProperty('--rot',n.rot+'deg');
+    card.style.background=n.color;
+
+    const pin=document.createElement('div');pin.className='note-pin';
+    const emoji=document.createElement('div');emoji.className='note-mood-emoji';emoji.textContent=n.emoji;
+    const text=document.createElement('p');text.className='note-text';text.textContent=n.text;
+
+    const footer=document.createElement('div');footer.className='note-footer';
+    const author=document.createElement('span');author.className='note-author';author.textContent=n.author;
+    const reactions=document.createElement('div');reactions.className='note-reactions';
+
+    const responseExamples=RESPONSES_PACK[n.responseType]||RESPONSES_PACK.apoyo;
+    responseExamples.slice(0,2).forEach(r=>{
+      const m=r.match(/^\p{Emoji}/u);
+      const emoji=m?m[0]:'💛';
+      const sp=document.createElement('span');
+      sp.className='reaction-sticker';
+      sp.textContent=emoji;
+      reactions.appendChild(sp);
+    });
+
+    footer.appendChild(author);
+    footer.appendChild(reactions);
+
+    card.appendChild(pin);
+    card.appendChild(emoji);
+    card.appendChild(text);
+    card.appendChild(footer);
+
+    card.onclick=()=>showResponseModal(n);
+
+    board.appendChild(card);
+  });
+}
+
+function showResponseModal(note){
+  const modal=document.getElementById('responseModal');
+  document.getElementById('responseTitle').textContent=`${note.emoji} ${note.author}`;
+  document.getElementById('responseText').textContent=note.text;
+
+  const options=document.getElementById('responseOptions');
+  options.innerHTML='';
+
+  const rp=RESPONSES_PACK[note.responseType]||RESPONSES_PACK.apoyo;
+  rp.forEach((txt)=>{
+    const opt=document.createElement('div');
+    opt.className='response-option';
+    const m=txt.match(/^\p{Emoji}/u);
+    opt.innerHTML=`<strong>${m?m[0]:'💛'}</strong><small>${txt}</small>`;
+    opt.onclick=async()=>{
+      const resp={id:Date.now().toString(),userId:currentUser?currentUser.id:null,text:txt,timestamp:Date.now()};
+      const noteIdx=data.notes.findIndex(n=>n.id===note.id);
+      if(noteIdx>=0){
+        data.notes[noteIdx].responses.push(resp);
+        await saveData();
+      }
+      closeResponseModal();
+      renderFeed();
+    };
+    options.appendChild(opt);
+  });
+
+  modal.classList.add('active');
+}
+
+function closeResponseModal(){
+  document.getElementById('responseModal').classList.remove('active');
+}
+
+document.addEventListener('DOMContentLoaded',init);
+</script>
+</body>
+</html>
