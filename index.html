@@ -218,6 +218,29 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
 
 .mascot-skin-heading{font-size:.8rem;font-weight:800;color:var(--text-soft);margin:.6rem 0 .4rem;padding-left:.2rem}
 
+/* Mascot outfit overlays (Posti-ropa) */
+.mascot-outfit-wrap{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.mascot-outfit-wrap svg{width:100%;height:100%}
+.outfit-item{position:absolute;font-size:.85em;line-height:1;pointer-events:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.2))}
+.outfit-hat{top:-8%;left:50%;transform:translateX(-50%);font-size:1em}
+.outfit-body{bottom:2%;right:0%;font-size:.75em}
+.outfit-accessory{bottom:2%;left:0%;font-size:.75em}
+
+/* Posti-ropa: prendas encima de la mascota */
+.mascot-outfit-wrap{position:relative;display:inline-block;width:100%;height:100%}
+.mascot-outfit-wrap svg{width:100%;height:100%}
+.outfit-item{position:absolute;font-size:0.9em;line-height:1;pointer-events:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.2))}
+.outfit-hat{top:-8%;left:50%;transform:translateX(-50%);font-size:1.1em}
+.outfit-body{bottom:6%;left:50%;transform:translateX(-50%);font-size:0.85em}
+.outfit-accessory{bottom:2%;right:-6%;font-size:0.8em}
+.season-tabs{display:flex;gap:.5rem;margin-bottom:.8rem}
+.season-tab{flex:1;padding:.5rem;border-radius:50px;border:2px solid #e8d0f0;background:white;font-family:var(--font);font-weight:700;font-size:.82rem;cursor:pointer;color:var(--text-soft)}
+.season-tab.active{background:var(--lavender);border-color:#c090e0;color:var(--text)}
+.clothing-gender-heading{font-size:.75rem;font-weight:800;color:var(--text-soft);margin:.7rem 0 .3rem;padding-left:.2rem}
+.outfit-slot-summary{display:flex;gap:.5rem;justify-content:center;margin-bottom:.8rem;flex-wrap:wrap}
+.outfit-slot-chip{background:#faf5ff;border:2px solid #ecdcf8;border-radius:50px;padding:.3rem .7rem;font-size:.72rem;font-weight:700;color:var(--text);display:flex;align-items:center;gap:.3rem;cursor:pointer}
+.outfit-slot-chip .empty{color:var(--text-soft);font-weight:600}
+
 /* Admin controls */
 .admin-controls{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;background:#fff0f0;border:2px solid #f0b8b8;border-radius:14px;padding:.6rem .8rem;margin-bottom:1rem}
 .admin-tag{font-size:.75rem;font-weight:800;color:#c04040;background:white;border-radius:50px;padding:.15rem .6rem}
@@ -748,6 +771,44 @@ const NOTE_SKINS={
   estrellitas:{name:'Estrellitas',price:50,cssClass:'skin-estrellitas',desc:'Estrellitas pegadas en las esquinas 🌟',preview:'🌟'}
 };
 
+// Posti-ropa: accesorios de vestir para tu mascota, con slots hat / outfit / accessory.
+// Género es solo una etiqueta de estilo para organizar la tienda — cualquiera puede comprar cualquier prenda.
+const CLOTHING_ITEMS={
+  gorra:{name:'Gorra',emoji:'🧢',slot:'hat',season:'verano',gender:'unisex',price:20},
+  flor:{name:'Flor Tropical',emoji:'🌺',slot:'hat',season:'verano',gender:'femenina',price:22},
+  gafas:{name:'Gafas de Sol',emoji:'🕶️',slot:'accessory',season:'verano',gender:'unisex',price:18},
+  tabla:{name:'Tabla de Surf',emoji:'🏄',slot:'accessory',season:'verano',gender:'masculina',price:28},
+  sandia:{name:'Sandía',emoji:'🍉',slot:'accessory',season:'verano',gender:'unisex',price:15},
+  bikini:{name:'Traje de Baño',emoji:'👙',slot:'outfit',season:'verano',gender:'femenina',price:32},
+  bermudas:{name:'Bermudas',emoji:'🩳',slot:'outfit',season:'verano',gender:'masculina',price:30},
+  bufanda:{name:'Bufanda',emoji:'🧣',slot:'accessory',season:'invierno',gender:'unisex',price:20},
+  guantes:{name:'Guantes',emoji:'🧤',slot:'accessory',season:'invierno',gender:'unisex',price:16},
+  gorroinv:{name:'Gorro de Lana',emoji:'🎩',slot:'hat',season:'invierno',gender:'unisex',price:20},
+  botas:{name:'Botas de Nieve',emoji:'🥾',slot:'accessory',season:'invierno',gender:'unisex',price:24},
+  abrigo:{name:'Abrigo',emoji:'🧥',slot:'outfit',season:'invierno',gender:'femenina',price:34},
+  chaqueta:{name:'Chaqueta',emoji:'🧥',slot:'outfit',season:'invierno',gender:'masculina',price:32},
+  copo:{name:'Copo de Nieve',emoji:'❄️',slot:'accessory',season:'invierno',gender:'unisex',price:14}
+};
+const OUTFIT_SLOTS=['hat','outfit','accessory'];
+const OUTFIT_SLOT_POS={hat:'outfit-hat',outfit:'outfit-body',accessory:'outfit-accessory'};
+
+function getCurrentOutfit(){
+  return(currentUserData&&currentUserData.outfit)||{};
+}
+function getOwnedClothing(){
+  return(currentUserData&&currentUserData.ownedClothing)||[];
+}
+function mascotHtmlWithOutfit(svgHtml,outfit){
+  outfit=outfit||{};
+  let overlays='';
+  OUTFIT_SLOTS.forEach(slot=>{
+    const itemId=outfit[slot];
+    const item=itemId&&CLOTHING_ITEMS[itemId];
+    if(item)overlays+=`<span class="outfit-item ${OUTFIT_SLOT_POS[slot]}">${item.emoji}</span>`;
+  });
+  return `<div class="mascot-outfit-wrap">${svgHtml}${overlays}</div>`;
+}
+
 const STARTING_POSTIBITS=20;
 
 let currentUser=null;
@@ -900,6 +961,8 @@ function initLocalMode(){
     equippedMascotSkins:{postiboo:'clasico'},
     ownedSkins:['clasica'],
     equippedSkin:'clasica',
+    ownedClothing:[],
+    outfit:{},
     supportDate:null,
     supportCountToday:0
   };
@@ -1016,19 +1079,20 @@ function updateWriterMascot(){
   const equippedId=getEquippedMascotId();
   const skinId=getEquippedMascotSkinId(equippedId);
   const svg=getMascotSvg(equippedId,selectedMood,skinId);
+  const dressed=mascotHtmlWithOutfit(svg,getCurrentOutfit());
 
-  document.getElementById('postibooWriter').innerHTML=svg;
+  document.getElementById('postibooWriter').innerHTML=dressed;
 
   const companionIcon=document.getElementById('companionMascotIcon');
   const companionName=document.getElementById('companionMascotName');
   if(companionIcon&&companionName){
-    companionIcon.innerHTML=svg;
+    companionIcon.innerHTML=dressed;
     companionName.textContent=MASCOTS[equippedId].name;
   }
 
   const badgeIcon=document.getElementById('companionBadgeIcon');
   if(badgeIcon){
-    badgeIcon.innerHTML=getMascotSvg(equippedId,null,skinId);
+    badgeIcon.innerHTML=mascotHtmlWithOutfit(getMascotSvg(equippedId,null,skinId),getCurrentOutfit());
     document.getElementById('companionBadge').title=`Tu compañero: ${MASCOTS[equippedId].name}`;
   }
 }
@@ -1059,7 +1123,7 @@ function renderProfileContent(){
   if(currentUser&&currentUserData){
     const equippedMid=getEquippedMascotId();
     const mascot=MASCOTS[equippedMid];
-    const avatarSvg=getMascotSvg(equippedMid,null,getEquippedMascotSkinId(equippedMid));
+    const avatarSvg=mascotHtmlWithOutfit(getMascotSvg(equippedMid,null,getEquippedMascotSkinId(equippedMid)),getCurrentOutfit());
     content.innerHTML=`
       <div style="margin:1rem 0;text-align:center">
         <div class="profile-avatar">${avatarSvg}</div>
@@ -1246,6 +1310,8 @@ async function handleAuth(e){
         equippedMascotSkins:{postiboo:'clasico'},
         ownedSkins:['clasica'],
         equippedSkin:'clasica',
+        ownedClothing:[],
+        outfit:{},
         isAdmin:false,
         isBanned:false,
         acceptedTermsAt:Date.now()
@@ -1297,6 +1363,13 @@ function renderStoreContent(){
     <div class="mascot-grid" id="mascotGrid"></div>
     <p class="section-label">🎨 Colores de mascota</p>
     <div id="mascotSkinsSection"></div>
+    <div class="petshop-banner" style="background:linear-gradient(135deg,#fbcfe8,#c4b5fd 60%,#a5f3fc)">👗 Posti-ropa <span>viste a tu mascota para cada temporada</span></div>
+    <div id="outfitCurrentSummary" class="outfit-slot-summary"></div>
+    <div class="season-tabs" id="seasonTabs">
+      <button class="season-tab active" data-season="verano">☀️ Verano</button>
+      <button class="season-tab" data-season="invierno">❄️ Invierno</button>
+    </div>
+    <div id="clothingSection"></div>
     <p class="section-label">📝 Skins de notita</p>
     <div class="mascot-grid" id="skinGrid"></div>
     <div class="buy-postibits-row"><button class="btn btn-primary" disabled>💳 Comprar PostiBits (próximamente)</button></div>`;
@@ -1348,6 +1421,16 @@ function renderStoreContent(){
       row.appendChild(card);
     });
     skinsSection.appendChild(row);
+  });
+
+  renderOutfitSummary();
+  renderClothingSection('verano');
+  document.querySelectorAll('.season-tab').forEach(tab=>{
+    tab.onclick=()=>{
+      document.querySelectorAll('.season-tab').forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      renderClothingSection(tab.dataset.season);
+    };
   });
 
   const skinGrid=document.getElementById('skinGrid');
@@ -1414,6 +1497,134 @@ async function equipMascotSkin(mascotId,skinId){
     await updateDoc(doc(db,'users',currentUser.id),{[`equippedMascotSkins.${mascotId}`]:skinId});
     updateWriterMascot();
   }catch(e){console.error('equipMascotSkin error',e)}
+}
+
+function renderOutfitSummary(){
+  const wrap=document.getElementById('outfitCurrentSummary');
+  if(!wrap)return;
+  wrap.innerHTML='';
+  const outfit=getCurrentOutfit();
+  const slotLabels={hat:'🎩 Sombrero',outfit:'👕 Outfit',accessory:'✨ Accesorio'};
+  OUTFIT_SLOTS.forEach(slot=>{
+    const itemId=outfit[slot];
+    const item=itemId&&CLOTHING_ITEMS[itemId];
+    const chip=document.createElement('div');
+    chip.className='outfit-slot-chip';
+    chip.innerHTML=item?`${item.emoji} ${item.name}`:`<span class="empty">${slotLabels[slot]}: vacío</span>`;
+    if(item){
+      chip.title='Quitar';
+      chip.onclick=()=>unequipClothing(slot);
+    }
+    wrap.appendChild(chip);
+  });
+}
+
+function renderClothingSection(season){
+  const section=document.getElementById('clothingSection');
+  if(!section)return;
+  section.innerHTML='';
+  const owned=getOwnedClothing();
+  const outfit=getCurrentOutfit();
+  const genders=[['femenina','👗 Femenina'],['masculina','🧢 Masculina'],['unisex','✨ Unisex']];
+
+  genders.forEach(([genderKey,label])=>{
+    const items=Object.entries(CLOTHING_ITEMS).filter(([,it])=>it.season===season&&it.gender===genderKey);
+    if(items.length===0)return;
+
+    const heading=document.createElement('p');
+    heading.className='clothing-gender-heading';
+    heading.textContent=label;
+    section.appendChild(heading);
+
+    const row=document.createElement('div');
+    row.className='mascot-grid';
+    items.forEach(([id,item])=>{
+      const isOwned=owned.includes(id);
+      const isEquipped=outfit[item.slot]===id;
+      const card=document.createElement('div');
+      card.className='mascot-card'+(isOwned?' owned':'')+(isEquipped?' equipped':'');
+      card.innerHTML=`<div class="mascot-svg" style="font-size:2.2rem;display:flex;align-items:center;justify-content:center">${item.emoji}</div><div class="mascot-name">${item.name}</div><div class="mascot-price">${item.price+' PostiBits'}</div>`;
+      const btn=document.createElement('button');
+      btn.className='mascot-btn '+(isEquipped?'equipped-label':isOwned?'equip':(currentUserData.postibits<item.price?'locked':'buy'));
+      btn.textContent=isEquipped?'✓ Puesto':isOwned?'Ponerlo':'Comprar';
+      btn.disabled=isEquipped;
+      btn.onclick=()=>isOwned?equipClothing(id):buyClothing(id);
+      card.appendChild(btn);
+      row.appendChild(card);
+    });
+    section.appendChild(row);
+  });
+}
+
+async function buyClothing(id){
+  const item=CLOTHING_ITEMS[id];
+  if(!item)return;
+  if(currentUserData.postibits<item.price){
+    showToast('No tienes suficientes PostiBits 🥲');
+    return;
+  }
+
+  if(localMode){
+    currentUserData.postibits-=item.price;
+    currentUserData.ownedClothing=[...new Set([...(currentUserData.ownedClothing||[]),id])];
+    currentUserData.outfit=currentUserData.outfit||{};
+    currentUserData.outfit[item.slot]=id;
+    updatePostibitsBadge();
+    updateWriterMascot();
+    renderOutfitSummary();
+    renderClothingSection(item.season);
+    showToast(`¡${item.name} puesto! ${item.emoji}`);
+    return;
+  }
+
+  try{
+    await updateDoc(doc(db,'users',currentUser.id),{
+      postibits:increment(-item.price),
+      ownedClothing:arrayUnion(id),
+      [`outfit.${item.slot}`]:id
+    });
+    updateWriterMascot();
+    renderOutfitSummary();
+    renderClothingSection(item.season);
+    showToast(`¡${item.name} puesto! ${item.emoji}`);
+  }catch(e){
+    console.error('buyClothing error',e);
+    showToast('No se pudo completar la compra 🥲');
+  }
+}
+
+async function equipClothing(id){
+  const item=CLOTHING_ITEMS[id];
+  if(!item)return;
+
+  if(localMode){
+    currentUserData.outfit=currentUserData.outfit||{};
+    currentUserData.outfit[item.slot]=id;
+    updateWriterMascot();
+    renderOutfitSummary();
+    renderClothingSection(item.season);
+    return;
+  }
+  try{
+    await updateDoc(doc(db,'users',currentUser.id),{[`outfit.${item.slot}`]:id});
+    updateWriterMascot();
+    renderOutfitSummary();
+    renderClothingSection(item.season);
+  }catch(e){console.error('equipClothing error',e)}
+}
+
+async function unequipClothing(slot){
+  if(localMode){
+    if(currentUserData.outfit)currentUserData.outfit[slot]=null;
+    updateWriterMascot();
+    renderOutfitSummary();
+    return;
+  }
+  try{
+    await updateDoc(doc(db,'users',currentUser.id),{[`outfit.${slot}`]:null});
+    updateWriterMascot();
+    renderOutfitSummary();
+  }catch(e){console.error('unequipClothing error',e)}
 }
 
 async function buySkin(id){
@@ -1565,6 +1776,7 @@ async function dropNote(){
     rot:ROTS[Math.floor(Math.random()*ROTS.length)],
     mascotId:getEquippedMascotId(),
     mascotSkin:getEquippedMascotSkinId(getEquippedMascotId()),
+    outfit:getCurrentOutfit(),
     skin:getEquippedSkinId(),
     hugs:0
   };
@@ -1639,7 +1851,7 @@ function renderFeed(){
   const walker=document.createElement('div');
   walker.className='postiboo-main';
   walker.title='Tu compañero emocional';
-  walker.innerHTML=getMascotSvg(getEquippedMascotId(),null,getEquippedMascotSkinId(getEquippedMascotId()));
+  walker.innerHTML=mascotHtmlWithOutfit(getMascotSvg(getEquippedMascotId(),null,getEquippedMascotSkinId(getEquippedMascotId())),getCurrentOutfit());
   walker.onclick=()=>{
     const msgs=['¡Aquí estoy contigo! 💛','Gracias por acompañarme hoy 🌸','¿Cómo te sientes ahora? 🤍','Sigo caminando a tu lado 🐾'];
     showToast(msgs[Math.floor(Math.random()*msgs.length)]);
@@ -1675,7 +1887,7 @@ function renderFeed(){
 
     const footer=document.createElement('div');footer.className='note-footer';
     const author=document.createElement('span');author.className='note-author';
-    const mascotSvgForNote=getMascotSvg(n.mascotId||'postiboo',n.mood,n.mascotSkin||'clasico');
+    const mascotSvgForNote=mascotHtmlWithOutfit(getMascotSvg(n.mascotId||'postiboo',n.mood,n.mascotSkin||'clasico'),n.outfit||{});
     author.innerHTML=`<span class="note-mascot-icon">${mascotSvgForNote}</span>${n.authorBadge?n.authorBadge+' ':''}${escapeHtml(n.author)}`;
 
     const rightSide=document.createElement('div');
