@@ -13,13 +13,13 @@
   --text:#5a4a6a;--text-soft:#8a7a9a;--radius-note:14px;--font:'Nunito',sans-serif;
 }
 html,body{height:100%;width:100%}
-body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100vh;overflow-x:hidden}
+body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100vh;overflow-x:hidden;position:relative}
 
 .screen{display:none;width:100%;min-height:100vh;flex-direction:column}
 .screen.active{display:flex}
 
 /* Header */
-.site-header{background:linear-gradient(135deg,#fce4ec 0%,#f3e5f5 40%,#e8eaf6 100%);border-bottom:2px dashed #e0c8e8;padding:1.2rem 2rem 1rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.site-header{background:linear-gradient(135deg,#fce4ec 0%,#f3e5f5 40%,#e8eaf6 100%);border-bottom:2px dashed #e0c8e8;padding:1.2rem 2rem 1rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;position:relative;z-index:1}
 .header-left{display:flex;align-items:center;gap:1rem}
 .logo{display:flex;align-items:center;gap:.5rem}
 .logo-icon{font-size:2rem}
@@ -36,12 +36,14 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
 .mood-badge{font-size:1.2rem}
 
 /* Main content */
-.main-content{flex:1;display:flex;flex-direction:column;padding:1.5rem 2rem;max-width:1200px;margin:0 auto;width:100%}
+.main-content{flex:1;display:flex;flex-direction:column;padding:1.5rem 2rem;max-width:1200px;margin:0 auto;width:100%;position:relative;z-index:1}
 
 /* Filter bar */
-.filter-bar{background:white;border:2px solid #e8d0f0;border-radius:16px;padding:1rem;display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;margin-bottom:1.5rem}
+.filter-bar{background:white;border:2px solid #e8d0f0;border-radius:16px;padding:1rem;display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;margin-bottom:1.5rem;position:relative}
+@keyframes decorFloat{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-12px) rotate(6deg)}}
 .filter-label{font-size:0.85rem;font-weight:700;color:var(--text-soft)}
-.filter-btn{background:white;border:2px solid #e8d0f0;border-radius:50px;padding:0.3rem 0.85rem;font-family:var(--font);font-size:0.8rem;font-weight:700;color:var(--text-soft);cursor:pointer;transition:all .15s}
+.filter-select{background:white;border:2px solid #e8d0f0;border-radius:50px;padding:.5rem 1rem;font-family:var(--font);font-size:.85rem;font-weight:700;color:var(--text);cursor:pointer;transition:border-color .15s}
+.filter-select:hover,.filter-select:focus{border-color:#c090e0;outline:none}
 .filter-btn:hover{border-color:#c090e0;color:var(--text)}
 .filter-btn.active{background:var(--lavender);border-color:#c090e0;color:var(--text)}
 
@@ -180,6 +182,8 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
 .note-hug-btn:hover{transform:scale(1.04)}
 .note-hug-btn:active{transform:scale(.96)}
 
+.mascot-skin-heading{font-size:.8rem;font-weight:800;color:var(--text-soft);margin:.6rem 0 .4rem;padding-left:.2rem}
+
 /* Admin controls */
 .admin-controls{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;background:#fff0f0;border:2px solid #f0b8b8;border-radius:14px;padding:.6rem .8rem;margin-bottom:1rem}
 .admin-tag{font-size:.75rem;font-weight:800;color:#c04040;background:white;border-radius:50px;padding:.15rem .6rem}
@@ -199,6 +203,29 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
 .companion-badge-icon{width:100%;height:100%;display:flex}
 .companion-badge-icon svg{width:100%;height:100%}
 @keyframes companionWobble{0%,100%{transform:rotate(-4deg) translateY(0)}50%{transform:rotate(4deg) translateY(-3px)}}
+
+.hearts-bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.heart-item{position:absolute;font-size:1.6rem;opacity:.14;animation:heartDrift linear infinite}
+.h1{left:3%;top:100%;animation-duration:26s;animation-delay:0s;font-size:1.8rem}
+.h2{left:12%;top:100%;animation-duration:32s;animation-delay:3s;font-size:1.4rem}
+.h3{left:22%;top:100%;animation-duration:24s;animation-delay:6s;font-size:1.7rem}
+.h4{left:33%;top:100%;animation-duration:29s;animation-delay:1s;font-size:1.5rem}
+.h5{left:45%;top:100%;animation-duration:27s;animation-delay:8s;font-size:1.9rem}
+.h6{left:56%;top:100%;animation-duration:31s;animation-delay:4s;font-size:1.4rem}
+.h7{left:66%;top:100%;animation-duration:25s;animation-delay:10s;font-size:1.7rem}
+.h8{left:76%;top:100%;animation-duration:30s;animation-delay:2s;font-size:1.5rem}
+.h9{left:85%;top:100%;animation-duration:23s;animation-delay:7s;font-size:1.8rem}
+.h10{left:93%;top:100%;animation-duration:28s;animation-delay:5s;font-size:1.4rem}
+.h11{left:8%;top:100%;animation-duration:33s;animation-delay:12s;font-size:1.6rem}
+.h12{left:60%;top:100%;animation-duration:26s;animation-delay:14s;font-size:1.6rem}
+.h13{left:38%;top:100%;animation-duration:29s;animation-delay:16s;font-size:1.5rem}
+.h14{left:70%;top:100%;animation-duration:24s;animation-delay:18s;font-size:1.7rem}
+@keyframes heartDrift{
+  0%{transform:translateY(0) translateX(0) rotate(-8deg);opacity:0}
+  8%{opacity:.14}
+  92%{opacity:.14}
+  100%{transform:translateY(-115vh) translateX(30px) rotate(8deg);opacity:0}
+}
 
 /* Welcome modal */
 #welcomeModal{z-index:500}
@@ -314,6 +341,24 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
 </head>
 <body>
 
+<!-- FLOATING HEARTS BACKGROUND -->
+<div class="hearts-bg" aria-hidden="true">
+  <span class="heart-item h1">❤️</span>
+  <span class="heart-item h2">💔</span>
+  <span class="heart-item h3">💋</span>
+  <span class="heart-item h4">❤️‍🔥</span>
+  <span class="heart-item h5">❤️‍🩹</span>
+  <span class="heart-item h6">💌</span>
+  <span class="heart-item h7">💞</span>
+  <span class="heart-item h8">❤️</span>
+  <span class="heart-item h9">💔</span>
+  <span class="heart-item h10">❤️‍🩹</span>
+  <span class="heart-item h11">💌</span>
+  <span class="heart-item h12">💞</span>
+  <span class="heart-item h13">💋</span>
+  <span class="heart-item h14">❤️‍🔥</span>
+</div>
+
 <!-- WELCOME MODAL -->
 <div class="modal-overlay" id="welcomeModal">
   <div class="modal-card welcome-card">
@@ -354,10 +399,10 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
   <div class="main-content">
     <!-- Filter bar -->
     <div class="filter-bar">
-      <span class="filter-label">Mood:</span>
-      <div class="filter-scroll" id="filterScroll">
-        <button class="filter-btn active" data-filter="all">Todas ✨</button>
-      </div>
+      <label class="filter-label" for="moodFilterSelect">Mood:</label>
+      <select class="filter-select" id="moodFilterSelect">
+        <option value="all">✨ Todas</option>
+      </select>
     </div>
 
     <!-- Corkboard -->
@@ -550,41 +595,116 @@ function faceParts(expr,yOff,mouthColor,extra){
   return `<ellipse cx="21" cy="${ex}" rx="4.5" ry="5" fill="white"/><ellipse cx="35" cy="${ex}" rx="4.5" ry="5" fill="white"/><circle cx="22" cy="${ex}" r="2.5" fill="#3b2a4a"/><circle cx="36" cy="${ex}" r="2.5" fill="#3b2a4a"/><circle cx="23" cy="${hy}" r="1" fill="white"/><circle cx="37" cy="${hy}" r="1" fill="white"/><ellipse cx="17" cy="${chy}" rx="4" ry="2.5" fill="#fda4af" opacity=".6"/><ellipse cx="39" cy="${chy}" rx="4" ry="2.5" fill="#fda4af" opacity=".6"/>${extra}<path d="M23 ${my} Q28 ${my+4} 33 ${my}" stroke="${mouthColor}" stroke-width="1.5" fill="none" stroke-linecap="round"/>`;
 }
 
-function postibooSvg(expr){
-  const face=faceParts(expr,0,'#a16207');
-  return `<svg width="56" height="62" viewBox="0 0 56 62" xmlns="http://www.w3.org/2000/svg"><ellipse cx="8" cy="34" rx="9" ry="6" fill="#fde68a" opacity=".85"/><ellipse cx="48" cy="34" rx="9" ry="6" fill="#fde68a" opacity=".85"/><rect x="10" y="12" width="36" height="36" rx="10" fill="#fef08a"/><rect x="10" y="12" width="36" height="36" rx="10" fill="none" stroke="#fbbf24" stroke-width="1.5"/><polygon points="38,12 46,12 46,20" fill="#fde047"/><line x1="38" y1="12" x2="46" y2="20" stroke="#fbbf24" stroke-width="1"/>${face}<line x1="28" y1="12" x2="28" y2="6" stroke="#fbbf24" stroke-width="1.5"/><circle cx="28" cy="5" r="2.5" fill="#f472b6"/></svg>`;
+function postiNoteSvg(expr,pal){
+  const face=faceParts(expr,0,pal.mouth);
+  return `<svg width="56" height="62" viewBox="0 0 56 62" xmlns="http://www.w3.org/2000/svg"><ellipse cx="8" cy="34" rx="9" ry="6" fill="${pal.wing}" opacity=".85"/><ellipse cx="48" cy="34" rx="9" ry="6" fill="${pal.wing}" opacity=".85"/><rect x="10" y="12" width="36" height="36" rx="10" fill="${pal.body}"/><rect x="10" y="12" width="36" height="36" rx="10" fill="none" stroke="${pal.border}" stroke-width="1.5"/><polygon points="38,12 46,12 46,20" fill="${pal.fold}"/><line x1="38" y1="12" x2="46" y2="20" stroke="${pal.border}" stroke-width="1"/>${face}<line x1="28" y1="12" x2="28" y2="6" stroke="${pal.border}" stroke-width="1.5"/><circle cx="28" cy="5" r="2.5" fill="${pal.tip}"/></svg>`;
 }
 
-function gatitobooSvg(expr){
-  const face=faceParts(expr,0,'#a16285');
-  return `<svg width="56" height="62" viewBox="0 0 56 62" xmlns="http://www.w3.org/2000/svg"><polygon points="14,14 6,2 20,10" fill="#f4a8c0"/><polygon points="42,14 50,2 36,10" fill="#f4a8c0"/><rect x="10" y="12" width="36" height="36" rx="10" fill="#ffd9e8"/><rect x="10" y="12" width="36" height="36" rx="10" fill="none" stroke="#e88aa8" stroke-width="1.5"/><polygon points="38,12 46,12 46,20" fill="#f8c0d8"/><line x1="38" y1="12" x2="46" y2="20" stroke="#e88aa8" stroke-width="1"/>${face}<line x1="8" y1="36" x2="1" y2="34" stroke="#e88aa8" stroke-width="1"/><line x1="8" y1="40" x2="1" y2="41" stroke="#e88aa8" stroke-width="1"/><line x1="48" y1="36" x2="55" y2="34" stroke="#e88aa8" stroke-width="1"/><line x1="48" y1="40" x2="55" y2="41" stroke="#e88aa8" stroke-width="1"/></svg>`;
+function postiGatoSvg(expr,pal){
+  const face=faceParts(expr,0,pal.mouth);
+  return `<svg width="56" height="62" viewBox="0 0 56 62" xmlns="http://www.w3.org/2000/svg"><polygon points="14,14 6,2 20,10" fill="${pal.ear}"/><polygon points="42,14 50,2 36,10" fill="${pal.ear}"/><rect x="10" y="12" width="36" height="36" rx="10" fill="${pal.body}"/><rect x="10" y="12" width="36" height="36" rx="10" fill="none" stroke="${pal.border}" stroke-width="1.5"/><polygon points="38,12 46,12 46,20" fill="${pal.fold}"/><line x1="38" y1="12" x2="46" y2="20" stroke="${pal.border}" stroke-width="1"/>${face}<line x1="8" y1="36" x2="1" y2="34" stroke="${pal.border}" stroke-width="1"/><line x1="8" y1="40" x2="1" y2="41" stroke="${pal.border}" stroke-width="1"/><line x1="48" y1="36" x2="55" y2="34" stroke="${pal.border}" stroke-width="1"/><line x1="48" y1="40" x2="55" y2="41" stroke="${pal.border}" stroke-width="1"/></svg>`;
 }
 
-function ositobooSvg(expr){
-  const nose=`<ellipse cx="28" cy="38" rx="3" ry="2.5" fill="#d9a86a"/>`;
-  const face=faceParts(expr,0,'#a17840',nose);
-  return `<svg width="56" height="62" viewBox="0 0 56 62" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="10" r="7" fill="#f0c090"/><circle cx="44" cy="10" r="7" fill="#f0c090"/><circle cx="12" cy="10" r="3.5" fill="#fad9b8"/><circle cx="44" cy="10" r="3.5" fill="#fad9b8"/><rect x="10" y="12" width="36" height="36" rx="10" fill="#ffe0c2"/><rect x="10" y="12" width="36" height="36" rx="10" fill="none" stroke="#d9a86a" stroke-width="1.5"/><polygon points="38,12 46,12 46,20" fill="#f8d0a0"/><line x1="38" y1="12" x2="46" y2="20" stroke="#d9a86a" stroke-width="1"/>${face}</svg>`;
+function postiSitoSvg(expr,pal){
+  const nose=`<ellipse cx="28" cy="38" rx="3" ry="2.5" fill="${pal.nose}"/>`;
+  const face=faceParts(expr,0,pal.mouth,nose);
+  return `<svg width="56" height="62" viewBox="0 0 56 62" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="10" r="7" fill="${pal.ear}"/><circle cx="44" cy="10" r="7" fill="${pal.ear}"/><circle cx="12" cy="10" r="3.5" fill="${pal.earIn}"/><circle cx="44" cy="10" r="3.5" fill="${pal.earIn}"/><rect x="10" y="12" width="36" height="36" rx="10" fill="${pal.body}"/><rect x="10" y="12" width="36" height="36" rx="10" fill="none" stroke="${pal.border}" stroke-width="1.5"/><polygon points="38,12 46,12 46,20" fill="${pal.fold}"/><line x1="38" y1="12" x2="46" y2="20" stroke="${pal.border}" stroke-width="1"/>${face}</svg>`;
 }
 
-function conejobooSvg(expr){
-  const face=faceParts(expr,2,'#8a60b0');
-  return `<svg width="56" height="64" viewBox="0 0 56 64" xmlns="http://www.w3.org/2000/svg"><ellipse cx="16" cy="6" rx="5" ry="13" fill="#d4b8f0"/><ellipse cx="40" cy="6" rx="5" ry="13" fill="#d4b8f0"/><ellipse cx="16" cy="7" rx="2.3" ry="9" fill="#f0deff"/><ellipse cx="40" cy="7" rx="2.3" ry="9" fill="#f0deff"/><rect x="10" y="14" width="36" height="36" rx="10" fill="#e6d9f8"/><rect x="10" y="14" width="36" height="36" rx="10" fill="none" stroke="#b890e0" stroke-width="1.5"/><polygon points="38,14 46,14 46,22" fill="#dcc8f4"/><line x1="38" y1="14" x2="46" y2="22" stroke="#b890e0" stroke-width="1"/>${face}</svg>`;
+function postiNejoSvg(expr,pal){
+  const face=faceParts(expr,2,pal.mouth);
+  return `<svg width="56" height="64" viewBox="0 0 56 64" xmlns="http://www.w3.org/2000/svg"><ellipse cx="16" cy="6" rx="5" ry="13" fill="${pal.ear}"/><ellipse cx="40" cy="6" rx="5" ry="13" fill="${pal.ear}"/><ellipse cx="16" cy="7" rx="2.3" ry="9" fill="${pal.earIn}"/><ellipse cx="40" cy="7" rx="2.3" ry="9" fill="${pal.earIn}"/><rect x="10" y="14" width="36" height="36" rx="10" fill="${pal.body}"/><rect x="10" y="14" width="36" height="36" rx="10" fill="none" stroke="${pal.border}" stroke-width="1.5"/><polygon points="38,14 46,14 46,22" fill="${pal.fold}"/><line x1="38" y1="14" x2="46" y2="22" stroke="${pal.border}" stroke-width="1"/>${face}</svg>`;
 }
 
-const MASCOT_BUILDERS={postiboo:postibooSvg,gatito:gatitobooSvg,osito:ositobooSvg,conejo:conejobooSvg};
+function postiBejaSvg(expr,pal){
+  const face=faceParts(expr,0,pal.mouth);
+  const clipId='beeClip'+pal.id;
+  return `<svg width="56" height="62" viewBox="0 0 56 62" xmlns="http://www.w3.org/2000/svg"><ellipse cx="6" cy="26" rx="10" ry="7" fill="${pal.wing}" opacity=".85" transform="rotate(-15 6 26)"/><ellipse cx="50" cy="26" rx="10" ry="7" fill="${pal.wing}" opacity=".85" transform="rotate(15 50 26)"/><defs><clipPath id="${clipId}"><rect x="10" y="12" width="36" height="36" rx="14"/></clipPath></defs><rect x="10" y="12" width="36" height="36" rx="14" fill="${pal.body}"/><g clip-path="url(#${clipId})"><rect x="10" y="22" width="36" height="6" fill="${pal.stripe}"/><rect x="10" y="34" width="36" height="6" fill="${pal.stripe}"/></g><rect x="10" y="12" width="36" height="36" rx="14" fill="none" stroke="${pal.border}" stroke-width="1.5"/>${face}<path d="M22 12 Q18 5 14 4" stroke="${pal.border}" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M34 12 Q38 5 42 4" stroke="${pal.border}" stroke-width="1.5" fill="none" stroke-linecap="round"/><circle cx="14" cy="4" r="2.2" fill="${pal.border}"/><circle cx="42" cy="4" r="2.2" fill="${pal.border}"/></svg>`;
+}
 
-function getMascotSvg(mascotId,mood){
-  const builder=MASCOT_BUILDERS[mascotId]||MASCOT_BUILDERS.postiboo;
+function postiVejaSvg(expr,pal){
+  const face=faceParts(expr,2,pal.mouth);
+  return `<svg width="56" height="64" viewBox="0 0 56 64" xmlns="http://www.w3.org/2000/svg"><circle cx="14" cy="10" r="7" fill="${pal.wool}"/><circle cx="24" cy="6" r="8" fill="${pal.wool}"/><circle cx="34" cy="6" r="8" fill="${pal.wool}"/><circle cx="44" cy="10" r="7" fill="${pal.wool}"/><ellipse cx="9" cy="28" rx="5" ry="8" fill="${pal.ear}"/><ellipse cx="47" cy="28" rx="5" ry="8" fill="${pal.ear}"/><rect x="10" y="16" width="36" height="34" rx="12" fill="${pal.body}"/><rect x="10" y="16" width="36" height="34" rx="12" fill="none" stroke="${pal.border}" stroke-width="1.5"/>${face}</svg>`;
+}
+
+function postiPosaSvg(expr,pal){
+  const face=faceParts(expr,0,pal.mouth);
+  return `<svg width="56" height="62" viewBox="0 0 56 62" xmlns="http://www.w3.org/2000/svg"><ellipse cx="4" cy="18" rx="9" ry="10" fill="${pal.wing}"/><ellipse cx="6" cy="34" rx="7" ry="8" fill="${pal.wingAccent}" opacity=".9"/><ellipse cx="52" cy="18" rx="9" ry="10" fill="${pal.wing}"/><ellipse cx="50" cy="34" rx="7" ry="8" fill="${pal.wingAccent}" opacity=".9"/><rect x="10" y="12" width="36" height="36" rx="12" fill="${pal.body}"/><rect x="10" y="12" width="36" height="36" rx="12" fill="none" stroke="${pal.border}" stroke-width="1.5"/>${face}<path d="M24 12 Q22 6 18 4" stroke="${pal.border}" stroke-width="1.4" fill="none" stroke-linecap="round"/><path d="M32 12 Q34 6 38 4" stroke="${pal.border}" stroke-width="1.4" fill="none" stroke-linecap="round"/><circle cx="18" cy="4" r="1.8" fill="${pal.border}"/><circle cx="38" cy="4" r="1.8" fill="${pal.border}"/></svg>`;
+}
+
+const MASCOT_BUILDERS={postiboo:postiNoteSvg,gatito:postiGatoSvg,osito:postiSitoSvg,conejo:postiNejoSvg,abeja:postiBejaSvg,oveja:postiVejaSvg,mariposa:postiPosaSvg};
+
+const MASCOT_SKIN_PALETTES={
+  postiboo:[
+    {id:'clasico',name:'Amarillo Clásico',price:0,body:'#fef08a',border:'#fbbf24',fold:'#fde047',wing:'#fde68a',mouth:'#a16207',tip:'#f472b6'},
+    {id:'rosa',name:'Rosa Pastel',price:20,body:'#ffd9e8',border:'#e88aa8',fold:'#f8c0d8',wing:'#fbc7dc',mouth:'#a1527d',tip:'#f472b6'},
+    {id:'menta',name:'Menta Fresca',price:20,body:'#c8f0dc',border:'#6ec99a',fold:'#a8e6c4',wing:'#b8ecd0',mouth:'#2f7a52',tip:'#f9a8d4'},
+    {id:'lavanda',name:'Lavanda Dream',price:25,body:'#e6d9f8',border:'#b890e0',fold:'#dcc8f4',wing:'#dccdf4',mouth:'#6b3f96',tip:'#f9a8d4'}
+  ],
+  gatito:[
+    {id:'clasico',name:'Rosa Clásico',price:0,body:'#ffd9e8',border:'#e88aa8',fold:'#f8c0d8',ear:'#f4a8c0',mouth:'#a16285'},
+    {id:'gris',name:'Gris Gatito',price:20,body:'#e4e4ea',border:'#a8a8b8',fold:'#d4d4de',ear:'#c8c8d4',mouth:'#5a5a6a'},
+    {id:'naranja',name:'Atigrado',price:20,body:'#ffe0b8',border:'#e8a860',fold:'#ffd090',ear:'#f4b878',mouth:'#a16820'},
+    {id:'blanco',name:'Blanco Nieve',price:25,body:'#fdfdfd',border:'#d8d8e0',fold:'#f0f0f4',ear:'#eaeaf0',mouth:'#7a7a8a'}
+  ],
+  osito:[
+    {id:'clasico',name:'Café Clásico',price:0,body:'#ffe0c2',border:'#d9a86a',fold:'#f8d0a0',ear:'#f0c090',earIn:'#fad9b8',nose:'#d9a86a',mouth:'#a17840'},
+    {id:'rosa',name:'Osito Rosa',price:20,body:'#ffe0e8',border:'#e8a8bc',fold:'#ffd0dc',ear:'#f4b8c8',earIn:'#fdd9e0',nose:'#c88098',mouth:'#a15868'},
+    {id:'panda',name:'Osito Panda',price:25,body:'#f4f4f8',border:'#3b3b45',fold:'#e4e4ea',ear:'#3b3b45',earIn:'#5a5a68',nose:'#3b3b45',mouth:'#3b3b45'},
+    {id:'polar',name:'Osito Polar',price:20,body:'#eef7fb',border:'#a8ccd9',fold:'#dcf0f8',ear:'#dcf0f8',earIn:'#eefaff',nose:'#7a9aa8',mouth:'#5a7a88'}
+  ],
+  conejo:[
+    {id:'clasico',name:'Lavanda Clásico',price:0,body:'#e6d9f8',border:'#b890e0',fold:'#dcc8f4',ear:'#d4b8f0',earIn:'#f0deff',mouth:'#8a60b0'},
+    {id:'menta',name:'Conejo Menta',price:20,body:'#d9f8ea',border:'#7ed0a8',fold:'#c0f0d8',ear:'#a8e8c4',earIn:'#e0fbee',mouth:'#3a8a5e'},
+    {id:'durazno',name:'Conejo Durazno',price:20,body:'#ffe4d4',border:'#e8a878',fold:'#ffd4b8',ear:'#f4c0a0',earIn:'#fff0e4',mouth:'#a16238'},
+    {id:'gris',name:'Conejo Gris',price:25,body:'#eaeaf0',border:'#b0b0c0',fold:'#dcdce6',ear:'#c8c8d8',earIn:'#f4f4f8',mouth:'#6a6a7a'}
+  ],
+  abeja:[
+    {id:'clasico',name:'Abeja Clásica',price:0,body:'#fff3b0',border:'#e0a800',stripe:'#3b3b45',wing:'#eaf6ff',mouth:'#7a5a00'},
+    {id:'rosa',name:'Abeja Rosa',price:25,body:'#ffe0ec',border:'#e888a8',stripe:'#a1527d',wing:'#fdeef4',mouth:'#8a4262'},
+    {id:'menta',name:'Abeja Menta',price:25,body:'#dff8ea',border:'#6ec99a',stripe:'#2f7a52',wing:'#eefdf4',mouth:'#245c3e'},
+    {id:'lila',name:'Abeja Lila',price:30,body:'#ece0fb',border:'#a888d8',stripe:'#6b3f96',wing:'#f6f0fe',mouth:'#5a3480'}
+  ],
+  oveja:[
+    {id:'clasico',name:'Oveja Clásica',price:0,body:'#fffdf7',border:'#d9c9a8',wool:'#ffffff',ear:'#f0c090',mouth:'#8a6a3a'},
+    {id:'rosa',name:'Oveja Rosa',price:25,body:'#fff0f4',border:'#e0b8c4',wool:'#ffe6ee',ear:'#f4b8c8',mouth:'#a15868'},
+    {id:'gris',name:'Oveja Gris',price:25,body:'#f2f2f6',border:'#c0c0cc',wool:'#e8e8f0',ear:'#d0d0dc',mouth:'#5a5a6a'},
+    {id:'negra',name:'Oveja Negra',price:30,body:'#3b3b45',border:'#232329',wool:'#4a4a56',ear:'#2a2a30',mouth:'#eaeaea'}
+  ],
+  mariposa:[
+    {id:'clasico',name:'Mariposa Clásica',price:0,body:'#fff0b8',border:'#e0a800',wing:'#f4a8c0',wingAccent:'#c060a0',mouth:'#7a5a00'},
+    {id:'azul',name:'Mariposa Azul',price:25,body:'#eaf6ff',border:'#7ab8e0',wing:'#a8d4f4',wingAccent:'#4a80c0',mouth:'#2a5a8a'},
+    {id:'monarca',name:'Mariposa Monarca',price:25,body:'#ffe4c4',border:'#e07a2a',wing:'#f8a860',wingAccent:'#3b3b45',mouth:'#7a3a0a'},
+    {id:'lila',name:'Mariposa Lila',price:30,body:'#f0e4fb',border:'#a888d8',wing:'#d4b8f0',wingAccent:'#8050b0',mouth:'#5a3480'}
+  ]
+};
+
+function getMascotSvg(mascotId,mood,skinId){
+  const family=MASCOT_BUILDERS[mascotId]||MASCOT_BUILDERS.postiboo;
   const expr=mood?(MOOD_EXPRESSION[mood]||'calm'):'calm';
-  return builder(expr);
+  const palettes=MASCOT_SKIN_PALETTES[mascotId]||MASCOT_SKIN_PALETTES.postiboo;
+  const pal=palettes.find(p=>p.id===(skinId||'clasico'))||palettes[0];
+  return family(expr,pal);
+}
+
+function getEquippedMascotSkinId(mascotId){
+  return(currentUserData&&currentUserData.equippedMascotSkins&&currentUserData.equippedMascotSkins[mascotId])||'clasico';
+}
+
+function getOwnedMascotSkins(mascotId){
+  return(currentUserData&&currentUserData.mascotSkins&&currentUserData.mascotSkins[mascotId])||['clasico'];
 }
 
 const MASCOTS={
-  postiboo:{name:'Posti-boo',price:0,svg:postibooSvg('calm'),desc:'La mascota oficial 💛'},
-  gatito:{name:'Gatito-boo',price:50,svg:gatitobooSvg('calm'),desc:'Curioso y juguetón 🐱'},
-  osito:{name:'Osito-boo',price:75,svg:ositobooSvg('calm'),desc:'Abrazos garantizados 🐻'},
-  conejo:{name:'Conejo-boo',price:110,svg:conejobooSvg('calm'),desc:'Saltitos de esperanza 🐰'}
+  postiboo:{name:'Posti-note',price:0,desc:'La mascota oficial 💛'},
+  gatito:{name:'Posti-gato',price:50,desc:'Curioso y juguetón 🐱'},
+  osito:{name:'Posti-sito',price:75,desc:'Abrazos garantizados 🐻'},
+  conejo:{name:'Posti-nejo',price:110,desc:'Saltitos de esperanza 🐰'},
+  abeja:{name:'Posti-beja',price:140,desc:'Dulce como la miel 🐝'},
+  oveja:{name:'Posti-veja',price:160,desc:'Suave como una nube 🐑'},
+  mariposa:{name:'Posti-posa',price:180,desc:'Ligera y llena de color 🦋'}
 };
+Object.keys(MASCOTS).forEach(id=>{MASCOTS[id].svg=getMascotSvg(id,null);});
 
 const NOTE_SKINS={
   clasica:{name:'Clásica',price:0,cssClass:'',desc:'El post-it de siempre 💛',preview:'📝'},
@@ -742,6 +862,8 @@ function initLocalMode(){
     lastLoginDate:todayStr(),
     ownedMascots:['postiboo'],
     equippedMascot:'postiboo',
+    mascotSkins:{postiboo:['clasico']},
+    equippedMascotSkins:{postiboo:'clasico'},
     ownedSkins:['clasica'],
     equippedSkin:'clasica',
     supportDate:null,
@@ -755,22 +877,17 @@ function initLocalMode(){
 }
 
 function renderFilterBar(){
-  const scroll=document.getElementById('filterScroll');
+  const select=document.getElementById('moodFilterSelect');
   MOOD_ORDER.forEach(mood=>{
-    const btn=document.createElement('button');
-    btn.className='filter-btn';
-    btn.dataset.filter=mood;
-    btn.textContent=`${MOOD_EMOJIS[mood]} ${moodLabel(mood)}`;
-    scroll.appendChild(btn);
+    const opt=document.createElement('option');
+    opt.value=mood;
+    opt.textContent=`${MOOD_EMOJIS[mood]} ${moodLabel(mood)}`;
+    select.appendChild(opt);
   });
-  document.querySelectorAll('.filter-btn').forEach(btn=>{
-    btn.onclick=()=>{
-      document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      currentFilter=btn.dataset.filter;
-      renderFeed();
-    };
-  });
+  select.onchange=()=>{
+    currentFilter=select.value;
+    renderFeed();
+  };
 }
 
 function sendHug(){
@@ -863,7 +980,8 @@ function updatePostibitsBadge(){
 
 function updateWriterMascot(){
   const equippedId=getEquippedMascotId();
-  const svg=getMascotSvg(equippedId,selectedMood);
+  const skinId=getEquippedMascotSkinId(equippedId);
+  const svg=getMascotSvg(equippedId,selectedMood,skinId);
 
   document.getElementById('postibooWriter').innerHTML=svg;
 
@@ -876,7 +994,7 @@ function updateWriterMascot(){
 
   const badgeIcon=document.getElementById('companionBadgeIcon');
   if(badgeIcon){
-    badgeIcon.innerHTML=getMascotSvg(equippedId,null);
+    badgeIcon.innerHTML=getMascotSvg(equippedId,null,skinId);
     document.getElementById('companionBadge').title=`Tu compañero: ${MASCOTS[equippedId].name}`;
   }
 }
@@ -903,10 +1021,12 @@ function renderProfileContent(){
   const content=document.getElementById('authContent');
 
   if(currentUser&&currentUserData){
-    const mascot=MASCOTS[getEquippedMascotId()];
+    const equippedMid=getEquippedMascotId();
+    const mascot=MASCOTS[equippedMid];
+    const avatarSvg=getMascotSvg(equippedMid,null,getEquippedMascotSkinId(equippedMid));
     content.innerHTML=`
       <div style="margin:1rem 0;text-align:center">
-        <div class="profile-avatar">${mascot.svg}</div>
+        <div class="profile-avatar">${avatarSvg}</div>
         <p style="color:var(--text);margin-bottom:.3rem">Hola, <strong>${escapeHtml(currentUser.username)}</strong> 💛</p>
         <div class="postibits-badge" style="margin:0 auto;width:fit-content">${currentUserData.postibits} PostiBits</div>
         <p class="streak-note">Racha de login: ${currentUserData.loginStreak||0} día${(currentUserData.loginStreak||0)===1?'':'s'} · cada 7 días ganas +5 PostiBits</p>
@@ -1086,6 +1206,8 @@ async function handleAuth(e){
         lastLoginDate:null,
         ownedMascots:['postiboo'],
         equippedMascot:'postiboo',
+        mascotSkins:{postiboo:['clasico']},
+        equippedMascotSkins:{postiboo:'clasico'},
         ownedSkins:['clasica'],
         equippedSkin:'clasica',
         isAdmin:false,
@@ -1137,6 +1259,8 @@ function renderStoreContent(){
   content.innerHTML=`<div class="postibits-badge" style="margin:0 auto 1rem;width:fit-content">Tienes ${currentUserData.postibits} PostiBits</div>
     <p class="section-label" style="margin-top:0">🐣 Mascotas</p>
     <div class="mascot-grid" id="mascotGrid"></div>
+    <p class="section-label">🎨 Colores de mascota</p>
+    <div id="mascotSkinsSection"></div>
     <p class="section-label">📝 Skins de notita</p>
     <div class="mascot-grid" id="skinGrid"></div>
     <div class="buy-postibits-row"><button class="btn btn-primary" disabled>💳 Comprar PostiBits (próximamente)</button></div>`;
@@ -1157,6 +1281,39 @@ function renderStoreContent(){
     grid.appendChild(card);
   });
 
+  const skinsSection=document.getElementById('mascotSkinsSection');
+  const ownedMascots=(currentUserData.ownedMascots&&currentUserData.ownedMascots.length)?currentUserData.ownedMascots:['postiboo'];
+  ownedMascots.forEach(mid=>{
+    const m=MASCOTS[mid];
+    const palettes=MASCOT_SKIN_PALETTES[mid]||[];
+    const ownedSkins=getOwnedMascotSkins(mid);
+    const equippedSkin=getEquippedMascotSkinId(mid);
+
+    const heading=document.createElement('p');
+    heading.className='mascot-skin-heading';
+    heading.textContent=`${m.name}`;
+    skinsSection.appendChild(heading);
+
+    const row=document.createElement('div');
+    row.className='mascot-grid';
+    palettes.forEach(pal=>{
+      const owned=ownedSkins.includes(pal.id);
+      const equipped=equippedSkin===pal.id;
+      const card=document.createElement('div');
+      card.className='mascot-card'+(owned?' owned':'')+(equipped?' equipped':'');
+      const previewSvg=getMascotSvg(mid,null,pal.id);
+      card.innerHTML=`<div class="mascot-svg">${previewSvg}</div><div class="mascot-name">${pal.name}</div><div class="mascot-price">${pal.price===0?'Incluido':pal.price+' PostiBits'}</div>`;
+      const btn=document.createElement('button');
+      btn.className='mascot-btn '+(equipped?'equipped-label':owned?'equip':(currentUserData.postibits<pal.price?'locked':'buy'));
+      btn.textContent=equipped?'✓ Puesto':owned?'Ponerlo':'Comprar';
+      btn.disabled=equipped;
+      btn.onclick=()=>owned?equipMascotSkin(mid,pal.id):buyMascotSkin(mid,pal.id);
+      card.appendChild(btn);
+      row.appendChild(card);
+    });
+    skinsSection.appendChild(row);
+  });
+
   const skinGrid=document.getElementById('skinGrid');
   Object.entries(NOTE_SKINS).forEach(([id,s])=>{
     const owned=(currentUserData.ownedSkins||['clasica']).includes(id);
@@ -1172,6 +1329,55 @@ function renderStoreContent(){
     card.appendChild(btn);
     skinGrid.appendChild(card);
   });
+}
+
+async function buyMascotSkin(mascotId,skinId){
+  const pal=(MASCOT_SKIN_PALETTES[mascotId]||[]).find(p=>p.id===skinId);
+  if(!pal)return;
+  if(currentUserData.postibits<pal.price){
+    showToast('No tienes suficientes PostiBits 🥲');
+    return;
+  }
+
+  if(localMode){
+    currentUserData.postibits-=pal.price;
+    currentUserData.mascotSkins=currentUserData.mascotSkins||{};
+    currentUserData.mascotSkins[mascotId]=[...new Set([...(currentUserData.mascotSkins[mascotId]||['clasico']),skinId])];
+    currentUserData.equippedMascotSkins=currentUserData.equippedMascotSkins||{};
+    currentUserData.equippedMascotSkins[mascotId]=skinId;
+    updatePostibitsBadge();
+    updateWriterMascot();
+    renderStoreContent();
+    showToast(`¡Nuevo color para ${MASCOTS[mascotId].name}! 🎉`);
+    return;
+  }
+
+  try{
+    const ownedNow=[...new Set([...getOwnedMascotSkins(mascotId),skinId])];
+    await updateDoc(doc(db,'users',currentUser.id),{
+      postibits:increment(-pal.price),
+      [`mascotSkins.${mascotId}`]:ownedNow,
+      [`equippedMascotSkins.${mascotId}`]:skinId
+    });
+    showToast(`¡Nuevo color para ${MASCOTS[mascotId].name}! 🎉`);
+  }catch(e){
+    console.error('buyMascotSkin error',e);
+    showToast('No se pudo completar la compra 🥲');
+  }
+}
+
+async function equipMascotSkin(mascotId,skinId){
+  if(localMode){
+    currentUserData.equippedMascotSkins=currentUserData.equippedMascotSkins||{};
+    currentUserData.equippedMascotSkins[mascotId]=skinId;
+    updateWriterMascot();
+    renderStoreContent();
+    return;
+  }
+  try{
+    await updateDoc(doc(db,'users',currentUser.id),{[`equippedMascotSkins.${mascotId}`]:skinId});
+    updateWriterMascot();
+  }catch(e){console.error('equipMascotSkin error',e)}
 }
 
 async function buySkin(id){
@@ -1226,6 +1432,10 @@ async function buyMascot(id){
     currentUserData.postibits-=m.price;
     currentUserData.ownedMascots=[...new Set([...(currentUserData.ownedMascots||['postiboo']),id])];
     currentUserData.equippedMascot=id;
+    currentUserData.mascotSkins=currentUserData.mascotSkins||{};
+    if(!currentUserData.mascotSkins[id])currentUserData.mascotSkins[id]=['clasico'];
+    currentUserData.equippedMascotSkins=currentUserData.equippedMascotSkins||{};
+    currentUserData.equippedMascotSkins[id]='clasico';
     updatePostibitsBadge();
     updateWriterMascot();
     renderStoreContent();
@@ -1237,7 +1447,9 @@ async function buyMascot(id){
     await updateDoc(doc(db,'users',currentUser.id),{
       postibits:increment(-m.price),
       ownedMascots:arrayUnion(id),
-      equippedMascot:id
+      equippedMascot:id,
+      [`mascotSkins.${id}`]:['clasico'],
+      [`equippedMascotSkins.${id}`]:'clasico'
     });
     showToast(`¡${m.name} ahora vive contigo! 🎉`);
   }catch(e){
@@ -1315,6 +1527,7 @@ async function dropNote(){
     responses:[],
     rot:ROTS[Math.floor(Math.random()*ROTS.length)],
     mascotId:getEquippedMascotId(),
+    mascotSkin:getEquippedMascotSkinId(getEquippedMascotId()),
     skin:getEquippedSkinId(),
     hugs:0
   };
@@ -1389,7 +1602,7 @@ function renderFeed(){
   const walker=document.createElement('div');
   walker.className='postiboo-main';
   walker.title='Tu compañero emocional';
-  walker.innerHTML=getMascotSvg(getEquippedMascotId(),null);
+  walker.innerHTML=getMascotSvg(getEquippedMascotId(),null,getEquippedMascotSkinId(getEquippedMascotId()));
   walker.onclick=()=>{
     const msgs=['¡Aquí estoy contigo! 💛','Gracias por acompañarme hoy 🌸','¿Cómo te sientes ahora? 🤍','Sigo caminando a tu lado 🐾'];
     showToast(msgs[Math.floor(Math.random()*msgs.length)]);
@@ -1425,7 +1638,7 @@ function renderFeed(){
 
     const footer=document.createElement('div');footer.className='note-footer';
     const author=document.createElement('span');author.className='note-author';
-    const mascotSvgForNote=getMascotSvg(n.mascotId||'postiboo',n.mood);
+    const mascotSvgForNote=getMascotSvg(n.mascotId||'postiboo',n.mood,n.mascotSkin||'clasico');
     author.innerHTML=`<span class="note-mascot-icon">${mascotSvgForNote}</span>${escapeHtml(n.author)}`;
 
     const rightSide=document.createElement('div');
