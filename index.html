@@ -168,10 +168,56 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
 .toast{position:fixed;bottom:-100px;left:50%;transform:translateX(-50%);background:white;border:2px solid #a8e0c0;border-radius:50px;padding:.7rem 1.5rem;font-weight:700;color:#1f5c3a;box-shadow:0 6px 24px rgba(0,0,0,.15);transition:bottom .4s cubic-bezier(.34,1.56,.64,1);z-index:300;white-space:nowrap;font-size:.9rem}
 .toast.show{bottom:2rem}
 
+/* Hug overlay */
+.hug-overlay{display:none;position:fixed;inset:0;background:rgba(255,220,240,.75);backdrop-filter:blur(6px);z-index:250;align-items:center;justify-content:center}
+.hug-overlay.active{display:flex}
+.hug-card{background:white;border-radius:28px;padding:2.5rem 3rem;text-align:center;border:3px solid var(--pink);animation:popIn .4s cubic-bezier(.34,1.56,.64,1);position:relative;max-width:90vw}
+.hug-bear-big{font-size:5rem;display:block;margin-bottom:1rem;animation:hugBounce .7s ease-in-out infinite alternate}
+.hug-card p{font-size:1.2rem;font-weight:700;color:#c06090}
+.hug-close{position:absolute;top:.8rem;right:1.1rem;font-size:1.5rem;cursor:pointer;color:#d0a0c0;font-weight:700;background:none;border:none}
+.hug-close:hover{color:#c06090}
+.hug-bear{display:inline-block;animation:wiggle 1.5s ease-in-out infinite}
+
+/* Filter scroll row */
+.filter-scroll{display:flex;gap:.5rem;overflow-x:auto;padding-bottom:.2rem;scrollbar-width:thin}
+.filter-scroll::-webkit-scrollbar{height:5px}
+
+/* Response count badge on notes */
+.note-response-count{font-size:.7rem;font-weight:700;color:rgba(80,60,100,.55);display:flex;align-items:center;gap:.2rem}
+
+/* Wandering mascot on corkboard */
+.postiboo-main{position:absolute;bottom:1rem;right:1.5rem;width:44px;height:48px;pointer-events:none;user-select:none;z-index:2;filter:drop-shadow(2px 3px 4px rgba(0,0,0,.12));animation:walk 9s linear infinite}
+.postiboo-main svg{width:100%;height:100%}
+
+/* Keyboard focus visibility */
+.note-card:focus-visible,.mood-btn:focus-visible,.filter-btn:focus-visible,.btn:focus-visible,.mascot-btn:focus-visible{outline:3px solid #c090e0;outline-offset:2px}
+
+/* Little wins toast + confetti */
+.win-toast{position:fixed;bottom:-100px;left:50%;transform:translateX(-50%);background:white;border:2px solid var(--mint);border-radius:50px;padding:.7rem 1.5rem;display:flex;align-items:center;gap:.6rem;font-weight:700;font-size:.9rem;color:#407060;box-shadow:0 6px 24px rgba(0,0,0,.12);transition:bottom .5s cubic-bezier(.34,1.56,.64,1);z-index:300;white-space:nowrap}
+.win-toast.show{bottom:5rem}
+.win-icon{font-size:1.3rem;animation:bounce .6s ease-in-out infinite alternate}
+.confetti-piece{position:fixed;pointer-events:none;z-index:400;animation:confettiFall 1.2s ease-in forwards}
+
+/* Mood tracker (profile) */
+.tracker-top{display:flex;align-items:center;gap:.6rem;background:#fff8e8;border:2px solid #f0d8a0;border-radius:14px;padding:.7rem .9rem;margin-bottom:.8rem}
+.tracker-top .tracker-emoji{font-size:1.6rem}
+.tracker-bars{display:flex;flex-direction:column;gap:.35rem}
+.tracker-bar-row{display:flex;align-items:center;gap:.5rem;font-size:.72rem;color:var(--text-soft)}
+.tracker-bar-label{width:70px;flex-shrink:0;display:flex;align-items:center;gap:.25rem;font-weight:700}
+.tracker-bar-track{flex:1;height:8px;background:#f0e8fa;border-radius:6px;overflow:hidden}
+.tracker-bar-fill{height:100%;border-radius:6px;transition:width .4s ease}
+.tracker-bar-count{width:16px;text-align:right;font-weight:700}
+.tracker-empty{font-size:.78rem;color:var(--text-soft);text-align:center;padding:.6rem 0}
+
 /* Animations */
 @keyframes dropIn{0%{transform:translateY(-40px) rotate(var(--rot,0deg));opacity:0}100%{transform:translateY(0) rotate(var(--rot,0deg));opacity:1}}
 @keyframes popIn{0%{transform:scale(.7);opacity:0}100%{transform:scale(1);opacity:1}}
 @keyframes float{0%,100%{transform:translateY(0px) rotate(-3deg)}50%{transform:translateY(-8px) rotate(3deg)}}
+@keyframes wiggle{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+@keyframes hugBounce{0%{transform:scale(1) rotate(-5deg)}100%{transform:scale(1.12) rotate(5deg)}}
+@keyframes bounce{0%{transform:translateY(0)}100%{transform:translateY(-5px)}}
+@keyframes walk{0%{transform:translateX(0) scaleX(1)}45%{transform:translateX(-70%) scaleX(1)}50%{transform:translateX(-70%) scaleX(-1)}95%{transform:translateX(0) scaleX(-1)}100%{transform:translateX(0) scaleX(1)}}
+@keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotate(0deg)}100%{opacity:0;transform:translateY(320px) rotate(720deg)}}
 
 ::-webkit-scrollbar{width:6px}
 ::-webkit-scrollbar-thumb{background:#e0c8f0;border-radius:10px}
@@ -201,6 +247,7 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
     </div>
     <div class="header-right">
       <span class="postibits-badge" id="postibitsBadge" style="display:none">🥧 <span id="postibitsAmount">0</span></span>
+      <button class="btn btn-secondary" id="hugBtn">🫂 <span class="hug-bear">Abrazo</span></button>
       <button class="btn btn-secondary" id="storeBtn">🛍️ Tienda</button>
       <button class="btn btn-primary" id="newNoteBtn">+ Drop it</button>
       <button class="btn btn-secondary" id="profileBtn">👤 Perfil</button>
@@ -212,12 +259,9 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
     <!-- Filter bar -->
     <div class="filter-bar">
       <span class="filter-label">Mood:</span>
-      <button class="filter-btn active" data-filter="all">Todas ✨</button>
-      <button class="filter-btn" data-filter="sad">😔 Sad</button>
-      <button class="filter-btn" data-filter="calm">😌 Calm</button>
-      <button class="filter-btn" data-filter="hopeful">🌈 Hopeful</button>
-      <button class="filter-btn" data-filter="grateful">✨ Grateful</button>
-      <button class="filter-btn" data-filter="motivated">🔥 Motivated</button>
+      <div class="filter-scroll" id="filterScroll">
+        <button class="filter-btn active" data-filter="all">Todas ✨</button>
+      </div>
     </div>
 
     <!-- Corkboard -->
@@ -252,6 +296,7 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
         <label class="resp-opt"><input type="radio" name="respType" value="apoyo" checked/> 💞 Solo apoyo</label>
         <label class="resp-opt"><input type="radio" name="respType" value="consejos"/> 🌱 Consejos suaves</label>
         <label class="resp-opt"><input type="radio" name="respType" value="historias"/> 🫂 Historias similares</label>
+        <label class="resp-opt"><input type="radio" name="respType" value="aqui"/> 🤍 Solo compañía (I'm here)</label>
       </div>
     </div>
 
@@ -259,6 +304,15 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
       <label class="anon-toggle"><input type="checkbox" id="anonCheck" checked/> Anónima 🫧</label>
       <button class="btn-drop" id="dropBtn">Drop it ✨</button>
     </div>
+  </div>
+</div>
+
+<!-- HUG OVERLAY -->
+<div class="hug-overlay" id="hugOverlay">
+  <div class="hug-card">
+    <button class="hug-close" id="hugClose">×</button>
+    <span class="hug-bear-big">🫂</span>
+    <p>Te mando un abrazo bien fuerte 💞</p>
   </div>
 </div>
 
@@ -283,6 +337,7 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
+<div class="win-toast" id="winToast"><span class="win-icon">🌟</span><span class="win-text">¡Bien hecho!</span></div>
 
 <!-- RESPONSE MODAL -->
 <div class="response-modal" id="responseModal">
@@ -324,7 +379,9 @@ const db=getFirestore(fbApp);
 const MOOD_COLORS={calm:'#c8f0dc',sad:'#b3c6e8',overwhelmed:'#e8c3e8',angry:'#f4b8b8',confused:'#ffd9a8',lonely:'#dce8f0',anxious:'#c9d4f0',grateful:'#fff0b8',motivated:'#ffe0b8',drained:'#cfd8dc',hopeful:'#b8eaf4'};
 const MOOD_EMOJIS={calm:'😌',sad:'😔',overwhelmed:'😵',angry:'😡',confused:'😕',lonely:'🤍',anxious:'🧿',grateful:'✨',motivated:'🔥',drained:'🌧️',hopeful:'🌈'};
 const PROMPTS={sad:'¿Qué te apachurró el corazón hoy? 💙',calm:'Qué bien que estés tranqui… ¿qué te dio paz hoy? 🌿',overwhelmed:'Respira. Cuéntale a tu notita qué te tiene así 💜',angry:'¿Qué te hizo enojar? Aquí puedes soltarlo todo 🔴',confused:'¿Qué te tiene con la cabeza hecha bola? 🌀',lonely:'No estás sola/solo. Cuéntame qué sientes 🤍',anxious:'Respira suavito. ¿Qué te está preocupando? 🫧',grateful:'¡Qué bonito! ¿Qué te hizo sonreír hoy? ✨',motivated:'¡Eso! ¿Qué te está llenando de energía? 🔥',drained:'Está bien descansar. ¿Qué te dejó sin pilas? 🌧️',hopeful:'Se siente bien tener esperanza 🌈 ¿Qué la generó?'};
-const RESPONSES_PACK={apoyo:['🐻 Estoy contigo','☁️ Respira conmigo','🐥 Yo también pasé por eso','⭐ Lo estás haciendo bien'],consejos:['🌱 Un paso a la vez','🫧 Habla con alguien de confianza','🌸 Date un momento para ti','✨ Está bien pedir ayuda'],historias:['🫂 Una vez yo también…','💜 Pasé algo similar','🌈 Salí adelante, tú puedes','🐣 No eres la única']};
+const RESPONSES_PACK={apoyo:['🐻 Estoy contigo','☁️ Respira conmigo','🐥 Yo también pasé por eso','⭐ Lo estás haciendo bien'],consejos:['🌱 Un paso a la vez','🫧 Habla con alguien de confianza','🌸 Date un momento para ti','✨ Está bien pedir ayuda'],historias:['🫂 Una vez yo también…','💜 Pasé algo similar','🌈 Salí adelante, tú puedes','🐣 No eres la única'],aqui:['🤍','🫂','💛','🌸']};
+const POSITIVE_MOODS=['hopeful','grateful','motivated','calm'];
+const MOOD_ORDER=['calm','sad','overwhelmed','angry','confused','lonely','anxious','grateful','motivated','drained','hopeful'];
 const ROTS=[-3,-1.5,0,1.5,2.5,-2,1,-1,3,-2.5];
 
 const MOOD_EXPRESSION={
@@ -421,6 +478,7 @@ function showToast(msg){
 
 function init(){
   renderMoodGrid();
+  renderFilterBar();
   document.getElementById('postibooWriter').innerHTML=MASCOTS.postiboo.svg;
   document.getElementById('companionMascotIcon').innerHTML=MASCOTS.postiboo.svg;
 
@@ -437,6 +495,12 @@ function init(){
     if(e.target===document.getElementById('storeModal'))document.getElementById('storeModal').classList.remove('active');
   };
 
+  document.getElementById('hugBtn').onclick=sendHug;
+  document.getElementById('hugClose').onclick=()=>document.getElementById('hugOverlay').classList.remove('active');
+  document.getElementById('hugOverlay').onclick=(e)=>{
+    if(e.target===document.getElementById('hugOverlay'))document.getElementById('hugOverlay').classList.remove('active');
+  };
+
   document.getElementById('noteText').oninput=function(){document.getElementById('charCount').textContent=this.value.length};
   document.getElementById('dropBtn').onclick=dropNote;
   document.getElementById('changeMascotBtn').onclick=()=>{
@@ -445,6 +509,28 @@ function init(){
   };
   document.getElementById('sendCustomResponse').onclick=sendCustomResponse;
 
+  document.addEventListener('keydown',(e)=>{
+    if(e.key!=='Escape')return;
+    if(document.getElementById('hugOverlay').classList.contains('active')){document.getElementById('hugOverlay').classList.remove('active');return}
+    if(document.getElementById('createNoteModal').classList.contains('active')){closeCreateModal();return}
+    if(document.getElementById('storeModal').classList.contains('active')){document.getElementById('storeModal').classList.remove('active');return}
+    if(document.getElementById('responseModal').classList.contains('active')){closeResponseModal();return}
+    if(document.getElementById('authModal').classList.contains('active')){closeAuthModal();return}
+  });
+
+  listenToNotes();
+  onAuthStateChanged(auth,handleAuthStateChange);
+}
+
+function renderFilterBar(){
+  const scroll=document.getElementById('filterScroll');
+  MOOD_ORDER.forEach(mood=>{
+    const btn=document.createElement('button');
+    btn.className='filter-btn';
+    btn.dataset.filter=mood;
+    btn.textContent=`${MOOD_EMOJIS[mood]} ${mood}`;
+    scroll.appendChild(btn);
+  });
   document.querySelectorAll('.filter-btn').forEach(btn=>{
     btn.onclick=()=>{
       document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
@@ -453,9 +539,13 @@ function init(){
       renderFeed();
     };
   });
+}
 
-  listenToNotes();
-  onAuthStateChanged(auth,handleAuthStateChange);
+function sendHug(){
+  document.getElementById('hugOverlay').classList.add('active');
+  if(currentUser){
+    awardSupportBit().catch(e=>console.error('hug award error',e));
+  }
 }
 
 function listenToNotes(){
@@ -582,6 +672,11 @@ function renderProfileContent(){
       </div>
 
       <div class="profile-section">
+        <p class="section-label">📊 Tu Mood Tracker</p>
+        <div id="profileMoodTracker"></div>
+      </div>
+
+      <div class="profile-section">
         <p class="section-label">📝 Mis notitas</p>
         <div class="profile-list" id="profileMyNotes"></div>
       </div>
@@ -598,6 +693,7 @@ function renderProfileContent(){
 
       <button onclick="logout()" class="btn btn-secondary" style="width:100%;margin-top:.5rem">Salir</button>
     `;
+    renderMoodTracker(document.getElementById('profileMoodTracker'));
     renderMyNotesList(document.getElementById('profileMyNotes'));
     renderOwnedMascotsList(document.getElementById('profileOwnedMascots'));
     renderSupportedNotesList(document.getElementById('profileSupportedNotes'));
@@ -615,6 +711,34 @@ function renderProfileContent(){
     `;
     document.getElementById('authForm').onsubmit=handleAuth;
   }
+}
+
+function renderMoodTracker(container){
+  const mine=allNotes.filter(n=>n.userId===currentUser.id);
+  if(mine.length===0){
+    container.innerHTML='<p class="tracker-empty">Deja tu primera notita para ver tus estadísticas aquí 🌱</p>';
+    return;
+  }
+
+  const weekAgo=Date.now()-7*86400000;
+  const recent=mine.filter(n=>(n.timestamp||0)>=weekAgo);
+  const pool=recent.length>0?recent:mine;
+
+  const counts={};
+  pool.forEach(n=>{counts[n.mood]=(counts[n.mood]||0)+1});
+
+  const topMood=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0][0];
+  const maxCount=Math.max(...Object.values(counts));
+
+  let html=`<div class="tracker-top"><span class="tracker-emoji">${MOOD_EMOJIS[topMood]}</span><span>Tu mood más frecuente ${recent.length>0?'esta semana':''} fue <strong>${topMood}</strong> 💛</span></div>`;
+  html+='<div class="tracker-bars">';
+  Object.entries(counts).sort((a,b)=>b[1]-a[1]).forEach(([mood,count])=>{
+    const pct=Math.round((count/maxCount)*100);
+    html+=`<div class="tracker-bar-row"><span class="tracker-bar-label">${MOOD_EMOJIS[mood]} ${mood}</span><span class="tracker-bar-track"><span class="tracker-bar-fill" style="width:${pct}%;background:${MOOD_COLORS[mood]}"></span></span><span class="tracker-bar-count">${count}</span></div>`;
+  });
+  html+='</div>';
+
+  container.innerHTML=html;
 }
 
 function truncate(str,n){
@@ -822,7 +946,7 @@ function closeCreateModal(){
 
 async function dropNote(){
   const text=document.getElementById('noteText').value.trim();
-  if(!selectedMood){alert('Elige un mood');return}
+  if(!selectedMood){showToast('Elige un mood primero 💛');return}
 
   const anon=document.getElementById('anonCheck').checked;
   const respType=document.querySelector('input[name="respType"]:checked').value;
@@ -844,9 +968,15 @@ async function dropNote(){
     mascotId:getEquippedMascotId()
   };
 
+  const wasPositive=POSITIVE_MOODS.includes(selectedMood);
+
   try{
     await addDoc(collection(db,'notes'),note);
     closeCreateModal();
+    if(wasPositive){
+      setTimeout(showWinToast,500);
+      setTimeout(launchConfetti,600);
+    }
   }catch(e){
     console.error('dropNote error',e);
     showToast('No se pudo guardar tu notita 🥲');
@@ -855,9 +985,46 @@ async function dropNote(){
   }
 }
 
+function showWinToast(){
+  const opts=[
+    {i:'🐥',t:'¡Lo estás haciendo bien! 🌟'},
+    {i:'⭐',t:'¡Pequeña victoria celebrada! ✨'},
+    {i:'🌈',t:'¡Tu notita llegó al corcho! 💛'},
+    {i:'🌸',t:'¡Eso es! ¡Sigue así! 🎉'}
+  ];
+  const o=opts[Math.floor(Math.random()*opts.length)];
+  const toast=document.getElementById('winToast');
+  toast.querySelector('.win-icon').textContent=o.i;
+  toast.querySelector('.win-text').textContent=o.t;
+  toast.classList.add('show');
+  setTimeout(()=>toast.classList.remove('show'),3000);
+}
+
+function launchConfetti(){
+  const cols=['#f9c8d8','#fff3b8','#c8e4f8','#e2d4f8','#c8f0dc','#ffd8c0'];
+  for(let i=0;i<26;i++){
+    const p=document.createElement('div');p.className='confetti-piece';
+    p.style.left=(20+Math.random()*60)+'vw';
+    p.style.top=(Math.random()*30)+'vh';
+    p.style.background=cols[Math.floor(Math.random()*cols.length)];
+    const size=(6+Math.random()*8)+'px';
+    p.style.width=size;p.style.height=size;
+    p.style.borderRadius=Math.random()>.5?'50%':'2px';
+    p.style.animationDelay=(Math.random()*.5)+'s';
+    p.style.animationDuration=(.9+Math.random()*.8)+'s';
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),2000);
+  }
+}
+
 function renderFeed(){
   const board=document.getElementById('corkboard');
   board.innerHTML='';
+
+  const walker=document.createElement('div');
+  walker.className='postiboo-main';
+  walker.innerHTML=getMascotSvg(getEquippedMascotId(),null);
+  board.appendChild(walker);
 
   let notes=allNotes;
   if(currentFilter!=='all'){
@@ -865,7 +1032,10 @@ function renderFeed(){
   }
 
   if(notes.length===0){
-    board.innerHTML='<div class="empty-board">Todavía no hay notitas por aquí… ¡sé la primera! 🌈</div>';
+    const empty=document.createElement('div');
+    empty.className='empty-board';
+    empty.textContent='Todavía no hay notitas por aquí… ¡sé la primera! 🌈';
+    board.appendChild(empty);
     return;
   }
 
@@ -874,6 +1044,9 @@ function renderFeed(){
     card.className='note-card';
     card.style.setProperty('--rot',n.rot+'deg');
     card.style.background=n.color;
+    card.tabIndex=0;
+    card.setAttribute('role','button');
+    card.setAttribute('aria-label',`Notita ${n.mood} de ${n.author}: ${n.text}`);
 
     const pin=document.createElement('div');pin.className='note-pin';
     const emoji=document.createElement('div');emoji.className='note-mood-emoji';emoji.textContent=n.emoji;
@@ -883,8 +1056,19 @@ function renderFeed(){
     const author=document.createElement('span');author.className='note-author';
     const mascotSvgForNote=getMascotSvg(n.mascotId||'postiboo',n.mood);
     author.innerHTML=`<span class="note-mascot-icon">${mascotSvgForNote}</span>${escapeHtml(n.author)}`;
-    const reactions=document.createElement('div');reactions.className='note-reactions';
 
+    const rightSide=document.createElement('div');
+    rightSide.style.cssText='display:flex;align-items:center;gap:.5rem';
+
+    const respCount=(n.responses||[]).length;
+    if(respCount>0){
+      const countEl=document.createElement('span');
+      countEl.className='note-response-count';
+      countEl.textContent=`💬 ${respCount}`;
+      rightSide.appendChild(countEl);
+    }
+
+    const reactions=document.createElement('div');reactions.className='note-reactions';
     const responseExamples=RESPONSES_PACK[n.responseType]||RESPONSES_PACK.apoyo;
     responseExamples.slice(0,2).forEach(r=>{
       const m=r.match(/^\p{Emoji}/u);
@@ -894,9 +1078,10 @@ function renderFeed(){
       sp.textContent=emoji;
       reactions.appendChild(sp);
     });
+    rightSide.appendChild(reactions);
 
     footer.appendChild(author);
-    footer.appendChild(reactions);
+    footer.appendChild(rightSide);
 
     card.appendChild(pin);
     card.appendChild(emoji);
@@ -904,6 +1089,9 @@ function renderFeed(){
     card.appendChild(footer);
 
     card.onclick=()=>showResponseModal(n);
+    card.onkeydown=(e)=>{
+      if(e.key==='Enter'||e.key===' '){e.preventDefault();showResponseModal(n)}
+    };
 
     board.appendChild(card);
   });
@@ -945,11 +1133,31 @@ async function addResponseToNote(noteId,txt){
   try{
     await updateDoc(doc(db,'notes',noteId),{responses:arrayUnion(resp)});
     showToast('¡Tu apoyo fue enviado! 💌');
+    if(currentUser){
+      awardSupportBit().catch(e=>console.error('award error',e));
+    }
   }catch(e){
     console.error('addResponse error',e);
     showToast('No se pudo enviar tu apoyo 🥲');
   }
   closeResponseModal();
+}
+
+const DAILY_SUPPORT_CAP=5;
+
+async function awardSupportBit(){
+  if(!currentUser||!currentUserData)return;
+  const today=todayStr();
+  const sameDay=currentUserData.supportDate===today;
+  const countToday=sameDay?(currentUserData.supportCountToday||0):0;
+  if(countToday>=DAILY_SUPPORT_CAP)return;
+  try{
+    await updateDoc(doc(db,'users',currentUser.id),{
+      postibits:increment(1),
+      supportDate:today,
+      supportCountToday:sameDay?increment(1):1
+    });
+  }catch(e){console.error('awardSupportBit error',e)}
 }
 
 async function sendCustomResponse(){
