@@ -369,10 +369,8 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
     <div class="response-type">
       <p class="section-label">¿Qué tipo de compañía quieres?</p>
       <div class="response-options">
-        <label class="resp-opt"><input type="radio" name="respType" value="apoyo" checked/> 💞 Solo apoyo</label>
-        <label class="resp-opt"><input type="radio" name="respType" value="consejos"/> 🌱 Consejos suaves</label>
-        <label class="resp-opt"><input type="radio" name="respType" value="historias"/> 🫂 Historias similares</label>
-        <label class="resp-opt"><input type="radio" name="respType" value="aqui"/> 🤍 Solo compañía (I'm here)</label>
+        <label class="resp-opt"><input type="radio" name="respType" value="apoyo" checked/> 💛 Post-itapoyo</label>
+        <label class="resp-opt"><input type="radio" name="respType" value="historias"/> 📖 Post-itistoria</label>
       </div>
     </div>
 
@@ -472,26 +470,29 @@ async function loadFirebase(){
 
 const MOOD_COLORS={calm:'#c8f0dc',sad:'#b3c6e8',overwhelmed:'#e8c3e8',angry:'#f4b8b8',confused:'#ffd9a8',lonely:'#dce8f0',anxious:'#c9d4f0',grateful:'#fff0b8',motivated:'#ffe0b8',drained:'#cfd8dc',hopeful:'#b8eaf4'};
 const MOOD_EMOJIS={calm:'😌',sad:'😔',overwhelmed:'😵',angry:'😡',confused:'😕',lonely:'🤍',anxious:'🧿',grateful:'✨',motivated:'🔥',drained:'🌧️',hopeful:'🌈'};
+const MOOD_LABELS_ES={calm:'Calma',sad:'Triste',overwhelmed:'Abrumada',angry:'Enojada',confused:'Confundida',lonely:'Sola',anxious:'Ansiosa',grateful:'Agradecida',motivated:'Motivada',drained:'Agotada',hopeful:'Esperanzada'};
+function moodLabel(mood){return MOOD_LABELS_ES[mood]||mood}
 const PROMPTS={sad:'¿Qué te apachurró el corazón hoy? 💙',calm:'Qué bien que estés tranqui… ¿qué te dio paz hoy? 🌿',overwhelmed:'Respira. Cuéntale a tu notita qué te tiene así 💜',angry:'¿Qué te hizo enojar? Aquí puedes soltarlo todo 🔴',confused:'¿Qué te tiene con la cabeza hecha bola? 🌀',lonely:'No estás sola/solo. Cuéntame qué sientes 🤍',anxious:'Respira suavito. ¿Qué te está preocupando? 🫧',grateful:'¡Qué bonito! ¿Qué te hizo sonreír hoy? ✨',motivated:'¡Eso! ¿Qué te está llenando de energía? 🔥',drained:'Está bien descansar. ¿Qué te dejó sin pilas? 🌧️',hopeful:'Se siente bien tener esperanza 🌈 ¿Qué la generó?'};
+
+// Post-itapoyo = pura reacción con emoji, sin frase. Post-itistoria = frase corta.
 const RESPONSES_PACK={
   heavy:{
-    apoyo:['🐻 Estoy contigo','☁️ Respira conmigo','🐥 Yo también pasé por eso','⭐ Lo estás haciendo bien'],
-    consejos:['🌱 Un paso a la vez','🫧 Habla con alguien de confianza','🌸 Date un momento para ti','✨ Está bien pedir ayuda'],
-    historias:['🫂 Una vez yo también…','💜 Pasé algo similar','🌈 Salí adelante, tú puedes','🐣 No eres la única'],
-    aqui:['🤍','🫂','💛','🌸']
+    apoyo:['🐻','☁️','🐥','⭐','💛','🫂'],
+    historias:['🫂 Una vez yo también…','💜 Pasé algo similar','🌈 Salí adelante, tú puedes','🐣 No eres la única']
   },
   positive:{
-    apoyo:['🎉 ¡Me alegra tanto por ti!','✨ Se nota tu buena energía','🐥 ¡Sigue así!','🌟 ¡Qué bonito leer esto!'],
-    consejos:['🌱 Disfruta este momento','🌸 Compártelo con alguien que quieras','🎊 Celébralo en grande','✨ Guarda este recuerdo'],
-    historias:['🫂 A mí también me pasó algo así de bonito','💛 Amo leer estas historias','🌈 Qué rico se siente cuando pasa esto','🐣 Gracias por compartirlo'],
-    aqui:['🎉','✨','💛','🌟']
+    apoyo:['🎉','✨','🐥','🌟','💛','🎊'],
+    historias:['🫂 A mí también me pasó algo así de bonito','💛 Amo leer estas historias','🌈 Qué rico se siente cuando pasa esto','🐣 Gracias por compartirlo']
   }
 };
 const POSITIVE_MOODS_SET=new Set(['calm','grateful','motivated','hopeful']);
+function normalizeResponseType(type){
+  return type==='historias'?'historias':'apoyo';
+}
 function getResponsePack(mood,responseType){
   const group=POSITIVE_MOODS_SET.has(mood)?'positive':'heavy';
   const pack=RESPONSES_PACK[group];
-  return pack[responseType]||pack.apoyo;
+  return pack[normalizeResponseType(responseType)];
 }
 const POSITIVE_MOODS=['hopeful','grateful','motivated','calm'];
 const MOOD_ORDER=['calm','sad','overwhelmed','angry','confused','lonely','anxious','grateful','motivated','drained','hopeful'];
@@ -730,7 +731,7 @@ function renderFilterBar(){
     const btn=document.createElement('button');
     btn.className='filter-btn';
     btn.dataset.filter=mood;
-    btn.textContent=`${MOOD_EMOJIS[mood]} ${mood}`;
+    btn.textContent=`${MOOD_EMOJIS[mood]} ${moodLabel(mood)}`;
     scroll.appendChild(btn);
   });
   document.querySelectorAll('.filter-btn').forEach(btn=>{
@@ -1229,7 +1230,7 @@ function renderMoodGrid(){
     const btn=document.createElement('button');
     btn.className='mood-btn';
     btn.dataset.mood=mood;
-    btn.innerHTML=`${emoji}<span>${mood}</span>`;
+    btn.innerHTML=`${emoji}<span>${moodLabel(mood)}</span>`;
     btn.type='button';
     btn.onclick=()=>{
       document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('selected'));
