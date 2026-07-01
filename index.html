@@ -132,6 +132,10 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
 .response-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:white;border-radius:20px;padding:2rem;border:2px solid #e8d0f0;z-index:150;max-width:400px;width:90%;box-shadow:0 10px 40px rgba(0,0,0,.2);display:none}
 .response-modal.active{display:block}
 .response-option{padding:1rem;background:#f8f0ff;border:2px solid #e8d0f0;border-radius:12px;margin-bottom:.8rem;cursor:pointer;transition:all .15s}
+.response-options-grid.is-apoyo{display:flex;flex-wrap:wrap;gap:.6rem}
+.response-option-emoji{padding:.5rem;margin-bottom:0;width:52px;height:52px;display:flex;align-items:center;justify-content:center;border-radius:14px}
+.response-option-emoji:hover{transform:scale(1.1)}
+.response-emoji-big{font-size:1.6rem;line-height:1}
 .response-option:hover{background:var(--lavender);border-color:#c090e0}
 .response-option strong{color:var(--text);display:block;margin-bottom:.3rem}
 .response-option small{color:var(--text-soft)}
@@ -172,6 +176,10 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
 .buy-postibits-row{text-align:center;margin-top:1.2rem;padding-top:1rem;border-top:1px dashed #e0c8f0}
 .buy-postibits-row button{opacity:.55;cursor:not-allowed}
 
+.note-hug-btn{display:flex;align-items:center;gap:.4rem;background:var(--pink);border:2px solid #f0a8c0;color:#c06090;padding:.5rem 1rem;border-radius:50px;font-family:var(--font);font-weight:700;font-size:.85rem;cursor:pointer;margin-bottom:1rem;transition:transform .15s}
+.note-hug-btn:hover{transform:scale(1.04)}
+.note-hug-btn:active{transform:scale(.96)}
+
 /* Admin controls */
 .admin-controls{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;background:#fff0f0;border:2px solid #f0b8b8;border-radius:14px;padding:.6rem .8rem;margin-bottom:1rem}
 .admin-tag{font-size:.75rem;font-weight:800;color:#c04040;background:white;border-radius:50px;padding:.15rem .6rem}
@@ -185,6 +193,12 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
 .terms-box{background:#faf5ff;border:2px solid #ecdcf8;border-radius:14px;padding:.8rem}
 .terms-title{font-size:.85rem;font-weight:800;color:var(--text);margin-bottom:.4rem}
 .terms-text{font-size:.75rem;color:var(--text-soft);line-height:1.5;margin-bottom:.6rem}
+
+.companion-badge{width:44px;height:48px;cursor:pointer;display:flex;align-items:center;justify-content:center;animation:companionWobble 3s ease-in-out infinite}
+.companion-badge:hover{animation:companionWobble .7s ease-in-out infinite}
+.companion-badge-icon{width:100%;height:100%;display:flex}
+.companion-badge-icon svg{width:100%;height:100%}
+@keyframes companionWobble{0%,100%{transform:rotate(-4deg) translateY(0)}50%{transform:rotate(4deg) translateY(-3px)}}
 
 /* Welcome modal */
 #welcomeModal{z-index:500}
@@ -216,7 +230,9 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
 .note-response-count{font-size:.7rem;font-weight:700;color:rgba(80,60,100,.55);display:flex;align-items:center;gap:.2rem}
 
 /* Wandering mascot on corkboard */
-.postiboo-main{position:absolute;bottom:1rem;right:1.5rem;width:44px;height:48px;pointer-events:none;user-select:none;z-index:2;filter:drop-shadow(2px 3px 4px rgba(0,0,0,.12));animation:walk 9s linear infinite}
+.postiboo-main{position:absolute;bottom:.5rem;right:1.5rem;width:80px;height:86px;pointer-events:auto;cursor:pointer;user-select:none;z-index:2;filter:drop-shadow(3px 5px 6px rgba(0,0,0,.15));animation:walk 9s linear infinite}
+.postiboo-main svg{animation:mascotBob 2.2s ease-in-out infinite}
+.postiboo-main:hover svg{animation:mascotBob 0.6s ease-in-out infinite}
 .postiboo-main svg{width:100%;height:100%}
 
 /* Keyboard focus visibility */
@@ -247,6 +263,7 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
 @keyframes hugBounce{0%{transform:scale(1) rotate(-5deg)}100%{transform:scale(1.12) rotate(5deg)}}
 @keyframes bounce{0%{transform:translateY(0)}100%{transform:translateY(-5px)}}
 @keyframes walk{0%{transform:translateX(0) scaleX(1)}45%{transform:translateX(-70%) scaleX(1)}50%{transform:translateX(-70%) scaleX(-1)}95%{transform:translateX(0) scaleX(-1)}100%{transform:translateX(0) scaleX(1)}}
+@keyframes mascotBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 @keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotate(0deg)}100%{opacity:0;transform:translateY(320px) rotate(720deg)}}
 
 ::-webkit-scrollbar{width:6px}
@@ -318,6 +335,9 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
       <div class="logo">
         <span class="logo-icon">🌈</span>
         <span class="logo-text">Post-itopia</span>
+      </div>
+      <div class="companion-badge" id="companionBadge" title="Tu compañero emocional">
+        <span class="companion-badge-icon" id="companionBadgeIcon"></span>
       </div>
       <div class="tagline">Tu rinconcito emocional pastel.</div>
     </div>
@@ -418,6 +438,7 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
   <button class="modal-close" onclick="closeResponseModal()">×</button>
   <h3 id="responseTitle" style="margin-bottom:1rem;color:var(--text);font-size:1.1rem"></h3>
   <p id="responseText" style="margin-bottom:1rem;color:var(--text);line-height:1.6"></p>
+  <button id="noteHugBtn" class="note-hug-btn">🫂 Mandar un abrazo <span id="noteHugCount">0</span></button>
   <div id="adminControls" class="admin-controls" style="display:none">
     <span class="admin-tag" id="adminRoleTag">🛡️ Admin</span>
     <button id="adminDeleteNoteBtn" class="admin-btn admin-btn-delete">🗑️ Eliminar notita</button>
@@ -477,14 +498,19 @@ const PROMPTS={sad:'¿Qué te apachurró el corazón hoy? 💙',calm:'Qué bien 
 // Post-itapoyo = pura reacción con emoji, sin frase. Post-itistoria = frase corta.
 const RESPONSES_PACK={
   heavy:{
-    apoyo:['🐻','☁️','🐥','⭐','💛','🫂'],
+    apoyo:['🐻','☁️','🤗','⭐','💛','🫂'],
     historias:['🫂 Una vez yo también…','💜 Pasé algo similar','🌈 Salí adelante, tú puedes','🐣 No eres la única']
   },
   positive:{
-    apoyo:['🎉','✨','🐥','🌟','💛','🎊'],
+    apoyo:['🎉','✨','🙌','🌟','💛','🎊'],
     historias:['🫂 A mí también me pasó algo así de bonito','💛 Amo leer estas historias','🌈 Qué rico se siente cuando pasa esto','🐣 Gracias por compartirlo']
   }
 };
+const EMOJI_MEANINGS={
+  '🐻':'Un abrazo de oso','☁️':'Respiro contigo','🤗':'Aquí estoy para ti','⭐':'Lo estás haciendo bien','💛':'Con todo mi cariño','🫂':'Un abrazo',
+  '🎉':'¡Me alegra por ti!','✨':'Brillas','🙌':'¡Sigue así!','🌟':'Qué bonito leer esto','🎊':'¡A celebrar!'
+};
+function emojiMeaning(e){return EMOJI_MEANINGS[e]||''}
 const POSITIVE_MOODS_SET=new Set(['calm','grateful','motivated','hopeful']);
 function normalizeResponseType(type){
   return type==='historias'?'historias':'apoyo';
@@ -636,8 +662,10 @@ async function init(){
   renderFilterBar();
   document.getElementById('postibooWriter').innerHTML=MASCOTS.postiboo.svg;
   document.getElementById('companionMascotIcon').innerHTML=MASCOTS.postiboo.svg;
+  document.getElementById('companionBadgeIcon').innerHTML=MASCOTS.postiboo.svg;
 
   document.getElementById('newNoteBtn').onclick=()=>document.getElementById('createNoteModal').classList.add('active');
+  document.getElementById('companionBadge').onclick=showStoreModal;
   document.getElementById('closeCreateModal').onclick=()=>closeCreateModal();
   document.getElementById('createNoteModal').onclick=(e)=>{
     if(e.target===document.getElementById('createNoteModal'))closeCreateModal();
@@ -665,6 +693,7 @@ async function init(){
   document.getElementById('sendCustomResponse').onclick=sendCustomResponse;
   document.getElementById('adminDeleteNoteBtn').onclick=adminDeleteNote;
   document.getElementById('adminBanAuthorBtn').onclick=adminBanAuthor;
+  document.getElementById('noteHugBtn').onclick=sendNoteHug;
 
   const WELCOME_KEY='postitopia_hide_welcome';
   const welcomeModal=document.getElementById('welcomeModal');
@@ -844,6 +873,12 @@ function updateWriterMascot(){
     companionIcon.innerHTML=svg;
     companionName.textContent=MASCOTS[equippedId].name;
   }
+
+  const badgeIcon=document.getElementById('companionBadgeIcon');
+  if(badgeIcon){
+    badgeIcon.innerHTML=getMascotSvg(equippedId,null);
+    document.getElementById('companionBadge').title=`Tu compañero: ${MASCOTS[equippedId].name}`;
+  }
 }
 
 function getEquippedMascotId(){
@@ -943,11 +978,11 @@ function renderMoodTracker(container){
   const topMood=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0][0];
   const maxCount=Math.max(...Object.values(counts));
 
-  let html=`<div class="tracker-top"><span class="tracker-emoji">${MOOD_EMOJIS[topMood]}</span><span>Tu mood más frecuente ${recent.length>0?'esta semana':''} fue <strong>${topMood}</strong> 💛</span></div>`;
+  let html=`<div class="tracker-top"><span class="tracker-emoji">${MOOD_EMOJIS[topMood]}</span><span>Tu mood más frecuente ${recent.length>0?'esta semana':''} fue <strong>${moodLabel(topMood)}</strong> 💛</span></div>`;
   html+='<div class="tracker-bars">';
   Object.entries(counts).sort((a,b)=>b[1]-a[1]).forEach(([mood,count])=>{
     const pct=Math.round((count/maxCount)*100);
-    html+=`<div class="tracker-bar-row"><span class="tracker-bar-label">${MOOD_EMOJIS[mood]} ${mood}</span><span class="tracker-bar-track"><span class="tracker-bar-fill" style="width:${pct}%;background:${MOOD_COLORS[mood]}"></span></span><span class="tracker-bar-count">${count}</span></div>`;
+    html+=`<div class="tracker-bar-row"><span class="tracker-bar-label">${MOOD_EMOJIS[mood]} ${moodLabel(mood)}</span><span class="tracker-bar-track"><span class="tracker-bar-fill" style="width:${pct}%;background:${MOOD_COLORS[mood]}"></span></span><span class="tracker-bar-count">${count}</span></div>`;
   });
   html+='</div>';
 
@@ -1280,7 +1315,8 @@ async function dropNote(){
     responses:[],
     rot:ROTS[Math.floor(Math.random()*ROTS.length)],
     mascotId:getEquippedMascotId(),
-    skin:getEquippedSkinId()
+    skin:getEquippedSkinId(),
+    hugs:0
   };
 
   const wasPositive=POSITIVE_MOODS.includes(selectedMood);
@@ -1352,7 +1388,12 @@ function renderFeed(){
 
   const walker=document.createElement('div');
   walker.className='postiboo-main';
+  walker.title='Tu compañero emocional';
   walker.innerHTML=getMascotSvg(getEquippedMascotId(),null);
+  walker.onclick=()=>{
+    const msgs=['¡Aquí estoy contigo! 💛','Gracias por acompañarme hoy 🌸','¿Cómo te sientes ahora? 🤍','Sigo caminando a tu lado 🐾'];
+    showToast(msgs[Math.floor(Math.random()*msgs.length)]);
+  };
   board.appendChild(walker);
 
   let notes=allNotes;
@@ -1376,7 +1417,7 @@ function renderFeed(){
     card.style.background=n.color;
     card.tabIndex=0;
     card.setAttribute('role','button');
-    card.setAttribute('aria-label',`Notita ${n.mood} de ${n.author}: ${n.text}`);
+    card.setAttribute('aria-label',`Notita ${moodLabel(n.mood)} de ${n.author}: ${n.text}`);
 
     const pin=document.createElement('div');pin.className='note-pin';
     const emoji=document.createElement('div');emoji.className='note-mood-emoji';emoji.textContent=n.emoji;
@@ -1389,6 +1430,13 @@ function renderFeed(){
 
     const rightSide=document.createElement('div');
     rightSide.style.cssText='display:flex;align-items:center;gap:.5rem';
+
+    if((n.hugs||0)>0){
+      const hugEl=document.createElement('span');
+      hugEl.className='note-response-count';
+      hugEl.textContent=`🫂 ${n.hugs}`;
+      rightSide.appendChild(hugEl);
+    }
 
     const respCount=(n.responses||[]).length;
     if(respCount>0){
@@ -1433,6 +1481,7 @@ function showResponseModal(note){
   const modal=document.getElementById('responseModal');
   document.getElementById('responseTitle').textContent=`${note.emoji} ${note.author}`;
   document.getElementById('responseText').textContent=note.text;
+  document.getElementById('noteHugCount').textContent=note.hugs||0;
 
   const adminBox=document.getElementById('adminControls');
   const canModerate=currentUserData&&(currentUserData.isAdmin||currentUserData.isModerator);
@@ -1455,13 +1504,22 @@ function showResponseModal(note){
 
   const options=document.getElementById('responseOptions');
   options.innerHTML='';
+  options.className='response-options-grid '+(note.responseType==='historias'?'is-historias':'is-apoyo');
 
   const rp=getResponsePack(note.mood,note.responseType);
   rp.forEach((txt)=>{
     const opt=document.createElement('div');
-    opt.className='response-option';
     const m=txt.match(/^\p{Emoji}/u);
-    opt.innerHTML=`<strong>${m?m[0]:'💛'}</strong><small>${txt}</small>`;
+    const iconEmoji=m?m[0]:'💛';
+    const restText=txt.replace(/^\p{Emoji}\s*/u,'');
+    if(note.responseType==='historias'){
+      opt.className='response-option';
+      opt.innerHTML=`<strong>${iconEmoji}</strong><small>${escapeHtml(restText)}</small>`;
+    }else{
+      opt.className='response-option response-option-emoji';
+      opt.title=emojiMeaning(iconEmoji);
+      opt.innerHTML=`<span class="response-emoji-big">${iconEmoji}</span>`;
+    }
     opt.onclick=()=>addResponseToNote(note.id,txt);
     options.appendChild(opt);
   });
@@ -1476,6 +1534,8 @@ async function addResponseToNote(noteId,txt){
     return;
   }
   const resp={id:Date.now().toString(),userId:currentUser?currentUser.id:null,text:txt,timestamp:Date.now()};
+  const meaning=emojiMeaning(txt.trim());
+  const sentMsg=meaning?`${txt} enviado — "${meaning}" 💌`:'¡Tu apoyo fue enviado! 💌';
 
   if(localMode){
     const note=localNotes.find(n=>n.id===noteId);
@@ -1483,7 +1543,7 @@ async function addResponseToNote(noteId,txt){
       note.responses=note.responses||[];
       note.responses.push(resp);
     }
-    showToast('¡Tu apoyo fue enviado! 💌');
+    showToast(sentMsg);
     if(currentUser)awardSupportBit();
     renderFeed();
     closeResponseModal();
@@ -1492,7 +1552,7 @@ async function addResponseToNote(noteId,txt){
 
   try{
     await updateDoc(doc(db,'notes',noteId),{responses:arrayUnion(resp)});
-    showToast('¡Tu apoyo fue enviado! 💌');
+    showToast(sentMsg);
     if(currentUser){
       awardSupportBit().catch(e=>console.error('award error',e));
     }
@@ -1544,6 +1604,35 @@ function closeResponseModal(){
   document.getElementById('responseModal').classList.remove('active');
   currentOpenNoteId=null;
   currentOpenNoteAuthorId=null;
+}
+
+async function sendNoteHug(){
+  if(!currentOpenNoteId)return;
+  const btn=document.getElementById('noteHugBtn');
+  btn.disabled=true;
+  document.getElementById('hugOverlay').classList.add('active');
+
+  if(localMode){
+    const note=localNotes.find(n=>n.id===currentOpenNoteId);
+    if(note){
+      note.hugs=(note.hugs||0)+1;
+      document.getElementById('noteHugCount').textContent=note.hugs;
+    }
+    renderFeed();
+    btn.disabled=false;
+    return;
+  }
+
+  try{
+    await updateDoc(doc(db,'notes',currentOpenNoteId),{hugs:increment(1)});
+    const current=parseInt(document.getElementById('noteHugCount').textContent||'0',10);
+    document.getElementById('noteHugCount').textContent=current+1;
+  }catch(e){
+    console.error('sendNoteHug error',e);
+    showToast('No se pudo enviar el abrazo 🥲');
+  }finally{
+    btn.disabled=false;
+  }
 }
 
 async function adminDeleteNote(){
