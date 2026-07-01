@@ -473,7 +473,26 @@ async function loadFirebase(){
 const MOOD_COLORS={calm:'#c8f0dc',sad:'#b3c6e8',overwhelmed:'#e8c3e8',angry:'#f4b8b8',confused:'#ffd9a8',lonely:'#dce8f0',anxious:'#c9d4f0',grateful:'#fff0b8',motivated:'#ffe0b8',drained:'#cfd8dc',hopeful:'#b8eaf4'};
 const MOOD_EMOJIS={calm:'😌',sad:'😔',overwhelmed:'😵',angry:'😡',confused:'😕',lonely:'🤍',anxious:'🧿',grateful:'✨',motivated:'🔥',drained:'🌧️',hopeful:'🌈'};
 const PROMPTS={sad:'¿Qué te apachurró el corazón hoy? 💙',calm:'Qué bien que estés tranqui… ¿qué te dio paz hoy? 🌿',overwhelmed:'Respira. Cuéntale a tu notita qué te tiene así 💜',angry:'¿Qué te hizo enojar? Aquí puedes soltarlo todo 🔴',confused:'¿Qué te tiene con la cabeza hecha bola? 🌀',lonely:'No estás sola/solo. Cuéntame qué sientes 🤍',anxious:'Respira suavito. ¿Qué te está preocupando? 🫧',grateful:'¡Qué bonito! ¿Qué te hizo sonreír hoy? ✨',motivated:'¡Eso! ¿Qué te está llenando de energía? 🔥',drained:'Está bien descansar. ¿Qué te dejó sin pilas? 🌧️',hopeful:'Se siente bien tener esperanza 🌈 ¿Qué la generó?'};
-const RESPONSES_PACK={apoyo:['🐻 Estoy contigo','☁️ Respira conmigo','🐥 Yo también pasé por eso','⭐ Lo estás haciendo bien'],consejos:['🌱 Un paso a la vez','🫧 Habla con alguien de confianza','🌸 Date un momento para ti','✨ Está bien pedir ayuda'],historias:['🫂 Una vez yo también…','💜 Pasé algo similar','🌈 Salí adelante, tú puedes','🐣 No eres la única'],aqui:['🤍','🫂','💛','🌸']};
+const RESPONSES_PACK={
+  heavy:{
+    apoyo:['🐻 Estoy contigo','☁️ Respira conmigo','🐥 Yo también pasé por eso','⭐ Lo estás haciendo bien'],
+    consejos:['🌱 Un paso a la vez','🫧 Habla con alguien de confianza','🌸 Date un momento para ti','✨ Está bien pedir ayuda'],
+    historias:['🫂 Una vez yo también…','💜 Pasé algo similar','🌈 Salí adelante, tú puedes','🐣 No eres la única'],
+    aqui:['🤍','🫂','💛','🌸']
+  },
+  positive:{
+    apoyo:['🎉 ¡Me alegra tanto por ti!','✨ Se nota tu buena energía','🐥 ¡Sigue así!','🌟 ¡Qué bonito leer esto!'],
+    consejos:['🌱 Disfruta este momento','🌸 Compártelo con alguien que quieras','🎊 Celébralo en grande','✨ Guarda este recuerdo'],
+    historias:['🫂 A mí también me pasó algo así de bonito','💛 Amo leer estas historias','🌈 Qué rico se siente cuando pasa esto','🐣 Gracias por compartirlo'],
+    aqui:['🎉','✨','💛','🌟']
+  }
+};
+const POSITIVE_MOODS_SET=new Set(['calm','grateful','motivated','hopeful']);
+function getResponsePack(mood,responseType){
+  const group=POSITIVE_MOODS_SET.has(mood)?'positive':'heavy';
+  const pack=RESPONSES_PACK[group];
+  return pack[responseType]||pack.apoyo;
+}
 const POSITIVE_MOODS=['hopeful','grateful','motivated','calm'];
 const MOOD_ORDER=['calm','sad','overwhelmed','angry','confused','lonely','anxious','grateful','motivated','drained','hopeful'];
 const ROTS=[-3,-1.5,0,1.5,2.5,-2,1,-1,3,-2.5];
@@ -1379,7 +1398,7 @@ function renderFeed(){
     }
 
     const reactions=document.createElement('div');reactions.className='note-reactions';
-    const responseExamples=RESPONSES_PACK[n.responseType]||RESPONSES_PACK.apoyo;
+    const responseExamples=getResponsePack(n.mood,n.responseType);
     responseExamples.slice(0,2).forEach(r=>{
       const m=r.match(/^\p{Emoji}/u);
       const emoji=m?m[0]:'💛';
@@ -1436,7 +1455,7 @@ function showResponseModal(note){
   const options=document.getElementById('responseOptions');
   options.innerHTML='';
 
-  const rp=RESPONSES_PACK[note.responseType]||RESPONSES_PACK.apoyo;
+  const rp=getResponsePack(note.mood,note.responseType);
   rp.forEach((txt)=>{
     const opt=document.createElement('div');
     opt.className='response-option';
