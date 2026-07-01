@@ -172,6 +172,20 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
 .buy-postibits-row{text-align:center;margin-top:1.2rem;padding-top:1rem;border-top:1px dashed #e0c8f0}
 .buy-postibits-row button{opacity:.55;cursor:not-allowed}
 
+/* Admin controls */
+.admin-controls{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;background:#fff0f0;border:2px solid #f0b8b8;border-radius:14px;padding:.6rem .8rem;margin-bottom:1rem}
+.admin-tag{font-size:.75rem;font-weight:800;color:#c04040;background:white;border-radius:50px;padding:.15rem .6rem}
+.admin-btn{border:none;border-radius:50px;padding:.35rem .8rem;font-family:var(--font);font-weight:700;font-size:.75rem;cursor:pointer;color:white}
+.admin-btn-delete{background:#e05a5a}
+.admin-btn-delete:hover{background:#c84444}
+.admin-btn-ban{background:#c084d8}
+.admin-btn-ban:hover{background:#a866bc}
+
+/* Terms box */
+.terms-box{background:#faf5ff;border:2px solid #ecdcf8;border-radius:14px;padding:.8rem}
+.terms-title{font-size:.85rem;font-weight:800;color:var(--text);margin-bottom:.4rem}
+.terms-text{font-size:.75rem;color:var(--text-soft);line-height:1.5;margin-bottom:.6rem}
+
 /* Welcome modal */
 #welcomeModal{z-index:500}
 .welcome-card{max-width:480px;text-align:center}
@@ -434,7 +448,7 @@ const firebaseConfig={
 // If it isn't (e.g. an offline preview), the app falls back to a local demo mode
 // below so every feature can still be clicked through.
 let initializeApp,getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,onAuthStateChanged,signOut;
-let getFirestore,collection,doc,setDoc,getDoc,addDoc,onSnapshot,query,orderBy,updateDoc,arrayUnion,increment;
+let getFirestore,collection,doc,setDoc,getDoc,addDoc,onSnapshot,query,orderBy,updateDoc,arrayUnion,increment,deleteDoc;
 let auth,db;
 let localMode=false;
 
@@ -449,7 +463,7 @@ async function loadFirebase(){
 
   ({initializeApp}=appMod);
   ({getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,onAuthStateChanged,signOut}=authMod);
-  ({getFirestore,collection,doc,setDoc,getDoc,addDoc,onSnapshot,query,orderBy,updateDoc,arrayUnion,increment}=fsMod);
+  ({getFirestore,collection,doc,setDoc,getDoc,addDoc,onSnapshot,query,orderBy,updateDoc,arrayUnion,increment,deleteDoc}=fsMod);
 
   const fbApp=initializeApp(firebaseConfig);
   auth=getAuth(fbApp);
@@ -544,6 +558,7 @@ let currentFilter='all';
 let isAuthLogin=true;
 let unsubUserDoc=null;
 let currentOpenNoteId=null;
+let currentOpenNoteAuthorId=null;
 let localIdCounter=1;
 
 const DAILY_SUPPORT_CAP=5;
@@ -628,6 +643,8 @@ async function init(){
     showStoreModal();
   };
   document.getElementById('sendCustomResponse').onclick=sendCustomResponse;
+  document.getElementById('adminDeleteNoteBtn').onclick=adminDeleteNote;
+  document.getElementById('adminBanAuthorBtn').onclick=adminBanAuthor;
 
   document.addEventListener('keydown',(e)=>{
     if(e.key!=='Escape')return;
@@ -1375,9 +1392,18 @@ function renderFeed(){
 
 function showResponseModal(note){
   currentOpenNoteId=note.id;
+  currentOpenNoteAuthorId=note.userId||null;
   const modal=document.getElementById('responseModal');
   document.getElementById('responseTitle').textContent=`${note.emoji} ${note.author}`;
   document.getElementById('responseText').textContent=note.text;
+
+  const adminBox=document.getElementById('adminControls');
+  if(currentUserData&&currentUserData.isAdmin){
+    adminBox.style.display='flex';
+    document.getElementById('adminBanAuthorBtn').style.display=note.userId?'inline-flex':'none';
+  }else{
+    adminBox.style.display='none';
+  }
 
   const existingWrap=document.getElementById('existingResponses');
   const responses=note.responses||[];
@@ -1477,6 +1503,48 @@ async function sendCustomResponse(){
 function closeResponseModal(){
   document.getElementById('responseModal').classList.remove('active');
   currentOpenNoteId=null;
+  currentOpenNoteAuthorId=null;
+}
+
+async function adminDeleteNote(){
+  if(!currentUserData||!currentUserData.isAdmin||!currentOpenNoteId)return;
+  if(!confirm('¿Eliminar esta notita permanentemente?'))return;
+
+  if(localMode){
+    localNotes=localNotes.filter(n=>n.id!==currentOpenNoteId);
+    allNotes=localNotes;
+    renderFeed();
+    closeResponseModal();
+    showToast('Notita eliminada 🗑️');
+    return;
+  }
+
+  try{
+    await deleteDoc(doc(db,'notes',currentOpenNoteId));
+    closeResponseModal();
+    showToast('Notita eliminada 🗑️');
+  }catch(e){
+    console.error('adminDeleteNote error',e);
+    showToast('No se pudo eliminar la notita 🥲');
+  }
+}
+
+async function adminBanAuthor(){
+  if(!currentUserData||!currentUserData.isAdmin||!currentOpenNoteAuthorId)return;
+  if(!confirm('¿Restringir la cuenta de la autora/autor de esta notita? No podrá publicar ni responder.'))return;
+
+  if(localMode){
+    showToast('👀 En vista previa local no hay otras cuentas reales que restringir');
+    return;
+  }
+
+  try{
+    await updateDoc(doc(db,'users',currentOpenNoteAuthorId),{isBanned:true});
+    showToast('Cuenta restringida 🚫');
+  }catch(e){
+    console.error('adminBanAuthor error',e);
+    showToast('No se pudo restringir la cuenta 🥲');
+  }
 }
 
 window.closeAuthModal=closeAuthModal;
