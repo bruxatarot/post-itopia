@@ -13,13 +13,13 @@
   --text:#5a4a6a;--text-soft:#8a7a9a;--radius-note:14px;--font:'Nunito',sans-serif;
 }
 html,body{height:100%;width:100%}
-body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100vh;overflow-x:hidden}
+body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100vh;overflow-x:hidden;position:relative}
 
 .screen{display:none;width:100%;min-height:100vh;flex-direction:column}
 .screen.active{display:flex}
 
 /* Header */
-.site-header{background:linear-gradient(135deg,#fce4ec 0%,#f3e5f5 40%,#e8eaf6 100%);border-bottom:2px dashed #e0c8e8;padding:1.2rem 2rem 1rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.site-header{background:linear-gradient(135deg,#fce4ec 0%,#f3e5f5 40%,#e8eaf6 100%);border-bottom:2px dashed #e0c8e8;padding:1.2rem 2rem 1rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;position:relative;z-index:1}
 .header-left{display:flex;align-items:center;gap:1rem}
 .logo{display:flex;align-items:center;gap:.5rem}
 .logo-icon{font-size:2rem}
@@ -36,12 +36,14 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
 .mood-badge{font-size:1.2rem}
 
 /* Main content */
-.main-content{flex:1;display:flex;flex-direction:column;padding:1.5rem 2rem;max-width:1200px;margin:0 auto;width:100%}
+.main-content{flex:1;display:flex;flex-direction:column;padding:1.5rem 2rem;max-width:1200px;margin:0 auto;width:100%;position:relative;z-index:1}
 
 /* Filter bar */
-.filter-bar{background:white;border:2px solid #e8d0f0;border-radius:16px;padding:1rem;display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;margin-bottom:1.5rem}
+.filter-bar{background:white;border:2px solid #e8d0f0;border-radius:16px;padding:1rem;display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;margin-bottom:1.5rem;position:relative}
+@keyframes decorFloat{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-12px) rotate(6deg)}}
 .filter-label{font-size:0.85rem;font-weight:700;color:var(--text-soft)}
-.filter-btn{background:white;border:2px solid #e8d0f0;border-radius:50px;padding:0.3rem 0.85rem;font-family:var(--font);font-size:0.8rem;font-weight:700;color:var(--text-soft);cursor:pointer;transition:all .15s}
+.filter-select{background:white;border:2px solid #e8d0f0;border-radius:50px;padding:.5rem 1rem;font-family:var(--font);font-size:.85rem;font-weight:700;color:var(--text);cursor:pointer;transition:border-color .15s}
+.filter-select:hover,.filter-select:focus{border-color:#c090e0;outline:none}
 .filter-btn:hover{border-color:#c090e0;color:var(--text)}
 .filter-btn.active{background:var(--lavender);border-color:#c090e0;color:var(--text)}
 
@@ -51,6 +53,14 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
 
 /* Post-it note */
 .note-card{position:relative;border-radius:var(--radius-note);padding:1.1rem 1rem 1.5rem;min-height:170px;box-shadow:3px 4px 12px rgba(0,0,0,.13);transform:rotate(var(--rot,0deg));transition:transform .2s,box-shadow .2s;cursor:pointer;display:flex;flex-direction:column;gap:.5rem;animation:dropIn .4s cubic-bezier(.34,1.56,.64,1)}
+
+/* Note skins */
+.note-card.skin-brillo{background-image:radial-gradient(circle at 15% 20%,rgba(255,255,255,.9) 0 2px,transparent 3px),radial-gradient(circle at 75% 15%,rgba(255,255,255,.8) 0 1.5px,transparent 2.5px),radial-gradient(circle at 40% 85%,rgba(255,255,255,.85) 0 2px,transparent 3px),radial-gradient(circle at 88% 70%,rgba(255,255,255,.7) 0 1.5px,transparent 2.5px),radial-gradient(circle at 60% 45%,rgba(255,255,255,.6) 0 1px,transparent 2px)!important;background-blend-mode:normal}
+.note-card.skin-fluffy{border:3px dashed rgba(255,255,255,.75);box-shadow:3px 4px 12px rgba(0,0,0,.13),inset 0 0 0 5px rgba(255,255,255,.35)}
+.note-card.skin-confeti{border:3px dotted #c090e0}
+.note-card.skin-estrellitas::before{content:'🌟';position:absolute;top:-8px;left:-6px;font-size:1rem;z-index:3}
+.note-card.skin-estrellitas::after{content:'🌟';position:absolute;bottom:-6px;right:-4px;font-size:.9rem;z-index:3;background:none;clip-path:none}
+
 .note-card::before{content:'';position:absolute;top:0;left:0;right:0;height:28px;background:rgba(255,255,255,.28);border-radius:var(--radius-note) var(--radius-note) 0 0}
 .note-card::after{content:'';position:absolute;bottom:0;right:0;width:22px;height:22px;background:rgba(0,0,0,.06);clip-path:polygon(100% 0,100% 100%,0 100%);border-radius:0 0 var(--radius-note) 0}
 .note-card:hover{transform:rotate(0deg) scale(1.03) translateY(-4px);box-shadow:5px 8px 22px rgba(0,0,0,.18);z-index:10}
@@ -62,8 +72,7 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
 .note-mascot-icon{width:16px;height:18px;display:inline-flex;flex-shrink:0}
 .note-mascot-icon svg{width:100%;height:100%}
 .note-reactions{display:flex;gap:.3rem}
-.reaction-sticker{width:18px;height:18px;display:inline-flex;cursor:pointer;transition:transform .15s}
-.reaction-sticker svg{width:100%;height:100%}
+.reaction-sticker{font-size:1rem;cursor:pointer;transition:transform .15s;line-height:1}
 .reaction-sticker:hover{transform:scale(1.3)}
 .note-pin{position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ff9ea0,#e05060);box-shadow:0 2px 4px rgba(0,0,0,.25);z-index:2}
 
@@ -125,11 +134,13 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
 .response-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:white;border-radius:20px;padding:2rem;border:2px solid #e8d0f0;z-index:150;max-width:400px;width:90%;box-shadow:0 10px 40px rgba(0,0,0,.2);display:none}
 .response-modal.active{display:block}
 .response-option{padding:1rem;background:#f8f0ff;border:2px solid #e8d0f0;border-radius:12px;margin-bottom:.8rem;cursor:pointer;transition:all .15s}
+.response-options-grid.is-apoyo{display:flex;flex-wrap:wrap;gap:.6rem}
+.response-option-emoji{padding:.5rem;margin-bottom:0;width:52px;height:52px;display:flex;align-items:center;justify-content:center;border-radius:14px}
+.response-option-emoji:hover{transform:scale(1.1)}
+.response-emoji-big{font-size:1.6rem;line-height:1}
 .response-option:hover{background:var(--lavender);border-color:#c090e0}
-.response-option{display:flex;align-items:flex-start;gap:.6rem}
-.response-option-icon{width:26px;height:26px;flex-shrink:0}
-.response-option-icon svg{width:100%;height:100%}
-.response-option-text small{color:var(--text-soft)}
+.response-option strong{color:var(--text);display:block;margin-bottom:.3rem}
+.response-option small{color:var(--text-soft)}
 .existing-responses{margin-bottom:1rem;max-height:160px;overflow-y:auto}
 .existing-response-item{background:#f8f0ff;border-radius:10px;padding:.6rem .8rem;margin-bottom:.5rem;font-size:.85rem;color:var(--text);word-break:break-word}
 .existing-responses-empty{font-size:.8rem;color:var(--text-soft);text-align:center;padding:.5rem 0}
@@ -149,6 +160,8 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
 /* Postibits + Tienda */
 .postibits-badge{display:flex;align-items:center;gap:.3rem;background:var(--yellow);border:2px solid #f0d060;border-radius:50px;padding:.4rem .9rem;font-weight:800;font-size:.85rem;color:#a07820}
 .streak-note{font-size:.8rem;color:var(--text-soft);margin:.5rem 0 1rem;text-align:center}
+.petshop-banner{background:linear-gradient(135deg,#fde68a,#fca5cd 60%,#c4b5fd);border-radius:16px;padding:.9rem 1rem;text-align:center;font-weight:800;color:#5a3a1a;font-size:1.05rem;margin-bottom:1rem;box-shadow:inset 0 0 0 2px rgba(255,255,255,.4)}
+.petshop-banner span{display:block;font-weight:600;font-size:.72rem;color:#6a4a2a;margin-top:.15rem}
 .mascot-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1rem;margin:1rem 0}
 .mascot-card{background:#f8f0ff;border:2px solid #e8d0f0;border-radius:16px;padding:1rem;text-align:center;transition:all .15s}
 .mascot-card.owned{border-color:#a8e0c0;background:#eafaf0}
@@ -162,123 +175,157 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
 .mascot-btn:hover{transform:scale(1.04)}
 .mascot-btn.buy{background:linear-gradient(135deg,#f48fb1,#ce93d8);color:white}
 .mascot-btn.equip{background:white;color:var(--text);border:2px solid #c090e0}
+
+/* Habitat scenes for Posti-mascotas pet shop */
+.habitat-card{overflow:hidden}
+.habitat-scene{position:relative;width:100%;height:84px;border-radius:12px;margin-bottom:.5rem;overflow:hidden;display:flex;align-items:flex-end;justify-content:center}
+.habitat-scene .mascot-svg{position:relative;z-index:2;margin-bottom:4px;transition:transform .25s}
+.habitat-card:hover .mascot-svg{transform:translateY(-4px) rotate(-3deg)}
+
+.habitat-postiboo .habitat-scene{background:linear-gradient(180deg,#fdf6e3 0%,#e8c78a 100%)}
+.habitat-postiboo .habitat-scene::before{content:'';position:absolute;inset:6px 4px 4px;border:3px solid #b8823f;border-radius:6px;background:repeating-linear-gradient(0deg,transparent 0 8px,rgba(184,130,63,.25) 8px 9px),repeating-linear-gradient(90deg,transparent 0 14px,rgba(184,130,63,.2) 14px 15px)}
+
+.habitat-gatito .habitat-scene{background:radial-gradient(ellipse at bottom,#ffd9e8 0%,#fff0f6 70%)}
+.habitat-gatito .habitat-scene::before{content:'';position:absolute;bottom:0;left:8%;right:8%;height:36px;border-radius:50% 50% 20% 20%/60% 60% 20% 20%;background:repeating-linear-gradient(45deg,#f4a8c0 0 6px,#f8c4d8 6px 12px);box-shadow:inset 0 4px 6px rgba(0,0,0,.08)}
+
+.habitat-osito .habitat-scene{background:radial-gradient(ellipse at 50% 100%,#4a3220 0%,#7a5a3a 55%,#c9a06a 100%)}
+.habitat-osito .habitat-scene::before{content:'';position:absolute;top:-10px;left:15%;right:15%;height:60px;border-radius:0 0 50% 50%/0 0 70% 70%;background:#2e1f14}
+
+.habitat-conejo .habitat-scene{background:linear-gradient(180deg,#f2fbe8 0%,#dff0c8 100%)}
+.habitat-conejo .habitat-scene::before{content:'';position:absolute;inset:8px;border-radius:8px;background-image:repeating-linear-gradient(0deg,#a8c890 0 2px,transparent 2px 12px),repeating-linear-gradient(90deg,#a8c890 0 2px,transparent 2px 12px);opacity:.55}
+.habitat-conejo .habitat-scene::after{content:'🌾';position:absolute;bottom:2px;left:6px;font-size:1rem;opacity:.8}
+
+.habitat-abeja .habitat-scene{background:linear-gradient(180deg,#fff4cf 0%,#ffe08a 100%)}
+.habitat-abeja .habitat-scene::before{content:'';position:absolute;inset:0;opacity:.55;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='24'%3E%3Cpolygon points='7,0 21,0 28,12 21,24 7,24 0,12' fill='none' stroke='%23e0a800' stroke-width='1.5'/%3E%3C/svg%3E");background-size:28px 24px}
+.habitat-abeja .habitat-scene::after{content:'🍯';position:absolute;bottom:2px;right:6px;font-size:1rem}
+
+.habitat-oveja .habitat-scene{background:linear-gradient(180deg,#cdeeff 0%,#a8e6c0 65%,#8fd4a8 100%)}
+.habitat-oveja .habitat-scene::before{content:'';position:absolute;bottom:0;left:0;right:0;height:22px;background-image:repeating-linear-gradient(90deg,#e8e0c8 0 3px,transparent 3px 16px);opacity:.8}
+.habitat-oveja .habitat-scene::after{content:'☁️';position:absolute;top:4px;right:8px;font-size:.9rem;opacity:.85}
+
+.habitat-mariposa .habitat-scene{background:linear-gradient(180deg,#eafaf0 0%,#d4f0dc 100%)}
+.habitat-mariposa .habitat-scene::before{content:'🌸';position:absolute;bottom:2px;left:6px;font-size:1rem}
+.habitat-mariposa .habitat-scene::after{content:'🌼';position:absolute;bottom:2px;right:6px;font-size:1rem}
+
 .mascot-btn.equipped-label{background:#a8e0c0;color:#1f5c3a;cursor:default}
 .mascot-btn.locked{background:#eee;color:#aaa;cursor:not-allowed}
 .buy-postibits-row{text-align:center;margin-top:1.2rem;padding-top:1rem;border-top:1px dashed #e0c8f0}
 .buy-postibits-row button{opacity:.55;cursor:not-allowed}
 
-/* Store tabs */
-.store-tabs{display:flex;gap:.5rem;justify-content:center;margin-bottom:1rem}
-.store-tab{background:white;border:2px solid #e8d0f0;border-radius:50px;padding:.35rem 1rem;font-family:var(--font);font-weight:700;font-size:.85rem;color:var(--text-soft);cursor:pointer;transition:all .15s}
-.store-tab.active{background:var(--lavender);border-color:#c090e0;color:var(--text)}
+.note-hug-btn{display:flex;align-items:center;gap:.4rem;background:var(--pink);border:2px solid #f0a8c0;color:#c06090;padding:.5rem 1rem;border-radius:50px;font-family:var(--font);font-weight:700;font-size:.85rem;cursor:pointer;margin-bottom:1rem;transition:transform .15s}
+.note-hug-btn:hover{transform:scale(1.04)}
+.note-hug-btn:active{transform:scale(.96)}
 
-/* Rareza badges */
-.rareza-badge{display:inline-block;font-size:.6rem;font-weight:800;padding:.1rem .4rem;border-radius:50px;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.3px}
-.rareza-comun{background:#e8e6ef;color:#6b6880}
-.rareza-rara{background:#d6e6fb;color:#2f6bb0}
-.rareza-legendaria{background:#fdeec3;color:#a07820}
-.rareza-mitica{background:linear-gradient(90deg,#f9c8d8,#e2d4f8,#c8e4f8,#c8f0dc);color:#6a3a8a}
+.mascot-skin-heading{font-size:.8rem;font-weight:800;color:var(--text-soft);margin:.6rem 0 .4rem;padding-left:.2rem}
 
-/* Emotion card glow by rareza */
-.emo-card.leg{border-color:#f0d060;box-shadow:0 0 10px rgba(240,200,80,.35)}
-.emo-card.mit{border-color:#d0a0e0;animation:mythicGlow 2.5s ease-in-out infinite}
-@keyframes mythicGlow{0%,100%{box-shadow:0 0 8px rgba(240,150,200,.4)}33%{box-shadow:0 0 14px rgba(180,150,240,.55)}66%{box-shadow:0 0 12px rgba(150,200,240,.5)}}
-.emo-svg{width:60px;height:66px;margin:0 auto .3rem;position:relative}
-.emo-svg svg{width:100%;height:100%}
-/* auras */
-.aura-sparkle::before,.aura-sparkle::after{content:'✨';position:absolute;font-size:.7rem;animation:sparkleFloat 1.8s ease-in-out infinite}
-.aura-sparkle::before{top:-2px;left:-2px}
-.aura-sparkle::after{bottom:2px;right:-2px;animation-delay:.9s}
-@keyframes sparkleFloat{0%,100%{opacity:.4;transform:scale(.85)}50%{opacity:1;transform:scale(1.15)}}
-.aura-halo::before{content:'';position:absolute;top:-3px;left:50%;transform:translateX(-50%);width:26px;height:9px;border:2px solid #fbd97a;border-radius:50%;opacity:.9}
-.aura-glow{animation:auraGlowPulse 2s ease-in-out infinite}
-@keyframes auraGlowPulse{0%,100%{filter:drop-shadow(0 0 2px rgba(251,191,36,.5))}50%{filter:drop-shadow(0 0 7px rgba(251,191,36,.85))}}
-.aura-cosmic{animation:cosmicPulse 3s ease-in-out infinite}
-@keyframes cosmicPulse{0%,100%{filter:drop-shadow(0 0 3px rgba(150,110,240,.6))}50%{filter:drop-shadow(0 0 9px rgba(190,140,240,.9))}}
+/* Admin controls */
+.admin-controls{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;background:#fff0f0;border:2px solid #f0b8b8;border-radius:14px;padding:.6rem .8rem;margin-bottom:1rem}
+.admin-tag{font-size:.75rem;font-weight:800;color:#c04040;background:white;border-radius:50px;padding:.15rem .6rem}
+.admin-btn{border:none;border-radius:50px;padding:.35rem .8rem;font-family:var(--font);font-weight:700;font-size:.75rem;cursor:pointer;color:white}
+.admin-btn-delete{background:#e05a5a}
+.admin-btn-delete:hover{background:#c84444}
+.admin-btn-ban{background:#c084d8}
+.admin-btn-ban:hover{background:#a866bc}
 
-/* Emotion picker in create-note */
-.emo-picker{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.4rem}
-.emo-pick-btn{width:44px;height:48px;border:2px solid #e8d0f0;border-radius:12px;background:#faf5ff;cursor:pointer;padding:2px;transition:all .15s;position:relative}
-.emo-pick-btn svg{width:100%;height:100%}
-.emo-pick-btn.selected{border-color:#c090e0;background:var(--lavender);transform:scale(1.08)}
-.emo-pick-auto{width:auto;padding:0 .7rem;font-family:var(--font);font-weight:700;font-size:.75rem;color:var(--text-soft)}
-.emo-pick-locked-note{font-size:.72rem;color:var(--text-soft);margin-top:.2rem}
+/* Terms box */
+.terms-box{background:#faf5ff;border:2px solid #ecdcf8;border-radius:14px;padding:.8rem}
+.terms-title{font-size:.85rem;font-weight:800;color:var(--text);margin-bottom:.4rem}
+.terms-text{font-size:.75rem;color:var(--text-soft);line-height:1.5;margin-bottom:.6rem}
+
+.companion-badge{width:44px;height:48px;cursor:pointer;display:flex;align-items:center;justify-content:center;animation:companionWobble 3s ease-in-out infinite}
+.companion-badge:hover{animation:companionWobble .7s ease-in-out infinite}
+.companion-badge-icon{width:100%;height:100%;display:flex}
+.companion-badge-icon svg{width:100%;height:100%}
+@keyframes companionWobble{0%,100%{transform:rotate(-4deg) translateY(0)}50%{transform:rotate(4deg) translateY(-3px)}}
+
+.hearts-bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.heart-item{position:absolute;font-size:1.6rem;opacity:.14;animation:heartDrift linear infinite}
+.h1{left:3%;top:100%;animation-duration:26s;animation-delay:0s;font-size:1.8rem}
+.h2{left:12%;top:100%;animation-duration:32s;animation-delay:3s;font-size:1.4rem}
+.h3{left:22%;top:100%;animation-duration:24s;animation-delay:6s;font-size:1.7rem}
+.h4{left:33%;top:100%;animation-duration:29s;animation-delay:1s;font-size:1.5rem}
+.h5{left:45%;top:100%;animation-duration:27s;animation-delay:8s;font-size:1.9rem}
+.h6{left:56%;top:100%;animation-duration:31s;animation-delay:4s;font-size:1.4rem}
+.h7{left:66%;top:100%;animation-duration:25s;animation-delay:10s;font-size:1.7rem}
+.h8{left:76%;top:100%;animation-duration:30s;animation-delay:2s;font-size:1.5rem}
+.h9{left:85%;top:100%;animation-duration:23s;animation-delay:7s;font-size:1.8rem}
+.h10{left:93%;top:100%;animation-duration:28s;animation-delay:5s;font-size:1.4rem}
+.h11{left:8%;top:100%;animation-duration:33s;animation-delay:12s;font-size:1.6rem}
+.h12{left:60%;top:100%;animation-duration:26s;animation-delay:14s;font-size:1.6rem}
+.h13{left:38%;top:100%;animation-duration:29s;animation-delay:16s;font-size:1.5rem}
+.h14{left:70%;top:100%;animation-duration:24s;animation-delay:18s;font-size:1.7rem}
+@keyframes heartDrift{
+  0%{transform:translateY(0) translateX(0) rotate(-8deg);opacity:0}
+  8%{opacity:.14}
+  92%{opacity:.14}
+  100%{transform:translateY(-115vh) translateX(30px) rotate(8deg);opacity:0}
+}
+
+/* Welcome modal */
+#welcomeModal{z-index:500}
+.welcome-card{max-width:480px;text-align:center}
+.welcome-mascot{width:64px;height:70px;margin:0 auto .5rem}
+.welcome-text{font-size:.88rem;color:var(--text);line-height:1.6;margin-bottom:.8rem;text-align:left}
+.welcome-dontshow{justify-content:center;margin:1rem 0}
+.welcome-btn{width:100%}
 
 /* Toast */
 .toast{position:fixed;bottom:-100px;left:50%;transform:translateX(-50%);background:white;border:2px solid #a8e0c0;border-radius:50px;padding:.7rem 1.5rem;font-weight:700;color:#1f5c3a;box-shadow:0 6px 24px rgba(0,0,0,.15);transition:bottom .4s cubic-bezier(.34,1.56,.64,1);z-index:300;white-space:nowrap;font-size:.9rem}
 .toast.show{bottom:2rem}
 
-/* Games hub */
-.game-cards{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0}
-@media(max-width:520px){.game-cards{grid-template-columns:1fr}}
-.game-card{background:#f8f0ff;border:2px solid #e8d0f0;border-radius:16px;padding:1.2rem;text-align:center;cursor:pointer;transition:all .15s}
-.game-card:hover{border-color:#c090e0;transform:translateY(-3px);box-shadow:0 6px 16px rgba(200,150,220,.25)}
-.game-card-emoji{font-size:2.4rem;display:block;margin-bottom:.4rem}
-.game-card-title{font-weight:800;color:var(--text);font-size:.95rem;margin-bottom:.2rem}
-.game-card-desc{font-size:.72rem;color:var(--text-soft);line-height:1.4}
-.game-earn-note{font-size:.78rem;color:var(--text-soft);text-align:center;margin-top:.5rem}
+/* Hug overlay */
+.hug-overlay{display:none;position:fixed;inset:0;background:rgba(255,220,240,.75);backdrop-filter:blur(6px);z-index:250;align-items:center;justify-content:center}
+.hug-overlay.active{display:flex}
+.hug-card{background:white;border-radius:28px;padding:2.5rem 3rem;text-align:center;border:3px solid var(--pink);animation:popIn .4s cubic-bezier(.34,1.56,.64,1);position:relative;max-width:90vw}
+.hug-bear-big{font-size:5rem;display:block;margin-bottom:1rem;animation:hugBounce .7s ease-in-out infinite alternate}
+.hug-card p{font-size:1.2rem;font-weight:700;color:#c06090}
+.hug-close{position:absolute;top:.8rem;right:1.1rem;font-size:1.5rem;cursor:pointer;color:#d0a0c0;font-weight:700;background:none;border:none}
+.hug-close:hover{color:#c06090}
+.hug-bear{display:inline-block;animation:wiggle 1.5s ease-in-out infinite}
 
-/* Catch game */
-.catch-stage{position:relative;width:100%;height:340px;background:linear-gradient(180deg,#eaf4ff 0%,#f6ecff 100%);border-radius:16px;overflow:hidden;border:2px solid #e0caf8;touch-action:none;user-select:none}
-.catch-hud{display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem;font-weight:800;color:var(--text);font-size:.9rem}
-.catch-hud .hearts{letter-spacing:2px}
-.catch-player{position:absolute;bottom:6px;width:52px;height:58px;transform:translateX(-50%);transition:none;z-index:3}
-.catch-player svg{width:100%;height:100%}
-.falling{position:absolute;width:34px;height:34px;z-index:2}
-.falling svg{width:100%;height:100%}
-.catch-overlay{position:absolute;inset:0;background:rgba(255,255,255,.85);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;z-index:5;text-align:center;padding:1rem}
-.catch-overlay h3{color:var(--text);font-size:1.2rem}
-.catch-overlay p{color:var(--text-soft);font-size:.85rem}
-.catch-hint{font-size:.72rem;color:var(--text-soft);text-align:center;margin-top:.5rem}
+/* Filter scroll row */
+.filter-scroll{display:flex;gap:.5rem;overflow-x:auto;padding-bottom:.2rem;scrollbar-width:thin}
+.filter-scroll::-webkit-scrollbar{height:5px}
 
-/* Pet care */
-.pet-stage{background:linear-gradient(180deg,#fff5fb 0%,#f3ecff 100%);border-radius:16px;padding:1.5rem 1rem;text-align:center;border:2px solid #e0caf8}
-.pet-mascot{width:120px;height:132px;margin:0 auto;transition:transform .3s}
-.pet-mascot svg{width:100%;height:100%}
-.pet-bounce{animation:petBounce .5s ease}
-@keyframes petBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
-.pet-status{font-weight:700;color:var(--text);margin:.6rem 0;font-size:.95rem;min-height:1.4em}
-.pet-bars{display:flex;flex-direction:column;gap:.5rem;margin:1rem auto;max-width:280px}
-.pet-bar-row{display:flex;align-items:center;gap:.5rem}
-.pet-bar-label{font-size:.78rem;font-weight:700;color:var(--text-soft);width:80px;text-align:left}
-.pet-bar-track{flex:1;height:14px;background:#eadff5;border-radius:50px;overflow:hidden}
-.pet-bar-fill{height:100%;border-radius:50px;transition:width .3s}
-.pet-actions{display:flex;gap:.5rem;justify-content:center;margin-top:1rem;flex-wrap:wrap}
-.pet-action-btn{background:white;border:2px solid #c090e0;color:#9050c0;font-weight:700;font-family:var(--font);border-radius:50px;padding:.5rem 1rem;font-size:.85rem;cursor:pointer;transition:transform .15s}
-.pet-action-btn:hover{transform:scale(1.06);background:var(--lavender)}
-.pet-action-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+/* Response count badge on notes */
+.note-response-count{font-size:.7rem;font-weight:700;color:rgba(80,60,100,.55);display:flex;align-items:center;gap:.2rem}
 
-/* Note skins */
-.note-card.skin-costura{border:2.5px dashed #a9825f}
-.note-card.skin-lace{border:3px dotted rgba(255,255,255,.95);box-shadow:3px 4px 12px rgba(0,0,0,.13),inset 0 0 0 5px rgba(255,255,255,.4)}
-.note-card.skin-bordado{border:3.5px double #b06a8a;box-shadow:3px 4px 12px rgba(0,0,0,.13),inset 0 0 0 3px rgba(255,255,255,.45)}
-.skin-corner{position:absolute;width:18px;height:18px;z-index:2;pointer-events:none}
-.skin-corner svg{width:100%;height:100%}
-.skin-corner.tl{top:3px;left:3px}
-.skin-corner.tr{top:3px;right:3px}
-.skin-corner.bl{bottom:4px;left:4px;width:22px;height:26px}
-/* Skin store preview */
-.skin-preview{width:86px;height:64px;border-radius:10px;background:#fff0b8;margin:0 auto .4rem;position:relative;box-shadow:2px 2px 6px rgba(0,0,0,.12)}
-.skin-preview.skin-costura{border:2px dashed #a9825f}
-.skin-preview.skin-lace{border:2.5px dotted rgba(255,255,255,.95);box-shadow:2px 2px 6px rgba(0,0,0,.12),inset 0 0 0 4px rgba(255,255,255,.4)}
-.skin-preview.skin-bordado{border:3px double #b06a8a;box-shadow:2px 2px 6px rgba(0,0,0,.12),inset 0 0 0 2px rgba(255,255,255,.45)}
-.skin-preview .skin-corner{width:14px;height:14px}
-.skin-preview .skin-corner.bl{width:16px;height:19px;bottom:2px;left:2px}
+/* Wandering mascot on corkboard */
+.postiboo-main{position:absolute;bottom:.5rem;right:1.5rem;width:80px;height:86px;pointer-events:auto;cursor:pointer;user-select:none;z-index:2;filter:drop-shadow(3px 5px 6px rgba(0,0,0,.15));animation:walk 9s linear infinite}
+.postiboo-main svg{animation:mascotBob 2.2s ease-in-out infinite}
+.postiboo-main:hover svg{animation:mascotBob 0.6s ease-in-out infinite}
+.postiboo-main svg{width:100%;height:100%}
 
-/* Header decorative mascot */
-.header-mascot{width:44px;height:48px;display:inline-flex;flex-shrink:0;animation:float 2.8s ease-in-out infinite}
-.header-mascot svg{width:100%;height:100%}
+/* Keyboard focus visibility */
+.note-card:focus-visible,.mood-btn:focus-visible,.filter-btn:focus-visible,.btn:focus-visible,.mascot-btn:focus-visible{outline:3px solid #c090e0;outline-offset:2px}
 
-/* Walking mascot on the corkboard */
-.board-mascot{position:absolute;bottom:14px;left:0;width:52px;height:57px;z-index:4;pointer-events:none;animation:boardWalk 16s ease-in-out infinite;filter:drop-shadow(1px 2px 2px rgba(0,0,0,.15))}
-.board-mascot svg{width:100%;height:100%;animation:boardBob .6s ease-in-out infinite}
-@keyframes boardWalk{0%{left:2%;transform:scaleX(1)}45%{left:88%;transform:scaleX(1)}50%{left:88%;transform:scaleX(-1)}95%{left:2%;transform:scaleX(-1)}100%{left:2%;transform:scaleX(1)}}
-@keyframes boardBob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-4px) rotate(2deg)}}
+/* Little wins toast + confetti */
+.win-toast{position:fixed;bottom:-100px;left:50%;transform:translateX(-50%);background:white;border:2px solid var(--mint);border-radius:50px;padding:.7rem 1.5rem;display:flex;align-items:center;gap:.6rem;font-weight:700;font-size:.9rem;color:#407060;box-shadow:0 6px 24px rgba(0,0,0,.12);transition:bottom .5s cubic-bezier(.34,1.56,.64,1);z-index:300;white-space:nowrap}
+.win-toast.show{bottom:5rem}
+.win-icon{font-size:1.3rem;animation:bounce .6s ease-in-out infinite alternate}
+.confetti-piece{position:fixed;pointer-events:none;z-index:400;animation:confettiFall 1.2s ease-in forwards}
+
+/* Mood tracker (profile) */
+.tracker-top{display:flex;align-items:center;gap:.6rem;background:#fff8e8;border:2px solid #f0d8a0;border-radius:14px;padding:.7rem .9rem;margin-bottom:.8rem}
+.tracker-top .tracker-emoji{font-size:1.6rem}
+.tracker-bars{display:flex;flex-direction:column;gap:.35rem}
+.tracker-bar-row{display:flex;align-items:center;gap:.5rem;font-size:.72rem;color:var(--text-soft)}
+.tracker-bar-label{width:70px;flex-shrink:0;display:flex;align-items:center;gap:.25rem;font-weight:700}
+.tracker-bar-track{flex:1;height:8px;background:#f0e8fa;border-radius:6px;overflow:hidden}
+.tracker-bar-fill{height:100%;border-radius:6px;transition:width .4s ease}
+.tracker-bar-count{width:16px;text-align:right;font-weight:700}
+.tracker-empty{font-size:.78rem;color:var(--text-soft);text-align:center;padding:.6rem 0}
 
 /* Animations */
 @keyframes dropIn{0%{transform:translateY(-40px) rotate(var(--rot,0deg));opacity:0}100%{transform:translateY(0) rotate(var(--rot,0deg));opacity:1}}
 @keyframes popIn{0%{transform:scale(.7);opacity:0}100%{transform:scale(1);opacity:1}}
 @keyframes float{0%,100%{transform:translateY(0px) rotate(-3deg)}50%{transform:translateY(-8px) rotate(3deg)}}
+@keyframes wiggle{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+@keyframes hugBounce{0%{transform:scale(1) rotate(-5deg)}100%{transform:scale(1.12) rotate(5deg)}}
+@keyframes bounce{0%{transform:translateY(0)}100%{transform:translateY(-5px)}}
+@keyframes walk{0%{transform:translateX(0) scaleX(1)}45%{transform:translateX(-70%) scaleX(1)}50%{transform:translateX(-70%) scaleX(-1)}95%{transform:translateX(0) scaleX(-1)}100%{transform:translateX(0) scaleX(1)}}
+@keyframes mascotBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotate(0deg)}100%{opacity:0;transform:translateY(320px) rotate(720deg)}}
 
 ::-webkit-scrollbar{width:6px}
 ::-webkit-scrollbar-thumb{background:#e0c8f0;border-radius:10px}
@@ -290,28 +337,94 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
   .mood-grid{grid-template-columns:repeat(3,1fr)}
   .modal-card{padding:1.5rem 1.2rem}
   .corkboard{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));padding:1rem;gap:.8rem}
+
+  .modal-overlay{padding:.5rem;align-items:flex-end}
+  .modal-card{padding:1.1rem 1rem 1.3rem;max-height:94vh;border-radius:22px 22px 0 0;max-width:100%}
+  .modal-close{top:.6rem;right:.8rem;font-size:1.3rem}
+  .modal-title{font-size:1.05rem;margin-bottom:.6rem;padding-right:1.5rem}
+  .postiboo-writer{top:-34px;right:1rem;font-size:1.8rem}
+  .companion-row{margin-bottom:.7rem;padding:.3rem .4rem}
+  .companion-mascot{width:24px;height:26px}
+  .companion-text{font-size:.7rem}
+  .companion-change{font-size:.65rem;padding:.2rem .55rem}
+  .mood-grid{gap:.35rem;margin-bottom:.7rem}
+  .mood-btn{padding:.35rem .2rem;font-size:1.15rem;border-radius:11px}
+  .mood-btn span{font-size:.56rem}
+  .prompt-text{font-size:.8rem;margin-bottom:.35rem}
+  .modal-textarea{height:72px;padding:.6rem;font-size:.88rem}
+  .char-count{margin-top:.15rem;font-size:.68rem}
+  .section-label{margin-top:.7rem;margin-bottom:.35rem;font-size:.78rem}
+  .response-options{gap:.3rem}
+  .resp-opt{font-size:.7rem;padding:.22rem .55rem}
+  .modal-footer{margin-top:.7rem}
+  .anon-toggle{font-size:.75rem}
+  .btn-drop{padding:.55rem 1.2rem;font-size:.9rem}
+
+  .hug-card{padding:1.8rem 1.6rem}
+  .hug-bear-big{font-size:3.6rem}
+  .filter-bar{padding:0 1rem}
+  .header-right{flex-wrap:wrap;justify-content:center;gap:.5rem}
+  .btn{font-size:.82rem;padding:.5rem .8rem}
+}
+
+@media(max-width:380px){
+  .mood-grid{grid-template-columns:repeat(3,1fr)}
+  .modal-textarea{height:64px}
 }
 </style>
 </head>
 <body>
+
+<!-- FLOATING HEARTS BACKGROUND -->
+<div class="hearts-bg" aria-hidden="true">
+  <span class="heart-item h1">❤️</span>
+  <span class="heart-item h2">💔</span>
+  <span class="heart-item h3">💋</span>
+  <span class="heart-item h4">❤️‍🔥</span>
+  <span class="heart-item h5">❤️‍🩹</span>
+  <span class="heart-item h6">💌</span>
+  <span class="heart-item h7">💞</span>
+  <span class="heart-item h8">❤️</span>
+  <span class="heart-item h9">💔</span>
+  <span class="heart-item h10">❤️‍🩹</span>
+  <span class="heart-item h11">💌</span>
+  <span class="heart-item h12">💞</span>
+  <span class="heart-item h13">💋</span>
+  <span class="heart-item h14">❤️‍🔥</span>
+</div>
+
+<!-- WELCOME MODAL -->
+<div class="modal-overlay" id="welcomeModal">
+  <div class="modal-card welcome-card">
+    <div class="welcome-mascot" id="welcomeMascot"></div>
+    <h2 class="modal-title">🌈 Bienvenido a Post‑itopia</h2>
+    <p class="welcome-text">Una página donde puedes descargar tu estado emocional, escribir cómo te sientes en una notita pastel y dejar que la comunidad te acompañe con palabras suaves, stickers kawaii y apoyo emocional.</p>
+    <p class="welcome-text">Aquí puedes conectar con otras personas que están pasando por algo similar, algo completamente diferente, o algo que tú ya viviste… y donde tu experiencia puede ayudar a alguien más.</p>
+    <p class="welcome-text">Post‑itopia es un espacio seguro, cute y chibi, creado para acompañarte, escucharte y recordarte que tus emociones también merecen un lugar suavecito.</p>
+    <label class="anon-toggle welcome-dontshow"><input type="checkbox" id="welcomeDontShow"/> No volver a mostrar esto</label>
+    <button class="btn-drop welcome-btn" id="welcomeCloseBtn">Entendido 💛</button>
+  </div>
+</div>
 
 <!-- MAIN SCREEN -->
 <div class="screen active" id="mainScreen">
   <!-- Header -->
   <header class="site-header">
     <div class="header-left">
-      <span class="header-mascot" id="headerMascot"></span>
       <div class="logo">
         <span class="logo-icon">🌈</span>
         <span class="logo-text">Post-itopia</span>
       </div>
+      <div class="companion-badge" id="companionBadge" title="Tu compañero emocional">
+        <span class="companion-badge-icon" id="companionBadgeIcon"></span>
+      </div>
       <div class="tagline">Tu rinconcito emocional pastel.</div>
     </div>
     <div class="header-right">
-      <span class="postibits-badge" id="postibitsBadge" style="display:none">🥧 <span id="postibitsAmount">0</span></span>
-      <button class="btn btn-secondary" id="gamesBtn">🎮 Juegos</button>
-      <button class="btn btn-secondary" id="storeBtn">🛍️ Tienda</button>
-      <button class="btn btn-primary" id="newNoteBtn">+ Drop it</button>
+      <span class="postibits-badge" id="postibitsBadge" style="display:none"><span id="postibitsAmount">0</span> PostiBits</span>
+      <button class="btn btn-secondary" id="hugBtn">🫂 <span class="hug-bear">Abrazo</span></button>
+      <button class="btn btn-secondary" id="storeBtn">🛍️ Post-itienda</button>
+      <button class="btn btn-primary" id="newNoteBtn">+ Post-it</button>
       <button class="btn btn-secondary" id="profileBtn">👤 Perfil</button>
     </div>
   </header>
@@ -320,19 +433,14 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
   <div class="main-content">
     <!-- Filter bar -->
     <div class="filter-bar">
-      <span class="filter-label">Mood:</span>
-      <button class="filter-btn active" data-filter="all">Todas ✨</button>
-      <button class="filter-btn" data-filter="sad">😔 Sad</button>
-      <button class="filter-btn" data-filter="calm">😌 Calm</button>
-      <button class="filter-btn" data-filter="hopeful">🌈 Hopeful</button>
-      <button class="filter-btn" data-filter="grateful">✨ Grateful</button>
-      <button class="filter-btn" data-filter="motivated">🔥 Motivated</button>
+      <label class="filter-label" for="moodFilterSelect">Mood:</label>
+      <select class="filter-select" id="moodFilterSelect">
+        <option value="all">✨ Todas</option>
+      </select>
     </div>
 
     <!-- Corkboard -->
-    <div class="corkboard" id="corkboard">
-      <div class="board-mascot" id="boardMascot" aria-hidden="true"></div>
-    </div>
+    <div class="corkboard" id="corkboard"></div>
   </div>
 </div>
 
@@ -349,12 +457,6 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
       <button type="button" class="companion-change" id="changeMascotBtn">Cambiar 🛍️</button>
     </div>
 
-    <div id="emotionPickerWrap" style="margin-bottom:1rem">
-      <p class="section-label" style="margin-top:0">🎭 Emoción de tu mascota</p>
-      <div class="emo-picker" id="emotionPicker"></div>
-      <p class="emo-pick-locked-note" id="emotionPickerNote"></p>
-    </div>
-
     <div class="mood-grid" id="moodGrid"></div>
 
     <div class="note-prompt">
@@ -366,16 +468,24 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
     <div class="response-type">
       <p class="section-label">¿Qué tipo de compañía quieres?</p>
       <div class="response-options">
-        <label class="resp-opt"><input type="radio" name="respType" value="apoyo" checked/> 💞 Solo apoyo</label>
-        <label class="resp-opt"><input type="radio" name="respType" value="consejos"/> 🌱 Consejos suaves</label>
-        <label class="resp-opt"><input type="radio" name="respType" value="historias"/> 🫂 Historias similares</label>
+        <label class="resp-opt"><input type="radio" name="respType" value="apoyo" checked/> 💛 Post-itapoyo</label>
+        <label class="resp-opt"><input type="radio" name="respType" value="historias"/> 📖 Post-itistoria</label>
       </div>
     </div>
 
     <div class="modal-footer">
       <label class="anon-toggle"><input type="checkbox" id="anonCheck" checked/> Anónima 🫧</label>
-      <button class="btn-drop" id="dropBtn">Drop it ✨</button>
+      <button class="btn-drop" id="dropBtn">Post-it ✨</button>
     </div>
+  </div>
+</div>
+
+<!-- HUG OVERLAY -->
+<div class="hug-overlay" id="hugOverlay">
+  <div class="hug-card">
+    <button class="hug-close" id="hugClose">×</button>
+    <span class="hug-bear-big">🫂</span>
+    <p>Te mando un abrazo bien fuerte 💞</p>
   </div>
 </div>
 
@@ -383,7 +493,7 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
 <div class="modal-overlay" id="storeModal">
   <div class="modal-card">
     <button class="modal-close" id="closeStoreModal">×</button>
-    <h2 class="modal-title">🛍️ Boutique Post-itopia</h2>
+    <h2 class="modal-title">🛍️ Post-itienda</h2>
     <p style="text-align:center;color:var(--text-soft);font-size:.85rem;margin-bottom:.5rem">Viste tu rinconcito con mascotas nuevas</p>
     <div id="storeContent"></div>
   </div>
@@ -400,78 +510,19 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
-
-<!-- GAMES HUB MODAL -->
-<div class="modal-overlay" id="gamesModal">
-  <div class="modal-card">
-    <button class="modal-close" id="closeGamesModal">×</button>
-    <h2 class="modal-title">🎮 Juegos de Post-itopia</h2>
-    <p style="text-align:center;color:var(--text-soft);font-size:.85rem;margin-bottom:.3rem">Juega y gana Postibits 🥧</p>
-    <p class="game-earn-note" id="gamesEarnNote"></p>
-    <div class="game-cards">
-      <div class="game-card" id="openCatchGame">
-        <span class="game-card-emoji">🧺</span>
-        <div class="game-card-title">Atrapa las notitas</div>
-        <div class="game-card-desc">Mueve tu mascota y atrapa notitas y stickers. ¡Esquiva las tormentas!</div>
-      </div>
-      <div class="game-card" id="openPetGame">
-        <span class="game-card-emoji">🍰</span>
-        <div class="game-card-title">Cuida a tu Posti-boo</div>
-        <div class="game-card-desc">Aliméntala, juega y déjala descansar para mantenerla feliz.</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- CATCH GAME MODAL -->
-<div class="modal-overlay" id="catchGameModal">
-  <div class="modal-card">
-    <button class="modal-close" id="closeCatchGame">×</button>
-    <h2 class="modal-title">🧺 Atrapa las notitas</h2>
-    <div class="catch-hud">
-      <span>⭐ <span id="catchScore">0</span></span>
-      <span class="hearts" id="catchHearts">💗💗💗</span>
-    </div>
-    <div class="catch-stage" id="catchStage">
-      <div class="catch-player" id="catchPlayer"></div>
-      <div class="catch-overlay" id="catchOverlay">
-        <h3 id="catchOverlayTitle">¿List@?</h3>
-        <p id="catchOverlayText">Atrapa 🥧 notitas y stickers. Esquiva las nubes de tormenta 🌩️</p>
-        <button class="btn-drop" id="catchStartBtn">¡Jugar! ✨</button>
-      </div>
-    </div>
-    <p class="catch-hint">En compu: usa ← → o el mouse. En celular: arrastra con el dedo.</p>
-  </div>
-</div>
-
-<!-- PET CARE MODAL -->
-<div class="modal-overlay" id="petGameModal">
-  <div class="modal-card">
-    <button class="modal-close" id="closePetGame">×</button>
-    <h2 class="modal-title">🍰 Cuida a tu Posti-boo</h2>
-    <div class="pet-stage">
-      <div class="pet-mascot" id="petMascot"></div>
-      <div class="pet-status" id="petStatus"></div>
-      <div class="pet-bars">
-        <div class="pet-bar-row"><span class="pet-bar-label">🍰 Hambre</span><div class="pet-bar-track"><div class="pet-bar-fill" id="barHunger"></div></div></div>
-        <div class="pet-bar-row"><span class="pet-bar-label">🎾 Ánimo</span><div class="pet-bar-track"><div class="pet-bar-fill" id="barMood"></div></div></div>
-        <div class="pet-bar-row"><span class="pet-bar-label">😴 Energía</span><div class="pet-bar-track"><div class="pet-bar-fill" id="barEnergy"></div></div></div>
-      </div>
-      <div class="pet-actions">
-        <button class="pet-action-btn" id="petFeed">🍰 Alimentar</button>
-        <button class="pet-action-btn" id="petPlay">🎾 Jugar</button>
-        <button class="pet-action-btn" id="petSleep">😴 Dormir</button>
-      </div>
-    </div>
-    <p class="game-earn-note">Mantenla feliz (las 3 barras altas) para ganar Postibits 🥧</p>
-  </div>
-</div>
+<div class="win-toast" id="winToast"><span class="win-icon">🌟</span><span class="win-text">¡Bien hecho!</span></div>
 
 <!-- RESPONSE MODAL -->
 <div class="response-modal" id="responseModal">
   <button class="modal-close" onclick="closeResponseModal()">×</button>
   <h3 id="responseTitle" style="margin-bottom:1rem;color:var(--text);font-size:1.1rem"></h3>
-  <p id="responseText" style="margin-bottom:1.5rem;color:var(--text);line-height:1.6"></p>
+  <p id="responseText" style="margin-bottom:1rem;color:var(--text);line-height:1.6"></p>
+  <button id="noteHugBtn" class="note-hug-btn">🫂 Mandar un abrazo <span id="noteHugCount">0</span></button>
+  <div id="adminControls" class="admin-controls" style="display:none">
+    <span class="admin-tag" id="adminRoleTag">🛡️ Admin</span>
+    <button id="adminDeleteNoteBtn" class="admin-btn admin-btn-delete">🗑️ Eliminar notita</button>
+    <button id="adminBanAuthorBtn" class="admin-btn admin-btn-ban">🚫 Restringir cuenta</button>
+  </div>
   <p class="section-label" style="margin-top:0">💬 Respuestas de la comunidad</p>
   <div id="existingResponses" class="existing-responses"></div>
   <p class="section-label">Respuestas rápidas</p>
@@ -482,16 +533,6 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
 </div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {
-  getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
-  onAuthStateChanged, signOut
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import {
-  getFirestore, collection, doc, setDoc, getDoc, addDoc,
-  onSnapshot, query, orderBy, updateDoc, arrayUnion, increment
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
 const firebaseConfig={
   apiKey:"AIzaSyA2jAsgWPBl4x13GaRWsAKSdAdER2nsXls",
   authDomain:"post-itopia.firebaseapp.com",
@@ -500,39 +541,66 @@ const firebaseConfig={
   messagingSenderId:"965140583784",
   appId:"1:965140583784:web:88097b45c2ec243c3df2dd"
 };
-const fbApp=initializeApp(firebaseConfig);
-const auth=getAuth(fbApp);
-const db=getFirestore(fbApp);
+
+// Firebase SDK bindings — populated by loadFirebase() if the network is reachable.
+// If it isn't (e.g. an offline preview), the app falls back to a local demo mode
+// below so every feature can still be clicked through.
+let initializeApp,getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,onAuthStateChanged,signOut;
+let getFirestore,collection,doc,setDoc,getDoc,addDoc,onSnapshot,query,orderBy,updateDoc,arrayUnion,increment,deleteDoc;
+let auth,db;
+let localMode=false;
+
+function withTimeout(promise,ms){
+  return Promise.race([promise,new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),ms))]);
+}
+
+async function loadFirebase(){
+  const appMod=await withTimeout(import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"),4000);
+  const authMod=await withTimeout(import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"),4000);
+  const fsMod=await withTimeout(import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"),4000);
+
+  ({initializeApp}=appMod);
+  ({getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,onAuthStateChanged,signOut}=authMod);
+  ({getFirestore,collection,doc,setDoc,getDoc,addDoc,onSnapshot,query,orderBy,updateDoc,arrayUnion,increment,deleteDoc}=fsMod);
+
+  const fbApp=initializeApp(firebaseConfig);
+  auth=getAuth(fbApp);
+  db=getFirestore(fbApp);
+}
 
 const MOOD_COLORS={calm:'#c8f0dc',sad:'#b3c6e8',overwhelmed:'#e8c3e8',angry:'#f4b8b8',confused:'#ffd9a8',lonely:'#dce8f0',anxious:'#c9d4f0',grateful:'#fff0b8',motivated:'#ffe0b8',drained:'#cfd8dc',hopeful:'#b8eaf4'};
 const MOOD_EMOJIS={calm:'😌',sad:'😔',overwhelmed:'😵',angry:'😡',confused:'😕',lonely:'🤍',anxious:'🧿',grateful:'✨',motivated:'🔥',drained:'🌧️',hopeful:'🌈'};
+const MOOD_LABELS_ES={calm:'Calma',sad:'Triste',overwhelmed:'Abrumada',angry:'Enojada',confused:'Confundida',lonely:'Sola',anxious:'Ansiosa',grateful:'Agradecida',motivated:'Motivada',drained:'Agotada',hopeful:'Esperanzada'};
+function moodLabel(mood){return MOOD_LABELS_ES[mood]||mood}
 const PROMPTS={sad:'¿Qué te apachurró el corazón hoy? 💙',calm:'Qué bien que estés tranqui… ¿qué te dio paz hoy? 🌿',overwhelmed:'Respira. Cuéntale a tu notita qué te tiene así 💜',angry:'¿Qué te hizo enojar? Aquí puedes soltarlo todo 🔴',confused:'¿Qué te tiene con la cabeza hecha bola? 🌀',lonely:'No estás sola/solo. Cuéntame qué sientes 🤍',anxious:'Respira suavito. ¿Qué te está preocupando? 🫧',grateful:'¡Qué bonito! ¿Qué te hizo sonreír hoy? ✨',motivated:'¡Eso! ¿Qué te está llenando de energía? 🔥',drained:'Está bien descansar. ¿Qué te dejó sin pilas? 🌧️',hopeful:'Se siente bien tener esperanza 🌈 ¿Qué la generó?'};
-const RESPONSES_PACK={apoyo:['🐻 Estoy contigo','☁️ Respira conmigo','🐥 Yo también pasé por eso','⭐ Lo estás haciendo bien'],consejos:['🌱 Un paso a la vez','🫧 Habla con alguien de confianza','🌸 Date un momento para ti','✨ Está bien pedir ayuda'],historias:['🫂 Una vez yo también…','💜 Pasé algo similar','🌈 Salí adelante, tú puedes','🐣 No eres la única']};
 
-const STICKER_SVGS={
-  '🐻':'<svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg"><circle cx="7" cy="7" r="4" fill="#f0c090"/><circle cx="21" cy="7" r="4" fill="#f0c090"/><circle cx="14" cy="16" r="10" fill="#f0c090"/><ellipse cx="14" cy="18" rx="4" ry="3" fill="#fff3e6"/><circle cx="10" cy="14" r="1.6" fill="#3b2a4a"/><circle cx="18" cy="14" r="1.6" fill="#3b2a4a"/><circle cx="14" cy="18" r="1.3" fill="#a17840"/></svg>',
-  '☁️':'<svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg"><ellipse cx="10" cy="17" rx="6" ry="5" fill="#dcefff"/><ellipse cx="18" cy="17" rx="6.5" ry="5.5" fill="#dcefff"/><ellipse cx="14" cy="13" rx="6" ry="5" fill="#eaf6ff"/><circle cx="10" cy="16" r="1" fill="#3b2a4a"/><circle cx="17" cy="16" r="1" fill="#3b2a4a"/></svg>',
-  '🐥':'<svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg"><ellipse cx="14" cy="17" rx="9" ry="8" fill="#fde047"/><circle cx="10" cy="14" r="1.4" fill="#3b2a4a"/><circle cx="18" cy="14" r="1.4" fill="#3b2a4a"/><polygon points="12,18 16,18 14,21" fill="#f0a030"/><path d="M14 6 Q13 9 15 9" stroke="#fde047" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>',
-  '⭐':'<svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg"><polygon points="14.0,3.0 16.7,10.3 24.5,10.6 18.4,15.4 20.5,22.9 14.0,18.6 7.5,22.9 9.6,15.4 3.5,10.6 11.3,10.3" fill="#fde047" stroke="#f0b830" stroke-width="1"/><circle cx="11" cy="12" r="1.2" fill="white" opacity=".7"/></svg>',
-  '🌱':'<svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg"><path d="M14 24 L14 13" stroke="#7bb852" stroke-width="2.2" stroke-linecap="round"/><path d="M14 15 Q7 13 8 6 Q16 7 14 15" fill="#97c459"/><path d="M14 17 Q21 15 20 9 Q13 10 14 17" fill="#7bb852"/></svg>',
-  '🫧':'<svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg"><circle cx="14" cy="15" r="10" fill="#dcefff" opacity=".8"/><circle cx="14" cy="15" r="10" fill="none" stroke="#b8dcf5" stroke-width="1"/><ellipse cx="11" cy="11" rx="2.6" ry="1.6" fill="white" opacity=".8"/><circle cx="23" cy="6" r="2.2" fill="#dcefff" opacity=".8"/></svg>',
-  '🌸':'<svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg"><g fill="#f9c8d8"><ellipse cx="14" cy="7" rx="4" ry="5"/><ellipse cx="14" cy="21" rx="4" ry="5"/><ellipse cx="7" cy="14" rx="5" ry="4"/><ellipse cx="21" cy="14" rx="5" ry="4"/></g><circle cx="14" cy="14" r="3.6" fill="#fde68a"/></svg>',
-  '✨':'<svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg"><path d="M14 2 L16.5 11 L26 14 L16.5 17 L14 26 L11.5 17 L2 14 L11.5 11 Z" fill="#fde047"/><circle cx="22" cy="6" r="1.6" fill="#fde047"/></svg>',
-  '🫂':'<svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg"><path d="M14 22 C6 16 6 9 11 8 C13 7.6 14 9 14 10 C14 9 15 7.6 17 8 C22 9 22 16 14 22 Z" fill="#f9c8d8"/><path d="M4 12 Q3 17 9 20" stroke="#f4a8c0" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M24 12 Q25 17 19 20" stroke="#f4a8c0" stroke-width="2.2" fill="none" stroke-linecap="round"/></svg>',
-  '💜':'<svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg"><path d="M14 23 C4 16 4 8 10 7 C12.5 6.5 14 8.5 14 10 C14 8.5 15.5 6.5 18 7 C24 8 24 16 14 23 Z" fill="#c9a8f0"/></svg>',
-  '🌈':'<svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg"><path d="M3 22 A11 11 0 0 1 25 22" fill="none" stroke="#f4a8c0" stroke-width="3"/><path d="M6 22 A8 8 0 0 1 22 22" fill="none" stroke="#fde68a" stroke-width="3"/><path d="M9 22 A5 5 0 0 1 19 22" fill="none" stroke="#a8d8f0" stroke-width="3"/><ellipse cx="4" cy="22" rx="3" ry="2" fill="#f0f0f8"/><ellipse cx="24" cy="22" rx="3" ry="2" fill="#f0f0f8"/></svg>',
-  '🐣':'<svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg"><path d="M14 4 C8 4 5 9 6 15 C7 21 11 24 14 24 C17 24 21 21 22 15 C23 9 20 4 14 4 Z" fill="#fdf6e3"/><path d="M6 13 L11 15 L7 17 Z" fill="#fdf6e3" stroke="#e8dcc0" stroke-width=".5"/><circle cx="14" cy="13" r="6" fill="#fde047"/><circle cx="12" cy="12" r="1" fill="#3b2a4a"/><circle cx="16" cy="12" r="1" fill="#3b2a4a"/><polygon points="12.5,15 15.5,15 14,17" fill="#f0a030"/></svg>'
+// Post-itapoyo = pura reacción con emoji, sin frase. Post-itistoria = frase corta.
+const RESPONSES_PACK={
+  heavy:{
+    apoyo:['🐻','☁️','🤗','⭐','💛','🫂'],
+    historias:['🫂 Una vez yo también…','💜 Pasé algo similar','🌈 Salí adelante, tú puedes','🐣 No eres la única']
+  },
+  positive:{
+    apoyo:['🎉','✨','🙌','🌟','💛','🎊'],
+    historias:['🫂 A mí también me pasó algo así de bonito','💛 Amo leer estas historias','🌈 Qué rico se siente cuando pasa esto','🐣 Gracias por compartirlo']
+  }
 };
-const FALLBACK_STICKER=STICKER_SVGS['💜'];
-
-function getStickerSvg(text){
-  const m=text.match(/^\p{Emoji}️?/u);
-  return(m&&STICKER_SVGS[m[0]])?STICKER_SVGS[m[0]]:FALLBACK_STICKER;
+const EMOJI_MEANINGS={
+  '🐻':'Un abrazo de oso','☁️':'Respiro contigo','🤗':'Aquí estoy para ti','⭐':'Lo estás haciendo bien','💛':'Con todo mi cariño','🫂':'Un abrazo',
+  '🎉':'¡Me alegra por ti!','✨':'Brillas','🙌':'¡Sigue así!','🌟':'Qué bonito leer esto','🎊':'¡A celebrar!'
+};
+function emojiMeaning(e){return EMOJI_MEANINGS[e]||''}
+const POSITIVE_MOODS_SET=new Set(['calm','grateful','motivated','hopeful']);
+function normalizeResponseType(type){
+  return type==='historias'?'historias':'apoyo';
 }
-
-function stripLeadingEmoji(text){
-  return text.replace(/^\p{Emoji}️?\s*/u,'');
+function getResponsePack(mood,responseType){
+  const group=POSITIVE_MOODS_SET.has(mood)?'positive':'heavy';
+  const pack=RESPONSES_PACK[group];
+  return pack[normalizeResponseType(responseType)];
 }
+const POSITIVE_MOODS=['hopeful','grateful','motivated','calm'];
+const MOOD_ORDER=['calm','sad','overwhelmed','angry','confused','lonely','anxious','grateful','motivated','drained','hopeful'];
 const ROTS=[-3,-1.5,0,1.5,2.5,-2,1,-1,3,-2.5];
 
 const MOOD_EXPRESSION={
@@ -558,7 +626,7 @@ function faceParts(expr,yOff,mouthColor,extra){
   if(expr==='angry'){
     return `<ellipse cx="21" cy="${ex}" rx="4" ry="4.3" fill="white"/><ellipse cx="35" cy="${ex}" rx="4" ry="4.3" fill="white"/><circle cx="22" cy="${ex+1}" r="2.4" fill="#3b2a4a"/><circle cx="36" cy="${ex+1}" r="2.4" fill="#3b2a4a"/><path d="M17 ${ex-5} L25 ${ex-2}" stroke="#3b2a4a" stroke-width="1.6" stroke-linecap="round"/><path d="M39 ${ex-5} L31 ${ex-2}" stroke="#3b2a4a" stroke-width="1.6" stroke-linecap="round"/><ellipse cx="17" cy="${chy}" rx="4.5" ry="2.8" fill="#f47a7a" opacity=".7"/><ellipse cx="39" cy="${chy}" rx="4.5" ry="2.8" fill="#f47a7a" opacity=".7"/>${extra}<path d="M21 ${my+3} Q28 ${my-1} 35 ${my+3}" stroke="${mouthColor}" stroke-width="1.6" fill="none" stroke-linecap="round"/>`;
   }
-  if(expr==='dreamy'){
+if(expr==='dreamy'){
     return `<path d="M17.5 ${ex} Q21 ${ex+3.5} 24.5 ${ex}" stroke="#3b2a4a" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M31.5 ${ex} Q35 ${ex+3.5} 38.5 ${ex}" stroke="#3b2a4a" stroke-width="1.6" fill="none" stroke-linecap="round"/><ellipse cx="17" cy="${chy}" rx="4" ry="2.6" fill="#fda4af" opacity=".6"/><ellipse cx="39" cy="${chy}" rx="4" ry="2.6" fill="#fda4af" opacity=".6"/><circle cx="41.5" cy="${ex-3}" r="1.1" fill="#c9b3f0"/><circle cx="43.5" cy="${ex-6}" r="0.7" fill="#dcc9f5"/>${extra}<path d="M23 ${my} Q28 ${my+3.5} 33 ${my}" stroke="${mouthColor}" stroke-width="1.4" fill="none" stroke-linecap="round"/>`;
   }
   if(expr==='surprised'){
@@ -597,36 +665,126 @@ function faceParts(expr,yOff,mouthColor,extra){
   return `<ellipse cx="21" cy="${ex}" rx="4.5" ry="5" fill="white"/><ellipse cx="35" cy="${ex}" rx="4.5" ry="5" fill="white"/><circle cx="22" cy="${ex}" r="2.5" fill="#3b2a4a"/><circle cx="36" cy="${ex}" r="2.5" fill="#3b2a4a"/><circle cx="23" cy="${hy}" r="1" fill="white"/><circle cx="37" cy="${hy}" r="1" fill="white"/><ellipse cx="17" cy="${chy}" rx="4" ry="2.5" fill="#fda4af" opacity=".6"/><ellipse cx="39" cy="${chy}" rx="4" ry="2.5" fill="#fda4af" opacity=".6"/>${extra}<path d="M23 ${my} Q28 ${my+4} 33 ${my}" stroke="${mouthColor}" stroke-width="1.5" fill="none" stroke-linecap="round"/>`;
 }
 
-function postibooSvg(expr){
-  const face=faceParts(expr,0,'#a16207');
-  return `<svg width="56" height="62" viewBox="0 0 56 62" xmlns="http://www.w3.org/2000/svg"><ellipse cx="8" cy="34" rx="9" ry="6" fill="#fde68a" opacity=".85"/><ellipse cx="48" cy="34" rx="9" ry="6" fill="#fde68a" opacity=".85"/><rect x="10" y="12" width="36" height="36" rx="10" fill="#fef08a"/><rect x="10" y="12" width="36" height="36" rx="10" fill="none" stroke="#fbbf24" stroke-width="1.5"/><polygon points="38,12 46,12 46,20" fill="#fde047"/><line x1="38" y1="12" x2="46" y2="20" stroke="#fbbf24" stroke-width="1"/>${face}<line x1="28" y1="12" x2="28" y2="6" stroke="#fbbf24" stroke-width="1.5"/><circle cx="28" cy="5" r="2.5" fill="#f472b6"/></svg>`;
+function postiNoteSvg(expr,pal){
+  const face=faceParts(expr,0,pal.mouth);
+  return `<svg width="56" height="62" viewBox="0 0 56 62" xmlns="http://www.w3.org/2000/svg"><ellipse cx="8" cy="34" rx="9" ry="6" fill="${pal.wing}" opacity=".85"/><ellipse cx="48" cy="34" rx="9" ry="6" fill="${pal.wing}" opacity=".85"/><rect x="10" y="12" width="36" height="36" rx="10" fill="${pal.body}"/><rect x="10" y="12" width="36" height="36" rx="10" fill="none" stroke="${pal.border}" stroke-width="1.5"/><polygon points="38,12 46,12 46,20" fill="${pal.fold}"/><line x1="38" y1="12" x2="46" y2="20" stroke="${pal.border}" stroke-width="1"/>${face}<line x1="28" y1="12" x2="28" y2="6" stroke="${pal.border}" stroke-width="1.5"/><circle cx="28" cy="5" r="2.5" fill="${pal.tip}"/></svg>`;
 }
 
-function gatitobooSvg(expr){
-  const face=faceParts(expr,0,'#a16285');
-  return `<svg width="56" height="62" viewBox="0 0 56 62" xmlns="http://www.w3.org/2000/svg"><polygon points="14,14 6,2 20,10" fill="#f4a8c0"/><polygon points="42,14 50,2 36,10" fill="#f4a8c0"/><rect x="10" y="12" width="36" height="36" rx="10" fill="#ffd9e8"/><rect x="10" y="12" width="36" height="36" rx="10" fill="none" stroke="#e88aa8" stroke-width="1.5"/><polygon points="38,12 46,12 46,20" fill="#f8c0d8"/><line x1="38" y1="12" x2="46" y2="20" stroke="#e88aa8" stroke-width="1"/>${face}<line x1="8" y1="36" x2="1" y2="34" stroke="#e88aa8" stroke-width="1"/><line x1="8" y1="40" x2="1" y2="41" stroke="#e88aa8" stroke-width="1"/><line x1="48" y1="36" x2="55" y2="34" stroke="#e88aa8" stroke-width="1"/><line x1="48" y1="40" x2="55" y2="41" stroke="#e88aa8" stroke-width="1"/></svg>`;
+function postiGatoSvg(expr,pal){
+  const face=faceParts(expr,0,pal.mouth);
+  return `<svg width="56" height="62" viewBox="0 0 56 62" xmlns="http://www.w3.org/2000/svg"><polygon points="14,14 6,2 20,10" fill="${pal.ear}"/><polygon points="42,14 50,2 36,10" fill="${pal.ear}"/><rect x="10" y="12" width="36" height="36" rx="10" fill="${pal.body}"/><rect x="10" y="12" width="36" height="36" rx="10" fill="none" stroke="${pal.border}" stroke-width="1.5"/><polygon points="38,12 46,12 46,20" fill="${pal.fold}"/><line x1="38" y1="12" x2="46" y2="20" stroke="${pal.border}" stroke-width="1"/>${face}<line x1="8" y1="36" x2="1" y2="34" stroke="${pal.border}" stroke-width="1"/><line x1="8" y1="40" x2="1" y2="41" stroke="${pal.border}" stroke-width="1"/><line x1="48" y1="36" x2="55" y2="34" stroke="${pal.border}" stroke-width="1"/><line x1="48" y1="40" x2="55" y2="41" stroke="${pal.border}" stroke-width="1"/></svg>`;
 }
 
-function ositobooSvg(expr){
-  const nose=`<ellipse cx="28" cy="38" rx="3" ry="2.5" fill="#d9a86a"/>`;
-  const face=faceParts(expr,0,'#a17840',nose);
-  return `<svg width="56" height="62" viewBox="0 0 56 62" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="10" r="7" fill="#f0c090"/><circle cx="44" cy="10" r="7" fill="#f0c090"/><circle cx="12" cy="10" r="3.5" fill="#fad9b8"/><circle cx="44" cy="10" r="3.5" fill="#fad9b8"/><rect x="10" y="12" width="36" height="36" rx="10" fill="#ffe0c2"/><rect x="10" y="12" width="36" height="36" rx="10" fill="none" stroke="#d9a86a" stroke-width="1.5"/><polygon points="38,12 46,12 46,20" fill="#f8d0a0"/><line x1="38" y1="12" x2="46" y2="20" stroke="#d9a86a" stroke-width="1"/>${face}</svg>`;
+function postiSitoSvg(expr,pal){
+  const nose=`<ellipse cx="28" cy="38" rx="3" ry="2.5" fill="${pal.nose}"/>`;
+  const face=faceParts(expr,0,pal.mouth,nose);
+  return `<svg width="56" height="62" viewBox="0 0 56 62" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="10" r="7" fill="${pal.ear}"/><circle cx="44" cy="10" r="7" fill="${pal.ear}"/><circle cx="12" cy="10" r="3.5" fill="${pal.earIn}"/><circle cx="44" cy="10" r="3.5" fill="${pal.earIn}"/><rect x="10" y="12" width="36" height="36" rx="10" fill="${pal.body}"/><rect x="10" y="12" width="36" height="36" rx="10" fill="none" stroke="${pal.border}" stroke-width="1.5"/><polygon points="38,12 46,12 46,20" fill="${pal.fold}"/><line x1="38" y1="12" x2="46" y2="20" stroke="${pal.border}" stroke-width="1"/>${face}</svg>`;
 }
 
-function conejobooSvg(expr){
-  const face=faceParts(expr,2,'#8a60b0');
-  return `<svg width="56" height="64" viewBox="0 0 56 64" xmlns="http://www.w3.org/2000/svg"><ellipse cx="16" cy="6" rx="5" ry="13" fill="#d4b8f0"/><ellipse cx="40" cy="6" rx="5" ry="13" fill="#d4b8f0"/><ellipse cx="16" cy="7" rx="2.3" ry="9" fill="#f0deff"/><ellipse cx="40" cy="7" rx="2.3" ry="9" fill="#f0deff"/><rect x="10" y="14" width="36" height="36" rx="10" fill="#e6d9f8"/><rect x="10" y="14" width="36" height="36" rx="10" fill="none" stroke="#b890e0" stroke-width="1.5"/><polygon points="38,14 46,14 46,22" fill="#dcc8f4"/><line x1="38" y1="14" x2="46" y2="22" stroke="#b890e0" stroke-width="1"/>${face}</svg>`;
+function postiNejoSvg(expr,pal){
+  const face=faceParts(expr,2,pal.mouth);
+  return `<svg width="56" height="64" viewBox="0 0 56 64" xmlns="http://www.w3.org/2000/svg"><ellipse cx="16" cy="6" rx="5" ry="13" fill="${pal.ear}"/><ellipse cx="40" cy="6" rx="5" ry="13" fill="${pal.ear}"/><ellipse cx="16" cy="7" rx="2.3" ry="9" fill="${pal.earIn}"/><ellipse cx="40" cy="7" rx="2.3" ry="9" fill="${pal.earIn}"/><rect x="10" y="14" width="36" height="36" rx="10" fill="${pal.body}"/><rect x="10" y="14" width="36" height="36" rx="10" fill="none" stroke="${pal.border}" stroke-width="1.5"/><polygon points="38,14 46,14 46,22" fill="${pal.fold}"/><line x1="38" y1="14" x2="46" y2="22" stroke="${pal.border}" stroke-width="1"/>${face}</svg>`;
 }
 
-const MASCOT_BUILDERS={postiboo:postibooSvg,gatito:gatitobooSvg,osito:ositobooSvg,conejo:conejobooSvg};
+function postiBejaSvg(expr,pal){
+  const face=faceParts(expr,0,pal.mouth);
+  const clipId='beeClip'+pal.id;
+  return `<svg width="56" height="62" viewBox="0 0 56 62" xmlns="http://www.w3.org/2000/svg"><ellipse cx="6" cy="26" rx="10" ry="7" fill="${pal.wing}" opacity=".85" transform="rotate(-15 6 26)"/><ellipse cx="50" cy="26" rx="10" ry="7" fill="${pal.wing}" opacity=".85" transform="rotate(15 50 26)"/><defs><clipPath id="${clipId}"><rect x="10" y="12" width="36" height="36" rx="14"/></clipPath></defs><rect x="10" y="12" width="36" height="36" rx="14" fill="${pal.body}"/><g clip-path="url(#${clipId})"><rect x="10" y="22" width="36" height="6" fill="${pal.stripe}"/><rect x="10" y="34" width="36" height="6" fill="${pal.stripe}"/></g><rect x="10" y="12" width="36" height="36" rx="14" fill="none" stroke="${pal.border}" stroke-width="1.5"/>${face}<path d="M22 12 Q18 5 14 4" stroke="${pal.border}" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M34 12 Q38 5 42 4" stroke="${pal.border}" stroke-width="1.5" fill="none" stroke-linecap="round"/><circle cx="14" cy="4" r="2.2" fill="${pal.border}"/><circle cx="42" cy="4" r="2.2" fill="${pal.border}"/></svg>`;
+}
 
-function getMascotSvg(mascotId,mood){
-  const builder=MASCOT_BUILDERS[mascotId]||MASCOT_BUILDERS.postiboo;
+function postiVejaSvg(expr,pal){
+  const face=faceParts(expr,2,pal.mouth);
+  return `<svg width="56" height="64" viewBox="0 0 56 64" xmlns="http://www.w3.org/2000/svg"><circle cx="14" cy="10" r="7" fill="${pal.wool}"/><circle cx="24" cy="6" r="8" fill="${pal.wool}"/><circle cx="34" cy="6" r="8" fill="${pal.wool}"/><circle cx="44" cy="10" r="7" fill="${pal.wool}"/><ellipse cx="9" cy="28" rx="5" ry="8" fill="${pal.ear}"/><ellipse cx="47" cy="28" rx="5" ry="8" fill="${pal.ear}"/><rect x="10" y="16" width="36" height="34" rx="12" fill="${pal.body}"/><rect x="10" y="16" width="36" height="34" rx="12" fill="none" stroke="${pal.border}" stroke-width="1.5"/>${face}</svg>`;
+}
+
+function postiPosaSvg(expr,pal){
+  const face=faceParts(expr,0,pal.mouth);
+  return `<svg width="56" height="62" viewBox="0 0 56 62" xmlns="http://www.w3.org/2000/svg"><ellipse cx="4" cy="18" rx="9" ry="10" fill="${pal.wing}"/><ellipse cx="6" cy="34" rx="7" ry="8" fill="${pal.wingAccent}" opacity=".9"/><ellipse cx="52" cy="18" rx="9" ry="10" fill="${pal.wing}"/><ellipse cx="50" cy="34" rx="7" ry="8" fill="${pal.wingAccent}" opacity=".9"/><rect x="10" y="12" width="36" height="36" rx="12" fill="${pal.body}"/><rect x="10" y="12" width="36" height="36" rx="12" fill="none" stroke="${pal.border}" stroke-width="1.5"/>${face}<path d="M24 12 Q22 6 18 4" stroke="${pal.border}" stroke-width="1.4" fill="none" stroke-linecap="round"/><path d="M32 12 Q34 6 38 4" stroke="${pal.border}" stroke-width="1.4" fill="none" stroke-linecap="round"/><circle cx="18" cy="4" r="1.8" fill="${pal.border}"/><circle cx="38" cy="4" r="1.8" fill="${pal.border}"/></svg>`;
+}
+
+const MASCOT_BUILDERS={postiboo:postiNoteSvg,gatito:postiGatoSvg,osito:postiSitoSvg,conejo:postiNejoSvg,abeja:postiBejaSvg,oveja:postiVejaSvg,mariposa:postiPosaSvg};
+
+const MASCOT_SKIN_PALETTES={
+  postiboo:[
+    {id:'clasico',name:'Amarillo Clásico',price:0,body:'#fef08a',border:'#fbbf24',fold:'#fde047',wing:'#fde68a',mouth:'#a16207',tip:'#f472b6'},
+    {id:'rosa',name:'Rosa Pastel',price:20,body:'#ffd9e8',border:'#e88aa8',fold:'#f8c0d8',wing:'#fbc7dc',mouth:'#a1527d',tip:'#f472b6'},
+    {id:'menta',name:'Menta Fresca',price:20,body:'#c8f0dc',border:'#6ec99a',fold:'#a8e6c4',wing:'#b8ecd0',mouth:'#2f7a52',tip:'#f9a8d4'},
+    {id:'lavanda',name:'Lavanda Dream',price:25,body:'#e6d9f8',border:'#b890e0',fold:'#dcc8f4',wing:'#dccdf4',mouth:'#6b3f96',tip:'#f9a8d4'}
+  ],
+  gatito:[
+    {id:'clasico',name:'Rosa Clásico',price:0,body:'#ffd9e8',border:'#e88aa8',fold:'#f8c0d8',ear:'#f4a8c0',mouth:'#a16285'},
+    {id:'gris',name:'Gris Gatito',price:20,body:'#e4e4ea',border:'#a8a8b8',fold:'#d4d4de',ear:'#c8c8d4',mouth:'#5a5a6a'},
+    {id:'naranja',name:'Atigrado',price:20,body:'#ffe0b8',border:'#e8a860',fold:'#ffd090',ear:'#f4b878',mouth:'#a16820'},
+    {id:'blanco',name:'Blanco Nieve',price:25,body:'#fdfdfd',border:'#d8d8e0',fold:'#f0f0f4',ear:'#eaeaf0',mouth:'#7a7a8a'}
+  ],
+  osito:[
+    {id:'clasico',name:'Café Clásico',price:0,body:'#ffe0c2',border:'#d9a86a',fold:'#f8d0a0',ear:'#f0c090',earIn:'#fad9b8',nose:'#d9a86a',mouth:'#a17840'},
+    {id:'rosa',name:'Osito Rosa',price:20,body:'#ffe0e8',border:'#e8a8bc',fold:'#ffd0dc',ear:'#f4b8c8',earIn:'#fdd9e0',nose:'#c88098',mouth:'#a15868'},
+    {id:'panda',name:'Osito Panda',price:25,body:'#f4f4f8',border:'#3b3b45',fold:'#e4e4ea',ear:'#3b3b45',earIn:'#5a5a68',nose:'#3b3b45',mouth:'#3b3b45'},
+    {id:'polar',name:'Osito Polar',price:20,body:'#eef7fb',border:'#a8ccd9',fold:'#dcf0f8',ear:'#dcf0f8',earIn:'#eefaff',nose:'#7a9aa8',mouth:'#5a7a88'}
+  ],
+  conejo:[
+    {id:'clasico',name:'Lavanda Clásico',price:0,body:'#e6d9f8',border:'#b890e0',fold:'#dcc8f4',ear:'#d4b8f0',earIn:'#f0deff',mouth:'#8a60b0'},
+    {id:'menta',name:'Conejo Menta',price:20,body:'#d9f8ea',border:'#7ed0a8',fold:'#c0f0d8',ear:'#a8e8c4',earIn:'#e0fbee',mouth:'#3a8a5e'},
+    {id:'durazno',name:'Conejo Durazno',price:20,body:'#ffe4d4',border:'#e8a878',fold:'#ffd4b8',ear:'#f4c0a0',earIn:'#fff0e4',mouth:'#a16238'},
+    {id:'gris',name:'Conejo Gris',price:25,body:'#eaeaf0',border:'#b0b0c0',fold:'#dcdce6',ear:'#c8c8d8',earIn:'#f4f4f8',mouth:'#6a6a7a'}
+  ],
+  abeja:[
+    {id:'clasico',name:'Abeja Clásica',price:0,body:'#fff3b0',border:'#e0a800',stripe:'#3b3b45',wing:'#eaf6ff',mouth:'#7a5a00'},
+    {id:'rosa',name:'Abeja Rosa',price:25,body:'#ffe0ec',border:'#e888a8',stripe:'#a1527d',wing:'#fdeef4',mouth:'#8a4262'},
+    {id:'menta',name:'Abeja Menta',price:25,body:'#dff8ea',border:'#6ec99a',stripe:'#2f7a52',wing:'#eefdf4',mouth:'#245c3e'},
+    {id:'lila',name:'Abeja Lila',price:30,body:'#ece0fb',border:'#a888d8',stripe:'#6b3f96',wing:'#f6f0fe',mouth:'#5a3480'}
+  ],
+  oveja:[
+    {id:'clasico',name:'Oveja Clásica',price:0,body:'#fffdf7',border:'#d9c9a8',wool:'#ffffff',ear:'#f0c090',mouth:'#8a6a3a'},
+    {id:'rosa',name:'Oveja Rosa',price:25,body:'#fff0f4',border:'#e0b8c4',wool:'#ffe6ee',ear:'#f4b8c8',mouth:'#a15868'},
+    {id:'gris',name:'Oveja Gris',price:25,body:'#f2f2f6',border:'#c0c0cc',wool:'#e8e8f0',ear:'#d0d0dc',mouth:'#5a5a6a'},
+    {id:'negra',name:'Oveja Negra',price:30,body:'#3b3b45',border:'#232329',wool:'#4a4a56',ear:'#2a2a30',mouth:'#eaeaea'}
+  ],
+  mariposa:[
+    {id:'clasico',name:'Mariposa Clásica',price:0,body:'#fff0b8',border:'#e0a800',wing:'#f4a8c0',wingAccent:'#c060a0',mouth:'#7a5a00'},
+    {id:'azul',name:'Mariposa Azul',price:25,body:'#eaf6ff',border:'#7ab8e0',wing:'#a8d4f4',wingAccent:'#4a80c0',mouth:'#2a5a8a'},
+    {id:'monarca',name:'Mariposa Monarca',price:25,body:'#ffe4c4',border:'#e07a2a',wing:'#f8a860',wingAccent:'#3b3b45',mouth:'#7a3a0a'},
+    {id:'lila',name:'Mariposa Lila',price:30,body:'#f0e4fb',border:'#a888d8',wing:'#d4b8f0',wingAccent:'#8050b0',mouth:'#5a3480'}
+  ]
+};
+
+function getMascotSvg(mascotId,mood,skinId){
+  const family=MASCOT_BUILDERS[mascotId]||MASCOT_BUILDERS.postiboo;
   const expr=mood?(MOOD_EXPRESSION[mood]||'calm'):'calm';
-  return builder(expr);
+  const palettes=MASCOT_SKIN_PALETTES[mascotId]||MASCOT_SKIN_PALETTES.postiboo;
+  const pal=palettes.find(p=>p.id===(skinId||'clasico'))||palettes[0];
+  return family(expr,pal);
 }
 
-/* Emociones coleccionables — cada una es una carita comprable */
+function getEquippedMascotSkinId(mascotId){
+  return(currentUserData&&currentUserData.equippedMascotSkins&&currentUserData.equippedMascotSkins[mascotId])||'clasico';
+}
+
+function getOwnedMascotSkins(mascotId){
+  return(currentUserData&&currentUserData.mascotSkins&&currentUserData.mascotSkins[mascotId])||['clasico'];
+}
+
+const MASCOTS={
+  postiboo:{name:'Posti-note',price:0,desc:'La mascota oficial 💛'},
+  gatito:{name:'Posti-gato',price:50,desc:'Curioso y juguetón 🐱'},
+  osito:{name:'Posti-sito',price:75,desc:'Abrazos garantizados 🐻'},
+  conejo:{name:'Posti-nejo',price:110,desc:'Saltitos de esperanza 🐰'},
+  abeja:{name:'Posti-beja',price:140,desc:'Dulce como la miel 🐝'},
+  oveja:{name:'Posti-veja',price:160,desc:'Suave como una nube 🐑'},
+  mariposa:{name:'Posti-posa',price:180,desc:'Ligera y llena de color 🦋'}
+};
+Object.keys(MASCOTS).forEach(id=>{MASCOTS[id].svg=getMascotSvg(id,null);});
+
+const NOTE_SKINS={
+  clasica:{name:'Clásica',price:0,cssClass:'',desc:'El post-it de siempre 💛',preview:'📝'},
+  brillo:{name:'Brillo Pastel',price:30,cssClass:'skin-brillo',desc:'Un toque de destellos suaves ✨',preview:'✨'},
+  fluffy:{name:'Bordes Fluffy',price:35,cssClass:'skin-fluffy',desc:'Bordes esponjositos y tiernos ☁️',preview:'☁️'},
+  confeti:{name:'Confeti Bordes',price:45,cssClass:'skin-confeti',desc:'Un marco de confeti pastel 🎉',preview:'🎉'},
+  estrellitas:{name:'Estrellitas',price:50,cssClass:'skin-estrellitas',desc:'Estrellitas pegadas en las esquinas 🌟',preview:'🌟'}
+};
+
+/* Emociones coleccionables */
 const EMOTIONS={
   feliz:      {nombre:'Feliz',       precio:0,  rareza:'comun',      expr:'happy'},
   sonadora:   {nombre:'Soñadora',    precio:15, rareza:'comun',      expr:'dreamy'},
@@ -644,49 +802,26 @@ const EMOTIONS={
 };
 const RAREZA_LABEL={comun:'Común',rara:'Rara',legendaria:'Legendaria',mitica:'Mítica'};
 
-function getEmotionExpr(emotionId){
-  return(emotionId&&EMOTIONS[emotionId])?EMOTIONS[emotionId].expr:null;
+function getMascotSvgExpr(mascotId,expr,skinId){
+  const family=MASCOT_BUILDERS[mascotId]||MASCOT_BUILDERS.postiboo;
+  const palettes=MASCOT_SKIN_PALETTES[mascotId]||MASCOT_SKIN_PALETTES.postiboo;
+  const pal=palettes.find(p=>p.id===(skinId||'clasico'))||palettes[0];
+  return family(expr,pal);
 }
-
-function getMascotSvgEmotion(mascotId,emotionId){
-  const builder=MASCOT_BUILDERS[mascotId]||MASCOT_BUILDERS.postiboo;
-  const expr=getEmotionExpr(emotionId)||'calm';
-  return builder(expr);
+function getEmotionExpr(id){return(id&&EMOTIONS[id])?EMOTIONS[id].expr:null}
+function getMascotSvgEmotion(mascotId,emotionId,skinId){
+  return getMascotSvgExpr(mascotId,getEmotionExpr(emotionId)||'calm',skinId);
 }
-
-/* Carita a mostrar en una notita: emoción elegida gana; si no, la del mood */
-function noteMascotSvg(note){
-  const mid=note.mascotId||'postiboo';
-  if(note.emotionId&&EMOTIONS[note.emotionId])return getMascotSvgEmotion(mid,note.emotionId);
-  return getMascotSvg(mid,note.mood);
+function getOwnedEmotions(){
+  const owned=(currentUserData&&currentUserData.ownedEmotions&&currentUserData.ownedEmotions.length)?currentUserData.ownedEmotions:['feliz'];
+  return Object.keys(EMOTIONS).filter(id=>owned.includes(id));
 }
-
-const MASCOTS={
-  postiboo:{name:'Posti-boo',price:0,svg:postibooSvg('calm'),desc:'La mascota oficial 💛'},
-  gatito:{name:'Gatito-boo',price:40,svg:gatitobooSvg('calm'),desc:'Curioso y juguetón 🐱'},
-  osito:{name:'Osito-boo',price:60,svg:ositobooSvg('calm'),desc:'Abrazos garantizados 🐻'},
-  conejo:{name:'Conejo-boo',price:90,svg:conejobooSvg('calm'),desc:'Saltitos de esperanza 🐰'}
-};
-
-/* Skins de notita — "Viste tu Notita" */
-const LACE_FLOWER='<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><g fill="#fff" opacity=".9"><ellipse cx="10" cy="5" rx="3" ry="4"/><ellipse cx="10" cy="15" rx="3" ry="4"/><ellipse cx="5" cy="10" rx="4" ry="3"/><ellipse cx="15" cy="10" rx="4" ry="3"/></g><circle cx="10" cy="10" r="2.6" fill="#f9c8d8"/></svg>';
-const BORDADO_FLOWER='<svg viewBox="0 0 22 26" xmlns="http://www.w3.org/2000/svg"><path d="M11 12 L11 24" stroke="#5e8c4a" stroke-width="1.6" stroke-dasharray="2.5 1.5"/><path d="M11 18 Q6 16 5 12" stroke="#5e8c4a" stroke-width="1.4" fill="none" stroke-dasharray="2.5 1.5"/><g fill="#e087a8"><ellipse cx="11" cy="4" rx="2.5" ry="3.2"/><ellipse cx="6.5" cy="7" rx="2.5" ry="3.2" transform="rotate(-60 6.5 7)"/><ellipse cx="15.5" cy="7" rx="2.5" ry="3.2" transform="rotate(60 15.5 7)"/><ellipse cx="8" cy="11" rx="2.5" ry="3.2" transform="rotate(-120 8 11)"/><ellipse cx="14" cy="11" rx="2.5" ry="3.2" transform="rotate(120 14 11)"/></g><circle cx="11" cy="7.5" r="2" fill="#fde68a"/></svg>';
-const NOTE_SKINS={
-  clasica:{nombre:'Clásica',precio:0,desc:'El look de siempre 💛'},
-  costura:{nombre:'Costura',precio:30,desc:'Cosida a manita 🧵'},
-  lace:{nombre:'Lace de flores',precio:60,desc:'Encaje con florecitas 🌸'},
-  bordado:{nombre:'Bordado',precio:85,desc:'Flor bordada a mano 🪡'}
-};
-
-function skinDecorHtml(skinId){
-  if(skinId==='lace')return `<span class="skin-corner tl">${LACE_FLOWER}</span><span class="skin-corner tr">${LACE_FLOWER}</span>`;
-  if(skinId==='bordado')return `<span class="skin-corner bl">${BORDADO_FLOWER}</span>`;
+function emotionAuraClass(rareza){
+  if(rareza==='mitica')return 'aura-cosmic';
+  if(rareza==='legendaria')return 'aura-glow';
   return '';
 }
 
-function getEquippedSkinId(){
-  return(currentUserData&&currentUserData.equippedSkin&&NOTE_SKINS[currentUserData.equippedSkin])?currentUserData.equippedSkin:'clasica';
-}
 const STARTING_POSTIBITS=20;
 
 let currentUser=null;
@@ -694,13 +829,44 @@ let currentUserData=null;
 let allNotes=[];
 let selectedMood=null;
 let selectedEmotion=null;
-let storeTab='mascotas';
 let currentFilter='all';
 let isAuthLogin=true;
 let unsubUserDoc=null;
 let currentOpenNoteId=null;
+let currentOpenNoteAuthorId=null;
+let localIdCounter=1;
+
+const DAILY_SUPPORT_CAP=5;
 
 function todayStr(){return new Date().toISOString().slice(0,10)}
+
+function buildLocalSeedNotes(){
+  const seed=[
+    {mood:'hopeful',text:'Hoy por fin dormí bien. Es poco pero es algo 🌈',author:'Sol 💛',responseType:'apoyo',responses:[{id:'r1',text:'🐻 Estoy contigo',timestamp:Date.now()}],anonymous:false},
+    {mood:'sad',text:'Extraño a mi mejor amiga. La distancia duele.',author:'Anónima 🫧',responseType:'apoyo',responses:[],anonymous:true},
+    {mood:'grateful',text:'Mi mamá me hizo mi comida favorita sin que se lo pidiera. La amo tanto.',author:'Luna 🌙',responseType:'historias',responses:[],anonymous:false},
+    {mood:'anxious',text:'Tengo presentación mañana y siento que no estoy lista para nada 😬',author:'Anónima 🫧',responseType:'aqui',responses:[],anonymous:true},
+    {mood:'motivated',text:'¡Por fin terminé el proyecto que tenía abandonado desde hace meses!',author:'Vale 🔥',responseType:'apoyo',responses:[],anonymous:false},
+    {mood:'calm',text:'Tarde con té, lluvia y un libro. Esto es todo lo que necesitaba hoy.',author:'Ro 🌿',responseType:'consejos',responses:[],anonymous:false}
+  ];
+  return seed.map((n,i)=>({
+    id:'local-seed-'+i,
+    userId:null,
+    mood:n.mood,
+    text:n.text,
+    color:MOOD_COLORS[n.mood],
+    emoji:MOOD_EMOJIS[n.mood],
+    author:n.author,
+    anonymous:n.anonymous,
+    timestamp:Date.now()-i*3600000,
+    responseType:n.responseType,
+    responses:n.responses,
+    rot:ROTS[i%ROTS.length],
+    mascotId:'postiboo'
+  }));
+}
+
+let localNotes=[];
 
 function escapeHtml(str){
   const div=document.createElement('div');
@@ -720,13 +886,15 @@ function showToast(msg){
   setTimeout(()=>toast.classList.remove('show'),3000);
 }
 
-function init(){
+async function init(){
   renderMoodGrid();
+  renderFilterBar();
   document.getElementById('postibooWriter').innerHTML=MASCOTS.postiboo.svg;
   document.getElementById('companionMascotIcon').innerHTML=MASCOTS.postiboo.svg;
-  updateDecorMascots();
+  document.getElementById('companionBadgeIcon').innerHTML=MASCOTS.postiboo.svg;
 
-  document.getElementById('newNoteBtn').onclick=()=>{renderEmotionPicker();document.getElementById('createNoteModal').classList.add('active')};
+  document.getElementById('newNoteBtn').onclick=()=>document.getElementById('createNoteModal').classList.add('active');
+  document.getElementById('companionBadge').onclick=showStoreModal;
   document.getElementById('closeCreateModal').onclick=()=>closeCreateModal();
   document.getElementById('createNoteModal').onclick=(e)=>{
     if(e.target===document.getElementById('createNoteModal'))closeCreateModal();
@@ -739,7 +907,11 @@ function init(){
     if(e.target===document.getElementById('storeModal'))document.getElementById('storeModal').classList.remove('active');
   };
 
-  setupGames();
+  document.getElementById('hugBtn').onclick=sendHug;
+  document.getElementById('hugClose').onclick=()=>document.getElementById('hugOverlay').classList.remove('active');
+  document.getElementById('hugOverlay').onclick=(e)=>{
+    if(e.target===document.getElementById('hugOverlay'))document.getElementById('hugOverlay').classList.remove('active');
+  };
 
   document.getElementById('noteText').oninput=function(){document.getElementById('charCount').textContent=this.value.length};
   document.getElementById('dropBtn').onclick=dropNote;
@@ -748,18 +920,91 @@ function init(){
     showStoreModal();
   };
   document.getElementById('sendCustomResponse').onclick=sendCustomResponse;
+  document.getElementById('adminDeleteNoteBtn').onclick=adminDeleteNote;
+  document.getElementById('adminBanAuthorBtn').onclick=adminBanAuthor;
+  document.getElementById('noteHugBtn').onclick=sendNoteHug;
 
-  document.querySelectorAll('.filter-btn').forEach(btn=>{
-    btn.onclick=()=>{
-      document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      currentFilter=btn.dataset.filter;
-      renderFeed();
-    };
+  const WELCOME_KEY='postitopia_hide_welcome';
+  const welcomeModal=document.getElementById('welcomeModal');
+  document.getElementById('welcomeMascot').innerHTML=MASCOTS.postiboo.svg;
+  let hideWelcome=false;
+  try{hideWelcome=localStorage.getItem(WELCOME_KEY)==='1'}catch(e){}
+  if(!hideWelcome)welcomeModal.classList.add('active');
+  document.getElementById('welcomeCloseBtn').onclick=()=>{
+    if(document.getElementById('welcomeDontShow').checked){
+      try{localStorage.setItem(WELCOME_KEY,'1')}catch(e){}
+    }
+    welcomeModal.classList.remove('active');
+  };
+  welcomeModal.onclick=(e)=>{
+    if(e.target===welcomeModal)welcomeModal.classList.remove('active');
+  };
+
+  document.addEventListener('keydown',(e)=>{
+    if(e.key!=='Escape')return;
+    if(welcomeModal.classList.contains('active')){welcomeModal.classList.remove('active');return}
+    if(document.getElementById('hugOverlay').classList.contains('active')){document.getElementById('hugOverlay').classList.remove('active');return}
+    if(document.getElementById('createNoteModal').classList.contains('active')){closeCreateModal();return}
+    if(document.getElementById('storeModal').classList.contains('active')){document.getElementById('storeModal').classList.remove('active');return}
+    if(document.getElementById('responseModal').classList.contains('active')){closeResponseModal();return}
+    if(document.getElementById('authModal').classList.contains('active')){closeAuthModal();return}
   });
 
-  listenToNotes();
-  onAuthStateChanged(auth,handleAuthStateChange);
+  try{
+    await loadFirebase();
+    listenToNotes();
+    onAuthStateChanged(auth,handleAuthStateChange);
+  }catch(e){
+    console.warn('Firebase no disponible, activando modo local de vista previa',e);
+    initLocalMode();
+  }
+}
+
+function initLocalMode(){
+  localMode=true;
+  localNotes=buildLocalSeedNotes();
+  allNotes=localNotes;
+  currentUser={id:'local-guest',username:'Invitada'};
+  currentUserData={
+    postibits:STARTING_POSTIBITS+100,
+    loginStreak:3,
+    lastLoginDate:todayStr(),
+    ownedMascots:['postiboo'],
+    equippedMascot:'postiboo',
+    mascotSkins:{postiboo:['clasico']},
+    equippedMascotSkins:{postiboo:'clasico'},
+    ownedSkins:['clasica'],
+    equippedSkin:'clasica',
+    ownedEmotions:['feliz'],
+    supportDate:null,
+    supportCountToday:0
+  };
+  updateProfileButton();
+  updatePostibitsBadge();
+  updateWriterMascot();
+  renderFeed();
+  showToast('👀 Vista previa sin conexión — los cambios no se guardan');
+}
+
+function renderFilterBar(){
+  const select=document.getElementById('moodFilterSelect');
+  MOOD_ORDER.forEach(mood=>{
+    const opt=document.createElement('option');
+    opt.value=mood;
+    opt.textContent=`${MOOD_EMOJIS[mood]} ${moodLabel(mood)}`;
+    select.appendChild(opt);
+  });
+  select.onchange=()=>{
+    currentFilter=select.value;
+    renderFeed();
+  };
+}
+
+function sendHug(){
+  document.getElementById('hugOverlay').classList.add('active');
+  if(currentUser){
+    awardSupportBit().catch(e=>console.error('hug award error',e));
+  }
 }
 
 function listenToNotes(){
@@ -801,7 +1046,7 @@ async function handleAuthStateChange(user){
       listenToUserDoc(user.uid);
       const result=await processLoginStreak();
       if(result&&result.awarded>0){
-        showToast(`¡Racha de ${result.streak} días! +${result.awarded} 🥧`);
+        showToast(`¡Racha de ${result.streak} días! +${result.awarded} PostiBits`);
       }
     }catch(e){console.error('auth state change error',e)}
   }else{
@@ -845,7 +1090,8 @@ function updatePostibitsBadge(){
 
 function updateWriterMascot(){
   const equippedId=getEquippedMascotId();
-  const svg=selectedEmotion?getMascotSvgEmotion(equippedId,selectedEmotion):getMascotSvg(equippedId,selectedMood);
+  const skinId=getEquippedMascotSkinId(equippedId);
+  const svg=getMascotSvg(equippedId,selectedMood,skinId);
 
   document.getElementById('postibooWriter').innerHTML=svg;
 
@@ -855,59 +1101,27 @@ function updateWriterMascot(){
     companionIcon.innerHTML=svg;
     companionName.textContent=MASCOTS[equippedId].name;
   }
-  updateDecorMascots();
-}
 
-function updateDecorMascots(){
-  const equippedId=getEquippedMascotId();
-  const idle=getMascotSvg(equippedId,'grateful');
-  const header=document.getElementById('headerMascot');
-  const board=document.getElementById('boardMascot');
-  if(header)header.innerHTML=idle;
-  if(board)board.innerHTML=idle;
-}
-
-function getOwnedEmotions(){
-  const owned=(currentUserData&&currentUserData.ownedEmotions&&currentUserData.ownedEmotions.length)?currentUserData.ownedEmotions:['feliz'];
-  return Object.keys(EMOTIONS).filter(id=>owned.includes(id));
-}
-
-function renderEmotionPicker(){
-  const picker=document.getElementById('emotionPicker');
-  const note=document.getElementById('emotionPickerNote');
-  const mid=getEquippedMascotId();
-  const owned=getOwnedEmotions();
-  picker.innerHTML='';
-
-  const autoBtn=document.createElement('button');
-  autoBtn.type='button';
-  autoBtn.className='emo-pick-btn emo-pick-auto'+(selectedEmotion===null?' selected':'');
-  autoBtn.textContent='Auto 🎨';
-  autoBtn.title='La carita cambia según tu mood';
-  autoBtn.onclick=()=>{selectedEmotion=null;renderEmotionPicker();updateWriterMascot()};
-  picker.appendChild(autoBtn);
-
-  owned.forEach(id=>{
-    const e=EMOTIONS[id];
-    const b=document.createElement('button');
-    b.type='button';
-    b.className='emo-pick-btn'+(selectedEmotion===id?' selected':'');
-    b.title=e.nombre;
-    b.innerHTML=getMascotSvgEmotion(mid,id);
-    b.onclick=()=>{selectedEmotion=id;renderEmotionPicker();updateWriterMascot()};
-    picker.appendChild(b);
-  });
-
-  note.textContent=owned.length<=1?'Compra más emociones en la tienda 🛍️ para desbloquear caritas.':'';
+  const badgeIcon=document.getElementById('companionBadgeIcon');
+  if(badgeIcon){
+    badgeIcon.innerHTML=getMascotSvg(equippedId,null,skinId);
+    document.getElementById('companionBadge').title=`Tu compañero: ${MASCOTS[equippedId].name}`;
+  }
 }
 
 function getEquippedMascotId(){
   return(currentUserData&&currentUserData.equippedMascot&&MASCOTS[currentUserData.equippedMascot])?currentUserData.equippedMascot:'postiboo';
 }
 
+function getEquippedSkinId(){
+  return(currentUserData&&currentUserData.equippedSkin&&NOTE_SKINS[currentUserData.equippedSkin])?currentUserData.equippedSkin:'clasica';
+}
+
 function updateProfileButton(){
   const btn=document.getElementById('profileBtn');
-  btn.textContent=currentUser?'👤 '+currentUser.username:'👤 Entrar';
+  if(!currentUser){btn.textContent='👤 Entrar';return}
+  const badge=(currentUserData&&currentUserData.isAdmin)?'👑 ':(currentUserData&&currentUserData.isModerator)?'🧹 ':'👤 ';
+  btn.textContent=badge+currentUser.username;
 }
 
 function showProfileModal(){
@@ -919,14 +1133,21 @@ function renderProfileContent(){
   const content=document.getElementById('authContent');
 
   if(currentUser&&currentUserData){
-    const mascot=MASCOTS[getEquippedMascotId()];
+    const equippedMid=getEquippedMascotId();
+    const mascot=MASCOTS[equippedMid];
+    const avatarSvg=getMascotSvg(equippedMid,null,getEquippedMascotSkinId(equippedMid));
     content.innerHTML=`
       <div style="margin:1rem 0;text-align:center">
-        <div class="profile-avatar">${mascot.svg}</div>
-        <p style="color:var(--text);margin-bottom:.3rem">Hola, <strong>${escapeHtml(currentUser.username)}</strong> 💛</p>
-        <div class="postibits-badge" style="margin:0 auto;width:fit-content">🥧 ${currentUserData.postibits} Postibits</div>
-        <p class="streak-note">Racha de login: ${currentUserData.loginStreak||0} día${(currentUserData.loginStreak||0)===1?'':'s'} · cada 7 días ganas +5 🥧</p>
-        <button onclick="closeAuthModal();showStoreModal()" class="btn btn-primary" style="width:100%">🛍️ Cambiar mascota / Tienda</button>
+        <div class="profile-avatar">${avatarSvg}</div>
+        <p style="color:var(--text);margin-bottom:.3rem">Hola, <strong>${currentUserData.isAdmin?'👑 ':currentUserData.isModerator?'🧹 ':''}${escapeHtml(currentUser.username)}</strong> 💛</p>
+        <div class="postibits-badge" style="margin:0 auto;width:fit-content">${currentUserData.postibits} PostiBits</div>
+        <p class="streak-note">Racha de login: ${currentUserData.loginStreak||0} día${(currentUserData.loginStreak||0)===1?'':'s'} · cada 7 días ganas +5 PostiBits</p>
+        <button onclick="closeAuthModal();showStoreModal()" class="btn btn-primary" style="width:100%">🛍️ Cambiar mascota / Post-itienda</button>
+      </div>
+
+      <div class="profile-section">
+        <p class="section-label">📊 Tu Mood Tracker</p>
+        <div id="profileMoodTracker"></div>
       </div>
 
       <div class="profile-section">
@@ -946,6 +1167,7 @@ function renderProfileContent(){
 
       <button onclick="logout()" class="btn btn-secondary" style="width:100%;margin-top:.5rem">Salir</button>
     `;
+    renderMoodTracker(document.getElementById('profileMoodTracker'));
     renderMyNotesList(document.getElementById('profileMyNotes'));
     renderOwnedMascotsList(document.getElementById('profileOwnedMascots'));
     renderSupportedNotesList(document.getElementById('profileSupportedNotes'));
@@ -954,6 +1176,12 @@ function renderProfileContent(){
       <form id="authForm" style="display:flex;flex-direction:column;gap:1rem;margin:1rem 0">
         <input class="auth-input" id="authUsername" type="text" placeholder="Tu nombre de usuario" required/>
         <input class="auth-input" id="authPassword" type="password" placeholder="Contraseña (mínimo 6 caracteres)" required minlength="6"/>
+        ${isAuthLogin?'':`
+        <div class="terms-box">
+          <p class="terms-title">📜 Reglas de la comunidad</p>
+          <p class="terms-text">Al crear tu cuenta aceptas: no insultar ni acosar a nadie, no publicar contenido obsceno, violento o sexual, no compartir datos personales de otras personas, y tratar cada notita con respeto y cariño 💛. El equipo puede eliminar notitas o restringir cuentas que rompan estas reglas.</p>
+          <label class="anon-toggle"><input type="checkbox" id="acceptTerms" required/> Acepto las reglas de la comunidad</label>
+        </div>`}
         <button type="submit" class="btn btn-primary" style="width:100%">${isAuthLogin?'Entrar':'Crear cuenta'}</button>
         <div id="authError" class="auth-error"></div>
       </form>
@@ -963,6 +1191,34 @@ function renderProfileContent(){
     `;
     document.getElementById('authForm').onsubmit=handleAuth;
   }
+}
+
+function renderMoodTracker(container){
+  const mine=allNotes.filter(n=>n.userId===currentUser.id);
+  if(mine.length===0){
+    container.innerHTML='<p class="tracker-empty">Deja tu primera notita para ver tus estadísticas aquí 🌱</p>';
+    return;
+  }
+
+  const weekAgo=Date.now()-7*86400000;
+  const recent=mine.filter(n=>(n.timestamp||0)>=weekAgo);
+  const pool=recent.length>0?recent:mine;
+
+  const counts={};
+  pool.forEach(n=>{counts[n.mood]=(counts[n.mood]||0)+1});
+
+  const topMood=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0][0];
+  const maxCount=Math.max(...Object.values(counts));
+
+  let html=`<div class="tracker-top"><span class="tracker-emoji">${MOOD_EMOJIS[topMood]}</span><span>Tu mood más frecuente ${recent.length>0?'esta semana':''} fue <strong>${moodLabel(topMood)}</strong> 💛</span></div>`;
+  html+='<div class="tracker-bars">';
+  Object.entries(counts).sort((a,b)=>b[1]-a[1]).forEach(([mood,count])=>{
+    const pct=Math.round((count/maxCount)*100);
+    html+=`<div class="tracker-bar-row"><span class="tracker-bar-label">${MOOD_EMOJIS[mood]} ${moodLabel(mood)}</span><span class="tracker-bar-track"><span class="tracker-bar-fill" style="width:${pct}%;background:${MOOD_COLORS[mood]}"></span></span><span class="tracker-bar-count">${count}</span></div>`;
+  });
+  html+='</div>';
+
+  container.innerHTML=html;
 }
 
 function truncate(str,n){
@@ -1028,6 +1284,10 @@ function mapAuthError(code){
 
 async function handleAuth(e){
   e.preventDefault();
+  if(localMode){
+    showToast('👀 Estás en vista previa local — la cuenta demo ya está activa');
+    return;
+  }
   const un=document.getElementById('authUsername').value.trim();
   const pw=document.getElementById('authPassword').value;
   const err=document.getElementById('authError');
@@ -1035,6 +1295,10 @@ async function handleAuth(e){
 
   if(!un||!pw){err.textContent='Completa todos los campos';err.style.display='block';return}
   if(pw.length<6){err.textContent='La contraseña debe tener al menos 6 caracteres';err.style.display='block';return}
+  if(!isAuthLogin){
+    const acceptEl=document.getElementById('acceptTerms');
+    if(!acceptEl||!acceptEl.checked){err.textContent='Debes aceptar las reglas de la comunidad para crear tu cuenta';err.style.display='block';return}
+  }
 
   const email=usernameToEmail(un);
   if(!email){err.textContent='Usa al menos una letra o número en tu nombre de usuario';err.style.display='block';return}
@@ -1054,9 +1318,14 @@ async function handleAuth(e){
         lastLoginDate:null,
         ownedMascots:['postiboo'],
         equippedMascot:'postiboo',
-        ownedEmotions:['feliz'],
+        mascotSkins:{postiboo:['clasico']},
+        equippedMascotSkins:{postiboo:'clasico'},
         ownedSkins:['clasica'],
-        equippedSkin:'clasica'
+        equippedSkin:'clasica',
+        ownedEmotions:['feliz'],
+        isAdmin:false,
+        isBanned:false,
+        acceptedTermsAt:Date.now()
       });
     }
     closeAuthModal();
@@ -1079,6 +1348,10 @@ function closeAuthModal(){
 }
 
 function logout(){
+  if(localMode){
+    showToast('👀 En vista previa local no puedes cerrar sesión');
+    return;
+  }
   signOut(auth);
   closeAuthModal();
 }
@@ -1093,89 +1366,27 @@ function showStoreModal(){
   document.getElementById('storeModal').classList.add('active');
 }
 
-function emotionAuraClass(rareza){
-  if(rareza==='mitica')return 'aura-cosmic';
-  if(rareza==='legendaria')return 'aura-glow';
-  return '';
-}
-
 function renderStoreContent(){
   if(!currentUser||!currentUserData)return;
   const content=document.getElementById('storeContent');
-  content.innerHTML=`
-    <div class="postibits-badge" style="margin:0 auto 1rem;width:fit-content">🥧 Tienes ${currentUserData.postibits} Postibits</div>
-    <div class="store-tabs">
-      <button class="store-tab${storeTab==='mascotas'?' active':''}" data-tab="mascotas">🐾 Mascotas</button>
-      <button class="store-tab${storeTab==='emociones'?' active':''}" data-tab="emociones">🎭 Emociones</button>
-      <button class="store-tab${storeTab==='skins'?' active':''}" data-tab="skins">📝 Notitas</button>
-    </div>
-    <div id="storeGridWrap"></div>
-    <div class="buy-postibits-row"><button class="btn btn-primary" disabled>💳 Comprar Postibits (próximamente)</button></div>`;
+  content.innerHTML=`<div class="postibits-badge" style="margin:0 auto 1rem;width:fit-content">Tienes ${currentUserData.postibits} PostiBits</div>
+    <div class="petshop-banner">🐾 Posti-mascotas <span>tu tiendita de mascotas de bolsillo</span></div>
+    <div class="mascot-grid" id="mascotGrid"></div>
+    <p class="section-label">🎨 Colores de mascota</p>
+    <div id="mascotSkinsSection"></div>
+    <p class="section-label">📝 Skins de notita</p>
+    <div class="mascot-grid" id="skinGrid"></div>
+    <p class="section-label">🎭 Emociones de mascota</p>
+    <div class="mascot-grid" id="emotionGrid"></div>
+    <div class="buy-postibits-row"><button class="btn btn-primary" disabled>💳 Comprar PostiBits (próximamente)</button></div>`;
 
-  content.querySelectorAll('.store-tab').forEach(t=>{
-    t.onclick=()=>{storeTab=t.dataset.tab;renderStoreContent()};
-  });
-
-  const wrap=document.getElementById('storeGridWrap');
-  if(storeTab==='mascotas')renderMascotStore(wrap);
-  else if(storeTab==='emociones')renderEmotionStore(wrap);
-  else renderSkinStore(wrap);
-}
-
-function renderSkinStore(wrap){
-  const owned=currentUserData.ownedSkins||['clasica'];
-  const equipped=getEquippedSkinId();
-  const grid=document.createElement('div');grid.className='mascot-grid';
-  Object.entries(NOTE_SKINS).forEach(([id,s])=>{
-    const isOwned=owned.includes(id);
-    const isEquipped=equipped===id;
-    const card=document.createElement('div');
-    card.className='mascot-card'+(isOwned?' owned':'')+(isEquipped?' equipped':'');
-    card.innerHTML=`<div class="skin-preview skin-${id}">${skinDecorHtml(id)}</div><div class="mascot-name">${s.nombre}</div><div class="mascot-desc">${s.desc}</div><div class="mascot-price">${s.precio===0?'Gratis':'🥧 '+s.precio}</div>`;
-    const btn=document.createElement('button');
-    btn.className='mascot-btn '+(isEquipped?'equipped-label':isOwned?'equip':(currentUserData.postibits<s.precio?'locked':'buy'));
-    btn.textContent=isEquipped?'✓ Equipada':isOwned?'Equipar':'Comprar';
-    btn.disabled=isEquipped;
-    btn.onclick=()=>isOwned?equipSkin(id):buySkin(id);
-    card.appendChild(btn);
-    grid.appendChild(card);
-  });
-  wrap.innerHTML='';wrap.appendChild(grid);
-}
-
-async function buySkin(id){
-  const s=NOTE_SKINS[id];
-  if(currentUserData.postibits<s.precio){
-    showToast('No tienes suficientes Postibits 🥲');
-    return;
-  }
-  try{
-    await updateDoc(doc(db,'users',currentUser.id),{
-      postibits:increment(-s.precio),
-      ownedSkins:arrayUnion(id),
-      equippedSkin:id
-    });
-    showToast(`¡Tu notita ahora viste ${s.nombre}! 🎀`);
-  }catch(e){
-    console.error('buySkin error',e);
-    showToast('No se pudo completar la compra 🥲');
-  }
-}
-
-async function equipSkin(id){
-  try{
-    await updateDoc(doc(db,'users',currentUser.id),{equippedSkin:id});
-  }catch(e){console.error('equipSkin error',e)}
-}
-
-function renderMascotStore(wrap){
-  const grid=document.createElement('div');grid.className='mascot-grid';
+  const grid=document.getElementById('mascotGrid');
   Object.entries(MASCOTS).forEach(([id,m])=>{
     const owned=(currentUserData.ownedMascots||[]).includes(id);
     const equipped=currentUserData.equippedMascot===id;
     const card=document.createElement('div');
-    card.className='mascot-card'+(owned?' owned':'')+(equipped?' equipped':'');
-    card.innerHTML=`<div class="mascot-svg">${m.svg}</div><div class="mascot-name">${m.name}</div><div class="mascot-desc">${m.desc}</div><div class="mascot-price">${m.price===0?'Gratis':'🥧 '+m.price}</div>`;
+    card.className='mascot-card habitat-card habitat-'+id+(owned?' owned':'')+(equipped?' equipped':'');
+    card.innerHTML=`<div class="habitat-scene"><div class="mascot-svg">${m.svg}</div></div><div class="mascot-name">${m.name}</div><div class="mascot-desc">${m.desc}</div><div class="mascot-price">${m.price===0?'Gratis':m.price+' PostiBits'}</div>`;
     const btn=document.createElement('button');
     btn.className='mascot-btn '+(equipped?'equipped-label':owned?'equip':(currentUserData.postibits<m.price?'locked':'buy'));
     btn.textContent=equipped?'✓ Equipada':owned?'Equipar':'Comprar';
@@ -1184,28 +1395,182 @@ function renderMascotStore(wrap){
     card.appendChild(btn);
     grid.appendChild(card);
   });
-  wrap.innerHTML='';wrap.appendChild(grid);
-}
 
-function renderEmotionStore(wrap){
-  const owned=currentUserData.ownedEmotions||['feliz'];
-  const mid=getEquippedMascotId();
-  const grid=document.createElement('div');grid.className='mascot-grid';
+  const skinsSection=document.getElementById('mascotSkinsSection');
+  const ownedMascots=(currentUserData.ownedMascots&&currentUserData.ownedMascots.length)?currentUserData.ownedMascots:['postiboo'];
+  ownedMascots.forEach(mid=>{
+    const m=MASCOTS[mid];
+    const palettes=MASCOT_SKIN_PALETTES[mid]||[];
+    const ownedSkins=getOwnedMascotSkins(mid);
+    const equippedSkin=getEquippedMascotSkinId(mid);
+
+    const heading=document.createElement('p');
+    heading.className='mascot-skin-heading';
+    heading.textContent=`${m.name}`;
+    skinsSection.appendChild(heading);
+
+    const row=document.createElement('div');
+    row.className='mascot-grid';
+    palettes.forEach(pal=>{
+      const owned=ownedSkins.includes(pal.id);
+      const equipped=equippedSkin===pal.id;
+      const card=document.createElement('div');
+      card.className='mascot-card habitat-card habitat-'+mid+(owned?' owned':'')+(equipped?' equipped':'');
+      const previewSvg=getMascotSvg(mid,null,pal.id);
+      card.innerHTML=`<div class="habitat-scene"><div class="mascot-svg">${previewSvg}</div></div><div class="mascot-name">${pal.name}</div><div class="mascot-price">${pal.price===0?'Incluido':pal.price+' PostiBits'}</div>`;
+      const btn=document.createElement('button');
+      btn.className='mascot-btn '+(equipped?'equipped-label':owned?'equip':(currentUserData.postibits<pal.price?'locked':'buy'));
+      btn.textContent=equipped?'✓ Puesto':owned?'Ponerlo':'Comprar';
+      btn.disabled=equipped;
+      btn.onclick=()=>owned?equipMascotSkin(mid,pal.id):buyMascotSkin(mid,pal.id);
+      card.appendChild(btn);
+      row.appendChild(card);
+    });
+    skinsSection.appendChild(row);
+  });
+
+  const skinGrid=document.getElementById('skinGrid');
+  Object.entries(NOTE_SKINS).forEach(([id,s])=>{
+    const owned=(currentUserData.ownedSkins||['clasica']).includes(id);
+    const equipped=getEquippedSkinId()===id;
+    const card=document.createElement('div');
+    card.className='mascot-card'+(owned?' owned':'')+(equipped?' equipped':'');
+    card.innerHTML=`<div class="mascot-svg" style="font-size:2.4rem;display:flex;align-items:center;justify-content:center">${s.preview}</div><div class="mascot-name">${s.name}</div><div class="mascot-desc">${s.desc}</div><div class="mascot-price">${s.price===0?'Gratis':s.price+' PostiBits'}</div>`;
+    const btn=document.createElement('button');
+    btn.className='mascot-btn '+(equipped?'equipped-label':owned?'equip':(currentUserData.postibits<s.price?'locked':'buy'));
+    btn.textContent=equipped?'✓ Equipada':owned?'Equipar':'Comprar';
+    btn.disabled=equipped;
+    btn.onclick=()=>owned?equipSkin(id):buySkin(id);
+    card.appendChild(btn);
+    skinGrid.appendChild(card);
+  });
+
+  const emoGrid=document.getElementById('emotionGrid');
+  const emoMid=getEquippedMascotId();
+  const emoSkin=getEquippedMascotSkinId(emoMid);
+  const ownedEmos=currentUserData.ownedEmotions||['feliz'];
   Object.entries(EMOTIONS).forEach(([id,e])=>{
-    const isOwned=owned.includes(id);
+    const isOwned=ownedEmos.includes(id);
     const card=document.createElement('div');
     card.className='mascot-card emo-card'+(isOwned?' owned':'')+(e.rareza==='legendaria'?' leg':'')+(e.rareza==='mitica'?' mit':'');
-    const aura=emotionAuraClass(e.rareza);
-    card.innerHTML=`<div class="emo-svg ${aura}">${getMascotSvgEmotion(mid,id)}</div><span class="rareza-badge rareza-${e.rareza}">${RAREZA_LABEL[e.rareza]}</span><div class="mascot-name">${e.nombre}</div><div class="mascot-price">${e.precio===0?'Gratis':'🥧 '+e.precio}</div>`;
+    card.innerHTML=`<div class="emo-svg ${emotionAuraClass(e.rareza)}">${getMascotSvgEmotion(emoMid,id,emoSkin)}</div><span class="rareza-badge rareza-${e.rareza}">${RAREZA_LABEL[e.rareza]}</span><div class="mascot-name">${e.nombre}</div><div class="mascot-price">${e.precio===0?'Gratis':e.precio+' PostiBits'}</div>`;
     const btn=document.createElement('button');
     btn.className='mascot-btn '+(isOwned?'equipped-label':(currentUserData.postibits<e.precio?'locked':'buy'));
     btn.textContent=isOwned?'✓ Tuya':'Comprar';
     btn.disabled=isOwned;
     if(!isOwned)btn.onclick=()=>buyEmotion(id);
     card.appendChild(btn);
-    grid.appendChild(card);
+    emoGrid.appendChild(card);
   });
-  wrap.innerHTML='';wrap.appendChild(grid);
+}
+
+async function buyEmotion(id){
+  const e=EMOTIONS[id];
+  if(currentUserData.postibits<e.precio){showToast('No tienes suficientes PostiBits 🥲');return}
+  if(localMode){
+    currentUserData.postibits-=e.precio;
+    currentUserData.ownedEmotions=[...new Set([...(currentUserData.ownedEmotions||['feliz']),id])];
+    updatePostibitsBadge();renderStoreContent();
+    showToast(`¡Desbloqueaste la emoción ${e.nombre}! 🎭`);
+    return;
+  }
+  try{
+    await updateDoc(doc(db,'users',currentUser.id),{
+      postibits:increment(-e.precio),
+      ownedEmotions:arrayUnion(id)
+    });
+    showToast(`¡Desbloqueaste la emoción ${e.nombre}! 🎭`);
+  }catch(err){console.error('buyEmotion error',err);showToast('No se pudo completar la compra 🥲')}
+}
+
+async function buyMascotSkin(mascotId,skinId){
+  const pal=(MASCOT_SKIN_PALETTES[mascotId]||[]).find(p=>p.id===skinId);
+  if(!pal)return;
+  if(currentUserData.postibits<pal.price){
+    showToast('No tienes suficientes PostiBits 🥲');
+    return;
+  }
+
+  if(localMode){
+    currentUserData.postibits-=pal.price;
+    currentUserData.mascotSkins=currentUserData.mascotSkins||{};
+    currentUserData.mascotSkins[mascotId]=[...new Set([...(currentUserData.mascotSkins[mascotId]||['clasico']),skinId])];
+    currentUserData.equippedMascotSkins=currentUserData.equippedMascotSkins||{};
+    currentUserData.equippedMascotSkins[mascotId]=skinId;
+    updatePostibitsBadge();
+    updateWriterMascot();
+    renderStoreContent();
+    showToast(`¡Nuevo color para ${MASCOTS[mascotId].name}! 🎉`);
+    return;
+  }
+
+  try{
+    const ownedNow=[...new Set([...getOwnedMascotSkins(mascotId),skinId])];
+    await updateDoc(doc(db,'users',currentUser.id),{
+      postibits:increment(-pal.price),
+      [`mascotSkins.${mascotId}`]:ownedNow,
+      [`equippedMascotSkins.${mascotId}`]:skinId
+    });
+    showToast(`¡Nuevo color para ${MASCOTS[mascotId].name}! 🎉`);
+  }catch(e){
+    console.error('buyMascotSkin error',e);
+    showToast('No se pudo completar la compra 🥲');
+  }
+}
+
+async function equipMascotSkin(mascotId,skinId){
+  if(localMode){
+    currentUserData.equippedMascotSkins=currentUserData.equippedMascotSkins||{};
+    currentUserData.equippedMascotSkins[mascotId]=skinId;
+    updateWriterMascot();
+    renderStoreContent();
+    return;
+  }
+  try{
+    await updateDoc(doc(db,'users',currentUser.id),{[`equippedMascotSkins.${mascotId}`]:skinId});
+    updateWriterMascot();
+  }catch(e){console.error('equipMascotSkin error',e)}
+}
+
+async function buySkin(id){
+  const s=NOTE_SKINS[id];
+  if(currentUserData.postibits<s.price){
+    showToast('No tienes suficientes PostiBits 🥲');
+    return;
+  }
+
+  if(localMode){
+    currentUserData.postibits-=s.price;
+    currentUserData.ownedSkins=[...new Set([...(currentUserData.ownedSkins||['clasica']),id])];
+    currentUserData.equippedSkin=id;
+    updatePostibitsBadge();
+    renderStoreContent();
+    showToast(`¡${s.name} lista para usar! 🎉`);
+    return;
+  }
+
+  try{
+    await updateDoc(doc(db,'users',currentUser.id),{
+      postibits:increment(-s.price),
+      ownedSkins:arrayUnion(id),
+      equippedSkin:id
+    });
+    showToast(`¡${s.name} lista para usar! 🎉`);
+  }catch(e){
+    console.error('buySkin error',e);
+    showToast('No se pudo completar la compra 🥲');
+  }
+}
+
+async function equipSkin(id){
+  if(localMode){
+    currentUserData.equippedSkin=id;
+    renderStoreContent();
+    return;
+  }
+  try{
+    await updateDoc(doc(db,'users',currentUser.id),{equippedSkin:id});
+  }catch(e){console.error('equipSkin error',e)}
 }
 
 async function buyMascot(id){
@@ -1214,11 +1579,29 @@ async function buyMascot(id){
     showToast('No tienes suficientes Postibits 🥲');
     return;
   }
+
+  if(localMode){
+    currentUserData.postibits-=m.price;
+    currentUserData.ownedMascots=[...new Set([...(currentUserData.ownedMascots||['postiboo']),id])];
+    currentUserData.equippedMascot=id;
+    currentUserData.mascotSkins=currentUserData.mascotSkins||{};
+    if(!currentUserData.mascotSkins[id])currentUserData.mascotSkins[id]=['clasico'];
+    currentUserData.equippedMascotSkins=currentUserData.equippedMascotSkins||{};
+    currentUserData.equippedMascotSkins[id]='clasico';
+    updatePostibitsBadge();
+    updateWriterMascot();
+    renderStoreContent();
+    showToast(`¡${m.name} ahora vive contigo! 🎉`);
+    return;
+  }
+
   try{
     await updateDoc(doc(db,'users',currentUser.id),{
       postibits:increment(-m.price),
       ownedMascots:arrayUnion(id),
-      equippedMascot:id
+      equippedMascot:id,
+      [`mascotSkins.${id}`]:['clasico'],
+      [`equippedMascotSkins.${id}`]:'clasico'
     });
     showToast(`¡${m.name} ahora vive contigo! 🎉`);
   }catch(e){
@@ -1228,27 +1611,15 @@ async function buyMascot(id){
 }
 
 async function equipMascot(id){
-  try{
-    await updateDoc(doc(db,'users',currentUser.id),{equippedMascot:id});
-  }catch(e){console.error('equipMascot error',e)}
-}
-
-async function buyEmotion(id){
-  const e=EMOTIONS[id];
-  if(currentUserData.postibits<e.precio){
-    showToast('No tienes suficientes Postibits 🥲');
+  if(localMode){
+    currentUserData.equippedMascot=id;
+    updateWriterMascot();
+    renderStoreContent();
     return;
   }
   try{
-    await updateDoc(doc(db,'users',currentUser.id),{
-      postibits:increment(-e.precio),
-      ownedEmotions:arrayUnion(id)
-    });
-    showToast(`¡Desbloqueaste la emoción ${e.nombre}! 🎭`);
-  }catch(err){
-    console.error('buyEmotion error',err);
-    showToast('No se pudo completar la compra 🥲');
-  }
+    await updateDoc(doc(db,'users',currentUser.id),{equippedMascot:id});
+  }catch(e){console.error('equipMascot error',e)}
 }
 
 function renderMoodGrid(){
@@ -1258,7 +1629,7 @@ function renderMoodGrid(){
     const btn=document.createElement('button');
     btn.className='mood-btn';
     btn.dataset.mood=mood;
-    btn.innerHTML=`${emoji}<span>${mood}</span>`;
+    btn.innerHTML=`${emoji}<span>${moodLabel(mood)}</span>`;
     btn.type='button';
     btn.onclick=()=>{
       document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('selected'));
@@ -1274,7 +1645,6 @@ function renderMoodGrid(){
 function closeCreateModal(){
   document.getElementById('createNoteModal').classList.remove('active');
   selectedMood=null;
-  selectedEmotion=null;
   document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('selected'));
   document.getElementById('noteText').value='';
   document.getElementById('charCount').textContent='0';
@@ -1284,8 +1654,12 @@ function closeCreateModal(){
 }
 
 async function dropNote(){
+  if(currentUserData&&currentUserData.isBanned){
+    showToast('Tu cuenta está restringida por incumplir las reglas de la comunidad 🚫');
+    return;
+  }
   const text=document.getElementById('noteText').value.trim();
-  if(!selectedMood){alert('Elige un mood');return}
+  if(!selectedMood){showToast('Elige un mood primero 💛');return}
 
   const anon=document.getElementById('anonCheck').checked;
   const respType=document.querySelector('input[name="respType"]:checked').value;
@@ -1299,19 +1673,41 @@ async function dropNote(){
     color:MOOD_COLORS[selectedMood],
     emoji:MOOD_EMOJIS[selectedMood],
     author:anon?'Anónima 🫧':(currentUser?currentUser.username:'Anónima 🫧'),
+    authorBadge:(!anon&&currentUserData)?(currentUserData.isAdmin?'👑':currentUserData.isModerator?'🧹':null):null,
     anonymous:anon,
     timestamp:Date.now(),
     responseType:respType,
     responses:[],
     rot:ROTS[Math.floor(Math.random()*ROTS.length)],
     mascotId:getEquippedMascotId(),
-    emotionId:selectedEmotion||null,
-    skinId:getEquippedSkinId()
+    mascotSkin:getEquippedMascotSkinId(getEquippedMascotId()),
+    skin:getEquippedSkinId(),
+    hugs:0
   };
+
+  const wasPositive=POSITIVE_MOODS.includes(selectedMood);
+
+  if(localMode){
+    note.id='local-'+(localIdCounter++);
+    localNotes.unshift(note);
+    allNotes=localNotes;
+    closeCreateModal();
+    renderFeed();
+    if(wasPositive){
+      setTimeout(showWinToast,500);
+      setTimeout(launchConfetti,600);
+    }
+    dropBtn.disabled=false;
+    return;
+  }
 
   try{
     await addDoc(collection(db,'notes'),note);
     closeCreateModal();
+    if(wasPositive){
+      setTimeout(showWinToast,500);
+      setTimeout(launchConfetti,600);
+    }
   }catch(e){
     console.error('dropNote error',e);
     showToast('No se pudo guardar tu notita 🥲');
@@ -1320,11 +1716,51 @@ async function dropNote(){
   }
 }
 
+function showWinToast(){
+  const opts=[
+    {i:'🐥',t:'¡Lo estás haciendo bien! 🌟'},
+    {i:'⭐',t:'¡Pequeña victoria celebrada! ✨'},
+    {i:'🌈',t:'¡Tu notita llegó al corcho! 💛'},
+    {i:'🌸',t:'¡Eso es! ¡Sigue así! 🎉'}
+  ];
+  const o=opts[Math.floor(Math.random()*opts.length)];
+  const toast=document.getElementById('winToast');
+  toast.querySelector('.win-icon').textContent=o.i;
+  toast.querySelector('.win-text').textContent=o.t;
+  toast.classList.add('show');
+  setTimeout(()=>toast.classList.remove('show'),3000);
+}
+
+function launchConfetti(){
+  const cols=['#f9c8d8','#fff3b8','#c8e4f8','#e2d4f8','#c8f0dc','#ffd8c0'];
+  for(let i=0;i<26;i++){
+    const p=document.createElement('div');p.className='confetti-piece';
+    p.style.left=(20+Math.random()*60)+'vw';
+    p.style.top=(Math.random()*30)+'vh';
+    p.style.background=cols[Math.floor(Math.random()*cols.length)];
+    const size=(6+Math.random()*8)+'px';
+    p.style.width=size;p.style.height=size;
+    p.style.borderRadius=Math.random()>.5?'50%':'2px';
+    p.style.animationDelay=(Math.random()*.5)+'s';
+    p.style.animationDuration=(.9+Math.random()*.8)+'s';
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),2000);
+  }
+}
+
 function renderFeed(){
   const board=document.getElementById('corkboard');
-  const boardMascot=document.getElementById('boardMascot');
   board.innerHTML='';
-  if(boardMascot)board.appendChild(boardMascot);
+
+  const walker=document.createElement('div');
+  walker.className='postiboo-main';
+  walker.title='Tu compañero emocional';
+  walker.innerHTML=getMascotSvg(getEquippedMascotId(),null,getEquippedMascotSkinId(getEquippedMascotId()));
+  walker.onclick=()=>{
+    const msgs=['¡Aquí estoy contigo! 💛','Gracias por acompañarme hoy 🌸','¿Cómo te sientes ahora? 🤍','Sigo caminando a tu lado 🐾'];
+    showToast(msgs[Math.floor(Math.random()*msgs.length)]);
+  };
+  board.appendChild(walker);
 
   let notes=allNotes;
   if(currentFilter!=='all'){
@@ -1341,11 +1777,13 @@ function renderFeed(){
 
   notes.forEach(n=>{
     const card=document.createElement('div');
-    const skin=(n.skinId&&NOTE_SKINS[n.skinId])?n.skinId:'clasica';
-    card.className='note-card'+(skin!=='clasica'?' skin-'+skin:'');
+    const skinClass=(NOTE_SKINS[n.skin]&&NOTE_SKINS[n.skin].cssClass)?NOTE_SKINS[n.skin].cssClass:'';
+    card.className='note-card'+(skinClass?' '+skinClass:'');
     card.style.setProperty('--rot',n.rot+'deg');
     card.style.background=n.color;
-    if(skin!=='clasica')card.insertAdjacentHTML('beforeend',skinDecorHtml(skin));
+    card.tabIndex=0;
+    card.setAttribute('role','button');
+    card.setAttribute('aria-label',`Notita ${moodLabel(n.mood)} de ${n.author}: ${n.text}`);
 
     const pin=document.createElement('div');pin.className='note-pin';
     const emoji=document.createElement('div');emoji.className='note-mood-emoji';emoji.textContent=n.emoji;
@@ -1353,20 +1791,41 @@ function renderFeed(){
 
     const footer=document.createElement('div');footer.className='note-footer';
     const author=document.createElement('span');author.className='note-author';
-    const mascotSvgForNote=noteMascotSvg(n);
-    author.innerHTML=`<span class="note-mascot-icon">${mascotSvgForNote}</span>${escapeHtml(n.author)}`;
-    const reactions=document.createElement('div');reactions.className='note-reactions';
+    const mascotSvgForNote=getMascotSvg(n.mascotId||'postiboo',n.mood,n.mascotSkin||'clasico');
+    author.innerHTML=`<span class="note-mascot-icon">${mascotSvgForNote}</span>${n.authorBadge?n.authorBadge+' ':''}${escapeHtml(n.author)}`;
 
-    const responseExamples=RESPONSES_PACK[n.responseType]||RESPONSES_PACK.apoyo;
+    const rightSide=document.createElement('div');
+    rightSide.style.cssText='display:flex;align-items:center;gap:.5rem';
+
+    if((n.hugs||0)>0){
+      const hugEl=document.createElement('span');
+      hugEl.className='note-response-count';
+      hugEl.textContent=`🫂 ${n.hugs}`;
+      rightSide.appendChild(hugEl);
+    }
+
+    const respCount=(n.responses||[]).length;
+    if(respCount>0){
+      const countEl=document.createElement('span');
+      countEl.className='note-response-count';
+      countEl.textContent=`💬 ${respCount}`;
+      rightSide.appendChild(countEl);
+    }
+
+    const reactions=document.createElement('div');reactions.className='note-reactions';
+    const responseExamples=getResponsePack(n.mood,n.responseType);
     responseExamples.slice(0,2).forEach(r=>{
+      const m=r.match(/^\p{Emoji}/u);
+      const emoji=m?m[0]:'💛';
       const sp=document.createElement('span');
       sp.className='reaction-sticker';
-      sp.innerHTML=getStickerSvg(r);
+      sp.textContent=emoji;
       reactions.appendChild(sp);
     });
+    rightSide.appendChild(reactions);
 
     footer.appendChild(author);
-    footer.appendChild(reactions);
+    footer.appendChild(rightSide);
 
     card.appendChild(pin);
     card.appendChild(emoji);
@@ -1374,6 +1833,9 @@ function renderFeed(){
     card.appendChild(footer);
 
     card.onclick=()=>showResponseModal(n);
+    card.onkeydown=(e)=>{
+      if(e.key==='Enter'||e.key===' '){e.preventDefault();showResponseModal(n)}
+    };
 
     board.appendChild(card);
   });
@@ -1381,9 +1843,22 @@ function renderFeed(){
 
 function showResponseModal(note){
   currentOpenNoteId=note.id;
+  currentOpenNoteAuthorId=note.userId||null;
   const modal=document.getElementById('responseModal');
   document.getElementById('responseTitle').textContent=`${note.emoji} ${note.author}`;
   document.getElementById('responseText').textContent=note.text;
+  document.getElementById('noteHugCount').textContent=note.hugs||0;
+
+  const adminBox=document.getElementById('adminControls');
+  const canModerate=currentUserData&&(currentUserData.isAdmin||currentUserData.isModerator);
+  const canBan=currentUserData&&currentUserData.isAdmin;
+  if(canModerate){
+    adminBox.style.display='flex';
+    document.getElementById('adminRoleTag').textContent=canBan?'🛡️ Admin':'🧹 Moderador';
+    document.getElementById('adminBanAuthorBtn').style.display=(canBan&&note.userId)?'inline-flex':'none';
+  }else{
+    adminBox.style.display='none';
+  }
 
   const existingWrap=document.getElementById('existingResponses');
   const responses=note.responses||[];
@@ -1395,12 +1870,22 @@ function showResponseModal(note){
 
   const options=document.getElementById('responseOptions');
   options.innerHTML='';
+  options.className='response-options-grid '+(note.responseType==='historias'?'is-historias':'is-apoyo');
 
-  const rp=RESPONSES_PACK[note.responseType]||RESPONSES_PACK.apoyo;
+  const rp=getResponsePack(note.mood,note.responseType);
   rp.forEach((txt)=>{
     const opt=document.createElement('div');
-    opt.className='response-option';
-    opt.innerHTML=`<span class="response-option-icon">${getStickerSvg(txt)}</span><span class="response-option-text"><small>${escapeHtml(stripLeadingEmoji(txt))}</small></span>`;
+    const m=txt.match(/^\p{Emoji}/u);
+    const iconEmoji=m?m[0]:'💛';
+    const restText=txt.replace(/^\p{Emoji}\s*/u,'');
+    if(note.responseType==='historias'){
+      opt.className='response-option';
+      opt.innerHTML=`<strong>${iconEmoji}</strong><small>${escapeHtml(restText)}</small>`;
+    }else{
+      opt.className='response-option response-option-emoji';
+      opt.title=emojiMeaning(iconEmoji);
+      opt.innerHTML=`<span class="response-emoji-big">${iconEmoji}</span>`;
+    }
     opt.onclick=()=>addResponseToNote(note.id,txt);
     options.appendChild(opt);
   });
@@ -1410,15 +1895,64 @@ function showResponseModal(note){
 }
 
 async function addResponseToNote(noteId,txt){
+  if(currentUserData&&currentUserData.isBanned){
+    showToast('Tu cuenta está restringida por incumplir las reglas de la comunidad 🚫');
+    return;
+  }
   const resp={id:Date.now().toString(),userId:currentUser?currentUser.id:null,text:txt,timestamp:Date.now()};
+  const meaning=emojiMeaning(txt.trim());
+  const sentMsg=meaning?`${txt} enviado — "${meaning}" 💌`:'¡Tu apoyo fue enviado! 💌';
+
+  if(localMode){
+    const note=localNotes.find(n=>n.id===noteId);
+    if(note){
+      note.responses=note.responses||[];
+      note.responses.push(resp);
+    }
+    showToast(sentMsg);
+    if(currentUser)awardSupportBit();
+    renderFeed();
+    closeResponseModal();
+    return;
+  }
+
   try{
     await updateDoc(doc(db,'notes',noteId),{responses:arrayUnion(resp)});
-    showToast('¡Tu apoyo fue enviado! 💌');
+    showToast(sentMsg);
+    if(currentUser){
+      awardSupportBit().catch(e=>console.error('award error',e));
+    }
   }catch(e){
     console.error('addResponse error',e);
     showToast('No se pudo enviar tu apoyo 🥲');
   }
   closeResponseModal();
+}
+
+async function awardSupportBit(){
+  if(!currentUser||!currentUserData)return;
+  const today=todayStr();
+  const sameDay=currentUserData.supportDate===today;
+  const countToday=sameDay?(currentUserData.supportCountToday||0):0;
+  if(countToday>=DAILY_SUPPORT_CAP)return;
+
+  if(localMode){
+    currentUserData.postibits=(currentUserData.postibits||0)+1;
+    currentUserData.supportDate=today;
+    currentUserData.supportCountToday=sameDay?countToday+1:1;
+    updatePostibitsBadge();
+    if(document.getElementById('storeModal').classList.contains('active'))renderStoreContent();
+    if(document.getElementById('authModal').classList.contains('active')&&currentUser)renderProfileContent();
+    return;
+  }
+
+  try{
+    await updateDoc(doc(db,'users',currentUser.id),{
+      postibits:increment(1),
+      supportDate:today,
+      supportCountToday:sameDay?increment(1):1
+    });
+  }catch(e){console.error('awardSupportBit error',e)}
 }
 
 async function sendCustomResponse(){
@@ -1435,279 +1969,79 @@ async function sendCustomResponse(){
 function closeResponseModal(){
   document.getElementById('responseModal').classList.remove('active');
   currentOpenNoteId=null;
+  currentOpenNoteAuthorId=null;
 }
 
-/* ════════ JUEGOS ════════ */
-const DAILY_GAME_CAP=15;
-const PIE_SVG='<svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg"><ellipse cx="14" cy="18" rx="11" ry="6.5" fill="#f0c060"/><path d="M3.5 18 Q14 8 24.5 18 Z" fill="#fde68a"/><ellipse cx="14" cy="14.5" rx="8.5" ry="3.6" fill="#fff2cc"/><circle cx="11" cy="13.5" r="1" fill="#e05070"/><circle cx="16" cy="14.5" r="1" fill="#e05070"/></svg>';
-const STORM_SVG='<svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg"><ellipse cx="10" cy="13" rx="6" ry="5" fill="#b4b8c6"/><ellipse cx="18" cy="13" rx="6.5" ry="5.5" fill="#b4b8c6"/><ellipse cx="14" cy="10" rx="6" ry="5" fill="#c8ccd8"/><polygon points="14,16 10,23 13.5,22 11,28 18,19 14.5,20 16.5,16" fill="#fde047"/></svg>';
-const CATCH_GOOD=['⭐','🌸','🌈','💜','✨','🐥','🌱'];
+async function sendNoteHug(){
+  if(!currentOpenNoteId)return;
+  const btn=document.getElementById('noteHugBtn');
+  btn.disabled=true;
+  document.getElementById('hugOverlay').classList.add('active');
 
-function gameEarnedToday(){
-  if(currentUserData&&currentUserData.gameEarningsDate===todayStr())return currentUserData.gameEarningsToday||0;
-  return 0;
-}
-function gameEarnRemaining(){return Math.max(0,DAILY_GAME_CAP-gameEarnedToday())}
-
-async function awardGamePostibits(amount){
-  if(!currentUser||!currentUserData)return 0;
-  const toAward=Math.min(Math.max(0,Math.floor(amount)),gameEarnRemaining());
-  if(toAward<=0)return 0;
-  const newToday=gameEarnedToday()+toAward;
-  try{
-    await updateDoc(doc(db,'users',currentUser.id),{
-      postibits:increment(toAward),
-      gameEarningsToday:newToday,
-      gameEarningsDate:todayStr()
-    });
-  }catch(e){console.error('award game postibits',e);return 0}
-  return toAward;
-}
-
-function hideModal(id){document.getElementById(id).classList.remove('active')}
-function requireLoginForGame(){
-  if(!currentUser){showProfileModal();showToast('Crea una cuenta para jugar y ganar Postibits 🎮');return false}
-  return true;
-}
-
-function setupGames(){
-  document.getElementById('gamesBtn').onclick=showGamesHub;
-  document.getElementById('closeGamesModal').onclick=()=>hideModal('gamesModal');
-  document.getElementById('gamesModal').onclick=(e)=>{if(e.target.id==='gamesModal')hideModal('gamesModal')};
-  document.getElementById('openCatchGame').onclick=()=>{hideModal('gamesModal');openCatchGame()};
-  document.getElementById('openPetGame').onclick=()=>{hideModal('gamesModal');openPetGame()};
-  document.getElementById('closeCatchGame').onclick=closeCatchGame;
-  document.getElementById('closePetGame').onclick=closePetGame;
-  document.getElementById('catchStartBtn').onclick=startCatchGame;
-  document.getElementById('petFeed').onclick=()=>petAction('feed');
-  document.getElementById('petPlay').onclick=()=>petAction('play');
-  document.getElementById('petSleep').onclick=()=>petAction('sleep');
-}
-
-function showGamesHub(){
-  if(!requireLoginForGame())return;
-  document.getElementById('gamesEarnNote').textContent=`Puedes ganar ${gameEarnRemaining()} Postibits más hoy 🥧`;
-  document.getElementById('gamesModal').classList.add('active');
-}
-
-/* ─── Atrapa las notitas ─── */
-let catchState=null;
-let catchControls=null;
-
-function openCatchGame(){
-  if(!requireLoginForGame())return;
-  document.getElementById('catchPlayer').innerHTML=getMascotSvg(getEquippedMascotId(),'calm');
-  document.getElementById('catchScore').textContent='0';
-  document.getElementById('catchHearts').textContent='💗💗💗';
-  document.getElementById('catchOverlayTitle').textContent='¿List@?';
-  document.getElementById('catchOverlayText').textContent='Atrapa notitas y stickers 🥧. Esquiva las nubes de tormenta 🌩️';
-  document.getElementById('catchStartBtn').textContent='¡Jugar! ✨';
-  document.getElementById('catchOverlay').style.display='flex';
-  document.getElementById('catchGameModal').classList.add('active');
-}
-
-function startCatchGame(){
-  const stage=document.getElementById('catchStage');
-  document.getElementById('catchOverlay').style.display='none';
-  stage.querySelectorAll('.falling').forEach(el=>el.remove());
-  const w=stage.clientWidth,h=stage.clientHeight;
-  catchState={running:true,score:0,hearts:3,playerX:w/2,items:[],lastSpawn:0,elapsed:0,w,h,raf:null,last:performance.now()};
-  document.getElementById('catchScore').textContent='0';
-  document.getElementById('catchHearts').textContent='💗💗💗';
-  positionCatchPlayer();
-  bindCatchControls();
-  catchState.raf=requestAnimationFrame(catchLoop);
-}
-
-function positionCatchPlayer(){
-  const half=26;
-  catchState.playerX=Math.max(half,Math.min(catchState.w-half,catchState.playerX));
-  document.getElementById('catchPlayer').style.left=catchState.playerX+'px';
-}
-
-function bindCatchControls(){
-  const stage=document.getElementById('catchStage');
-  const move=(clientX)=>{
-    const rect=stage.getBoundingClientRect();
-    catchState.playerX=clientX-rect.left;
-    positionCatchPlayer();
-  };
-  const onMouse=(e)=>{if(catchState&&catchState.running)move(e.clientX)};
-  const onTouch=(e)=>{if(catchState&&catchState.running&&e.touches[0]){move(e.touches[0].clientX);e.preventDefault()}};
-  const onKey=(e)=>{
-    if(!catchState||!catchState.running)return;
-    if(e.key==='ArrowLeft'){catchState.playerX-=28;positionCatchPlayer()}
-    if(e.key==='ArrowRight'){catchState.playerX+=28;positionCatchPlayer()}
-  };
-  stage.addEventListener('mousemove',onMouse);
-  stage.addEventListener('touchmove',onTouch,{passive:false});
-  window.addEventListener('keydown',onKey);
-  catchControls={stage,onMouse,onTouch,onKey};
-}
-function unbindCatchControls(){
-  if(!catchControls)return;
-  catchControls.stage.removeEventListener('mousemove',catchControls.onMouse);
-  catchControls.stage.removeEventListener('touchmove',catchControls.onTouch);
-  window.removeEventListener('keydown',catchControls.onKey);
-  catchControls=null;
-}
-
-function spawnCatchItem(){
-  const stage=document.getElementById('catchStage');
-  const bad=Math.random()<0.22;
-  const el=document.createElement('div');
-  el.className='falling';
-  let pts=0;
-  if(bad){el.innerHTML=STORM_SVG}
-  else if(Math.random()<0.3){el.innerHTML=PIE_SVG;pts=3}
-  else{const k=CATCH_GOOD[Math.floor(Math.random()*CATCH_GOOD.length)];el.innerHTML=STICKER_SVGS[k]||PIE_SVG;pts=1}
-  const x=20+Math.random()*(catchState.w-40);
-  el.style.left=(x-17)+'px';
-  el.style.top='-34px';
-  stage.appendChild(el);
-  catchState.items.push({el,x,y:-34,bad,pts});
-}
-
-function catchLoop(now){
-  if(!catchState||!catchState.running)return;
-  const dt=Math.min(50,now-catchState.last)/1000;
-  catchState.last=now;
-  catchState.elapsed+=dt;
-  const speed=90+catchState.elapsed*8;
-  const spawnGap=Math.max(420,900-catchState.elapsed*12);
-  catchState.lastSpawn+=dt*1000;
-  if(catchState.lastSpawn>=spawnGap){catchState.lastSpawn=0;spawnCatchItem()}
-  const playerY=catchState.h-58-6;
-  for(let i=catchState.items.length-1;i>=0;i--){
-    const it=catchState.items[i];
-    it.y+=speed*dt;
-    it.el.style.top=it.y+'px';
-    if(it.y+34>=playerY&&it.y<=catchState.h-6&&Math.abs(it.x-catchState.playerX)<32){
-      if(it.bad){loseCatchHeart()}
-      else{catchState.score+=it.pts;document.getElementById('catchScore').textContent=catchState.score}
-      it.el.remove();catchState.items.splice(i,1);
-      continue;
+  if(localMode){
+    const note=localNotes.find(n=>n.id===currentOpenNoteId);
+    if(note){
+      note.hugs=(note.hugs||0)+1;
+      document.getElementById('noteHugCount').textContent=note.hugs;
     }
-    if(it.y>catchState.h){it.el.remove();catchState.items.splice(i,1)}
+    renderFeed();
+    btn.disabled=false;
+    return;
   }
-  if(catchState.running)catchState.raf=requestAnimationFrame(catchLoop);
-}
 
-function loseCatchHeart(){
-  catchState.hearts--;
-  document.getElementById('catchHearts').textContent='💗'.repeat(Math.max(0,catchState.hearts))+'🤍'.repeat(3-catchState.hearts);
-  if(catchState.hearts<=0)endCatchGame();
-}
-
-async function endCatchGame(){
-  catchState.running=false;
-  cancelAnimationFrame(catchState.raf);
-  unbindCatchControls();
-  const score=catchState.score;
-  document.getElementById('catchStage').querySelectorAll('.falling').forEach(el=>el.remove());
-  const earned=Math.floor(score/10);
-  const awarded=earned>0?await awardGamePostibits(earned):0;
-  document.getElementById('catchOverlayTitle').textContent='¡Buen trabajo! 🌟';
-  let msg=`Puntaje: ${score}. `;
-  if(awarded>0)msg+=`Ganaste ${awarded} Postibits 🥧`;
-  else if(earned>0)msg+='Ya llegaste a tu límite de hoy 🥧 ¡vuelve mañana!';
-  else msg+='¡Atrapa más para ganar Postibits!';
-  document.getElementById('catchOverlayText').textContent=msg;
-  document.getElementById('catchStartBtn').textContent='Jugar otra vez 🔁';
-  document.getElementById('catchOverlay').style.display='flex';
-}
-
-function closeCatchGame(){
-  if(catchState){catchState.running=false;cancelAnimationFrame(catchState.raf)}
-  unbindCatchControls();
-  document.getElementById('catchStage').querySelectorAll('.falling').forEach(el=>el.remove());
-  hideModal('catchGameModal');
-}
-
-/* ─── Cuida a tu Posti-boo ─── */
-const PET_DECAY_PER_MIN=0.7;
-let petState=null;
-let petRewardGuard=null;
-
-function clampStat(v){return Math.max(0,Math.min(100,Math.round(v)))}
-
-function readPet(){
-  const d=currentUserData||{};
-  const last=d.petLastUpdate||Date.now();
-  const mins=(Date.now()-last)/60000;
-  const dec=mins*PET_DECAY_PER_MIN;
-  return {
-    hunger:clampStat((d.petHunger!==undefined?d.petHunger:80)-dec),
-    mood:clampStat((d.petMood!==undefined?d.petMood:80)-dec),
-    energy:clampStat((d.petEnergy!==undefined?d.petEnergy:80)-dec*0.6),
-    last:Date.now()
-  };
-}
-
-function openPetGame(){
-  if(!requireLoginForGame())return;
-  petState=readPet();
-  renderPet();
-  document.getElementById('petGameModal').classList.add('active');
-}
-
-function petExpr(){
-  const avg=(petState.hunger+petState.mood+petState.energy)/3;
-  return avg>=66?'happy':avg>=33?'calm':'sad';
-}
-
-function setPetBar(id,val){
-  const el=document.getElementById(id);
-  el.style.width=val+'%';
-  el.style.background=val>=60?'#8fd6a8':val>=30?'#fbd36b':'#f3a0a0';
-}
-
-function renderPet(){
-  const id=getEquippedMascotId();
-  const builder=MASCOT_BUILDERS[id]||MASCOT_BUILDERS.postiboo;
-  document.getElementById('petMascot').innerHTML=builder(petExpr());
-  setPetBar('barHunger',petState.hunger);
-  setPetBar('barMood',petState.mood);
-  setPetBar('barEnergy',petState.energy);
-  const avg=(petState.hunger+petState.mood+petState.energy)/3;
-  const name=MASCOTS[id].name;
-  let status;
-  if(avg>=75)status=`${name} está feliz y contenta 💛`;
-  else if(avg>=45)status=`${name} está bien, pero te extraña 🩷`;
-  else status=`${name} necesita tu cariño 🥺`;
-  document.getElementById('petStatus').textContent=status;
-}
-
-function petRewardedToday(){
-  return (currentUserData&&currentUserData.petRewardDate===todayStr())||petRewardGuard===todayStr();
-}
-
-async function petAction(kind){
-  if(!petState)return;
-  if(kind==='feed'){petState.hunger=clampStat(petState.hunger+30)}
-  if(kind==='play'){petState.mood=clampStat(petState.mood+30);petState.energy=clampStat(petState.energy-10);petState.hunger=clampStat(petState.hunger-5)}
-  if(kind==='sleep'){petState.energy=clampStat(petState.energy+40);petState.mood=clampStat(petState.mood+5)}
-  petState.last=Date.now();
-  const mascot=document.getElementById('petMascot');
-  mascot.classList.remove('pet-bounce');void mascot.offsetWidth;mascot.classList.add('pet-bounce');
-  renderPet();
   try{
-    await updateDoc(doc(db,'users',currentUser.id),{
-      petHunger:petState.hunger,petMood:petState.mood,petEnergy:petState.energy,petLastUpdate:petState.last
-    });
-  }catch(e){console.error('pet save',e)}
-  const allHigh=petState.hunger>=70&&petState.mood>=70&&petState.energy>=70;
-  if(allHigh&&!petRewardedToday()){
-    petRewardGuard=todayStr();
-    const got=await awardGamePostibits(3);
-    if(got>0){
-      try{await updateDoc(doc(db,'users',currentUser.id),{petRewardDate:todayStr()})}catch(e){console.error(e)}
-      showToast(`¡${MASCOTS[getEquippedMascotId()].name} está feliz! +${got} 🥧`);
-    }
+    await updateDoc(doc(db,'notes',currentOpenNoteId),{hugs:increment(1)});
+    const current=parseInt(document.getElementById('noteHugCount').textContent||'0',10);
+    document.getElementById('noteHugCount').textContent=current+1;
+  }catch(e){
+    console.error('sendNoteHug error',e);
+    showToast('No se pudo enviar el abrazo 🥲');
+  }finally{
+    btn.disabled=false;
   }
 }
 
-function closePetGame(){petState=null;hideModal('petGameModal')}
+async function adminDeleteNote(){
+  const canModerate=currentUserData&&(currentUserData.isAdmin||currentUserData.isModerator);
+  if(!canModerate||!currentOpenNoteId)return;
+  if(!confirm('¿Eliminar esta notita permanentemente?'))return;
+
+  if(localMode){
+    localNotes=localNotes.filter(n=>n.id!==currentOpenNoteId);
+    allNotes=localNotes;
+    renderFeed();
+    closeResponseModal();
+    showToast('Notita eliminada 🗑️');
+    return;
+  }
+
+  try{
+    await deleteDoc(doc(db,'notes',currentOpenNoteId));
+    closeResponseModal();
+    showToast('Notita eliminada 🗑️');
+  }catch(e){
+    console.error('adminDeleteNote error',e);
+    showToast('No se pudo eliminar la notita 🥲');
+  }
+}
+
+async function adminBanAuthor(){
+  if(!currentUserData||!currentUserData.isAdmin||!currentOpenNoteAuthorId)return;
+  if(!confirm('¿Restringir la cuenta de la autora/autor de esta notita? No podrá publicar ni responder.'))return;
+
+  if(localMode){
+    showToast('👀 En vista previa local no hay otras cuentas reales que restringir');
+    return;
+  }
+
+  try{
+    await updateDoc(doc(db,'users',currentOpenNoteAuthorId),{isBanned:true});
+    showToast('Cuenta restringida 🚫');
+  }catch(e){
+    console.error('adminBanAuthor error',e);
+    showToast('No se pudo restringir la cuenta 🥲');
+  }
+}
 
 window.closeAuthModal=closeAuthModal;
 window.closeResponseModal=closeResponseModal;
