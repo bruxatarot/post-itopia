@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Post-itopia · Admin 🛠️</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pink:#f9c8d8;--yellow:#fff3b8;--lavender:#e2d4f8;--mint:#c8f0dc;
+  --text:#5a4a6a;--text-soft:#8a7a9a;--font:'Nunito',sans-serif;
+}
+body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100vh}
+
+.wrap{max-width:900px;margin:0 auto;padding:2rem 1.5rem}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem}
+.title{font-size:1.5rem;font-weight:800;background:linear-gradient(135deg,#f48fb1,#ce93d8,#90caf9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.btn{padding:.5rem 1rem;border-radius:50px;border:none;font-family:var(--font);font-weight:700;cursor:pointer;font-size:.9rem;transition:transform .15s}
+.btn:hover{transform:scale(1.04)}
+.btn-primary{background:linear-gradient(135deg,#ce93d8,#90caf9);color:white}
+.btn-secondary{background:var(--pink);color:#c06090;border:2px solid #f0a8c0}
+.btn-mini{padding:.35rem .7rem;font-size:.78rem;border-radius:50px;border:2px solid #c090e0;background:white;color:#9050c0;font-weight:700;cursor:pointer}
+.btn-mini:hover{background:var(--lavender)}
+
+.card{background:white;border:2px solid #e8d0f0;border-radius:16px;padding:1.5rem;margin-bottom:1.5rem}
+.auth-card{max-width:380px;margin:4rem auto}
+.auth-input{width:100%;padding:.7rem;border:2px solid #e8d0f0;border-radius:12px;font-family:var(--font);font-size:.95rem;margin-bottom:.8rem;outline:none}
+.auth-input:focus{border-color:#c090e0}
+.auth-error{color:#e05060;font-size:.85rem;margin-bottom:.5rem;display:none}
+.no-access{text-align:center;padding:2rem}
+.no-access .emoji{font-size:3rem;display:block;margin-bottom:1rem}
+
+.search-input{width:100%;padding:.6rem .9rem;border:2px solid #e8d0f0;border-radius:50px;font-family:var(--font);font-size:.9rem;outline:none;margin-bottom:1rem}
+.search-input:focus{border-color:#c090e0}
+
+.user-row{display:flex;align-items:center;gap:.8rem;padding:.8rem;border-radius:12px;border:1px solid #f0e0f8;margin-bottom:.6rem;flex-wrap:wrap}
+.user-row:hover{background:#fdf6ff}
+.user-main{flex:1;min-width:160px}
+.user-name{font-weight:800;color:var(--text);font-size:.95rem}
+.user-stats{font-size:.75rem;color:var(--text-soft);display:flex;gap:.7rem;flex-wrap:wrap;margin-top:.2rem}
+.postibits-tag{background:var(--yellow);border-radius:50px;padding:.2rem .6rem;font-weight:800;font-size:.78rem;color:#a07820}
+.gift-form{display:flex;gap:.4rem;align-items:center;flex-wrap:wrap}
+.gift-input{width:70px;padding:.4rem;border:2px solid #e8d0f0;border-radius:8px;font-family:var(--font);font-size:.85rem;text-align:center}
+.reason-input{width:140px;padding:.4rem .6rem;border:2px solid #e8d0f0;border-radius:8px;font-family:var(--font);font-size:.8rem}
+
+.section-title{font-size:1rem;font-weight:800;color:var(--text);margin-bottom:.8rem}
+.section-sub{font-size:.8rem;color:var(--text-soft);margin-bottom:1rem}
+
+.leader-item{display:flex;align-items:center;gap:.6rem;padding:.5rem .3rem;border-bottom:1px solid #f4e8fa;font-size:.85rem}
+.leader-rank{font-weight:800;color:#c090e0;width:22px}
+.leader-name{flex:1;font-weight:700;color:var(--text)}
+.leader-count{color:var(--text-soft);font-size:.78rem}
+
+.log-item{font-size:.8rem;color:var(--text-soft);padding:.4rem 0;border-bottom:1px solid #f4e8fa}
+.log-item strong{color:var(--text)}
+
+.toast{position:fixed;bottom:-100px;left:50%;transform:translateX(-50%);background:white;border:2px solid #a8e0c0;border-radius:50px;padding:.7rem 1.5rem;font-weight:700;color:#1f5c3a;box-shadow:0 6px 24px rgba(0,0,0,.15);transition:bottom .4s cubic-bezier(.34,1.56,.64,1);z-index:300;font-size:.9rem}
+.toast.show{bottom:2rem}
+.empty{text-align:center;color:var(--text-soft);font-size:.85rem;padding:1rem}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div id="authView" class="auth-card card">
+    <h2 style="text-align:center;margin-bottom:1rem">🛠️ Panel Admin</h2>
+    <form id="authForm">
+      <input class="auth-input" id="authUsername" type="text" placeholder="Tu usuario de Post-itopia" required/>
+      <input class="auth-input" id="authPassword" type="password" placeholder="Contraseña" required/>
+      <button type="submit" class="btn btn-primary" style="width:100%">Entrar</button>
+      <div id="authError" class="auth-error"></div>
+    </form>
+  </div>
+
+  <div id="noAccessView" class="card no-access" style="display:none">
+    <span class="emoji">🔒</span>
+    <p style="font-weight:700;margin-bottom:.5rem">Esta cuenta no tiene acceso de administradora</p>
+    <p class="section-sub">Pídele a la dueña del proyecto que agregue tu UID a la colección "admins" en Firestore.</p>
+    <button class="btn btn-secondary" id="noAccessLogout">Salir</button>
+  </div>
+
+  <div id="adminView" style="display:none">
+    <div class="header">
+      <span class="title">🛠️ Panel Admin · Post-itopia</span>
+      <button class="btn btn-secondary" id="logoutBtn">Salir</button>
+    </div>
+
+    <div class="card">
+      <p class="section-title">👥 Usuarios</p>
+      <p class="section-sub">Regala Postibits a quien lo merezca por su trabajo o apoyo en la comunidad.</p>
+      <input class="search-input" id="userSearch" type="text" placeholder="Buscar por nombre de usuario…"/>
+      <div id="userList"></div>
+    </div>
+
+    <div class="card">
+      <p class="section-title">🏆 Top apoyo de la comunidad</p>
+      <p class="section-sub">Quiénes han respondido más notitas de otras personas.</p>
+      <div id="leaderboard"></div>
+    </div>
+
+    <div class="card">
+      <p class="section-title">📜 Historial de regalos</p>
+      <div id="giftLog"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  getFirestore, collection, doc, getDoc, updateDoc, addDoc,
+  onSnapshot, query, orderBy, limit, increment
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig={
+  apiKey:"AIzaSyA2jAsgWPBl4x13GaRWsAKSdAdER2nsXls",
+  authDomain:"post-itopia.firebaseapp.com",
+  projectId:"post-itopia",
+  storageBucket:"post-itopia.firebasestorage.app",
+  messagingSenderId:"965140583784",
+  appId:"1:965140583784:web:88097b45c2ec243c3df2dd"
+};
+const fbApp=initializeApp(firebaseConfig);
+const auth=getAuth(fbApp);
+const db=getFirestore(fbApp);
+
+let currentAdmin=null;
+let allUsers=[];
+let allNotes=[];
+let searchTerm='';
+
+function usernameToEmail(username){
+  const clean=username.toLowerCase().replace(/[^a-z0-9]/g,'');
+  return clean?clean+'@postitopia.app':null;
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+function escapeHtml(str){
+  const div=document.createElement('div');
+  div.textContent=str;
+  return div.innerHTML;
+}
+
+document.getElementById('authForm').onsubmit=async(e)=>{
+  e.preventDefault();
+  const un=document.getElementById('authUsername').value.trim();
+  const pw=document.getElementById('authPassword').value;
+  const err=document.getElementById('authError');
+  err.style.display='none';
+
+  const email=usernameToEmail(un);
+  if(!email||!pw){err.textContent='Completa usuario y contraseña';err.style.display='block';return}
+
+  try{
+    await signInWithEmailAndPassword(auth,email,pw);
+  }catch(error){
+    console.error(error);
+    err.textContent='Usuario o contraseña incorrectos';
+    err.style.display='block';
+  }
+};
+
+document.getElementById('logoutBtn').onclick=()=>signOut(auth);
+document.getElementById('noAccessLogout').onclick=()=>signOut(auth);
+
+document.getElementById('userSearch').oninput=function(){
+  searchTerm=this.value.trim().toLowerCase();
+  renderUserList();
+};
+
+onAuthStateChanged(auth,async(user)=>{
+  if(!user){
+    currentAdmin=null;
+    document.getElementById('authView').style.display='block';
+    document.getElementById('noAccessView').style.display='none';
+    document.getElementById('adminView').style.display='none';
+    return;
+  }
+
+  const adminSnap=await getDoc(doc(db,'admins',user.uid));
+  if(!adminSnap.exists()){
+    document.getElementById('authView').style.display='none';
+    document.getElementById('noAccessView').style.display='block';
+    document.getElementById('adminView').style.display='none';
+    return;
+  }
+
+  const userSnap=await getDoc(doc(db,'users',user.uid));
+  currentAdmin={uid:user.uid,username:userSnap.exists()?userSnap.data().username:'Admin'};
+
+  document.getElementById('authView').style.display='none';
+  document.getElementById('noAccessView').style.display='none';
+  document.getElementById('adminView').style.display='block';
+
+  listenToUsers();
+  listenToNotes();
+  listenToGiftLog();
+});
+
+function listenToUsers(){
+  onSnapshot(collection(db,'users'),(snap)=>{
+    allUsers=snap.docs.map(d=>({id:d.id,...d.data()}));
+    renderUserList();
+    renderLeaderboard();
+  },(err)=>console.error('users listener error',err));
+}
+
+function listenToNotes(){
+  onSnapshot(collection(db,'notes'),(snap)=>{
+    allNotes=snap.docs.map(d=>({id:d.id,...d.data()}));
+    renderUserList();
+    renderLeaderboard();
+  },(err)=>console.error('notes listener error',err));
+}
+
+function listenToGiftLog(){
+  const q=query(collection(db,'admin_gifts'),orderBy('timestamp','desc'),limit(20));
+  onSnapshot(q,(snap)=>{
+    const log=document.getElementById('giftLog');
+    if(snap.empty){
+      log.innerHTML='<p class="empty">Todavía no has regalado Postibits 🌱</p>';
+      return;
+    }
+    log.innerHTML=snap.docs.map(d=>{
+      const g=d.data();
+      const date=new Date(g.timestamp).toLocaleString('es');
+      return `<div class="log-item">🥧 <strong>+${g.amount}</strong> a <strong>${escapeHtml(g.username||'?')}</strong>${g.reason?' · '+escapeHtml(g.reason):''} <span style="opacity:.7">— ${date}</span></div>`;
+    }).join('');
+  },(err)=>console.error('gift log listener error',err));
+}
+
+function countNotesByUser(uid){
+  return allNotes.filter(n=>n.userId===uid).length;
+}
+
+function countSupportByUser(uid){
+  let count=0;
+  allNotes.forEach(n=>{
+    (n.responses||[]).forEach(r=>{if(r.userId===uid)count++});
+  });
+  return count;
+}
+
+function renderUserList(){
+  const container=document.getElementById('userList');
+  let users=allUsers;
+  if(searchTerm){
+    users=users.filter(u=>(u.username||'').toLowerCase().includes(searchTerm));
+  }
+  users=users.slice().sort((a,b)=>(a.username||'').localeCompare(b.username||''));
+
+  if(users.length===0){
+    container.innerHTML='<p class="empty">No se encontraron usuarios</p>';
+    return;
+  }
+
+  container.innerHTML='';
+  users.forEach(u=>{
+    const row=document.createElement('div');
+    row.className='user-row';
+    row.innerHTML=`
+      <div class="user-main">
+        <div class="user-name">${escapeHtml(u.username||'(sin nombre)')} <span class="postibits-tag">🥧 ${u.postibits||0}</span></div>
+        <div class="user-stats">
+          <span>📝 ${countNotesByUser(u.id)} notitas</span>
+          <span>💞 ${countSupportByUser(u.id)} apoyos dados</span>
+        </div>
+      </div>
+      <div class="gift-form">
+        <input type="number" class="gift-input" placeholder="0" min="1" id="amount-${u.id}"/>
+        <input type="text" class="reason-input" placeholder="Motivo (opcional)" id="reason-${u.id}"/>
+        <button class="btn-mini" data-uid="${u.id}">Regalar 🎁</button>
+      </div>
+    `;
+    row.querySelector('.btn-mini').onclick=()=>giftPostibits(u.id,u.username);
+    container.appendChild(row);
+  });
+}
+
+function renderLeaderboard(){
+  const container=document.getElementById('leaderboard');
+  const ranked=allUsers.map(u=>({
+    username:u.username,
+    id:u.id,
+    supportCount:countSupportByUser(u.id)
+  })).filter(u=>u.supportCount>0).sort((a,b)=>b.supportCount-a.supportCount).slice(0,10);
+
+  if(ranked.length===0){
+    container.innerHTML='<p class="empty">Todavía nadie ha dado apoyo 🌱</p>';
+    return;
+  }
+
+  container.innerHTML=ranked.map((u,i)=>`
+    <div class="leader-item">
+      <span class="leader-rank">#${i+1}</span>
+      <span class="leader-name">${escapeHtml(u.username||'?')}</span>
+      <span class="leader-count">${u.supportCount} apoyo${u.supportCount===1?'':'s'}</span>
+      <button class="btn-mini" data-uid="${u.id}">Regalar 🎁</button>
+    </div>
+  `).join('');
+
+  container.querySelectorAll('.btn-mini').forEach(btn=>{
+    btn.onclick=()=>{
+      const uid=btn.dataset.uid;
+      const u=allUsers.find(x=>x.id===uid);
+      document.getElementById('userSearch').value=u.username;
+      searchTerm=u.username.toLowerCase();
+      renderUserList();
+      document.getElementById(`amount-${uid}`)?.focus();
+      window.scrollTo({top:0,behavior:'smooth'});
+    };
+  });
+}
+
+async function giftPostibits(uid,username){
+  const amountInput=document.getElementById(`amount-${uid}`);
+  const reasonInput=document.getElementById(`reason-${uid}`);
+  const amount=parseInt(amountInput.value,10);
+  const reason=reasonInput.value.trim();
+
+  if(!amount||amount<=0){
+    showToast('Escribe una cantidad válida de Postibits 🥲');
+    return;
+  }
+
+  try{
+    await updateDoc(doc(db,'users',uid),{postibits:increment(amount)});
+    await addDoc(collection(db,'admin_gifts'),{
+      userId:uid,
+      username:username||'',
+      amount,
+      reason,
+      adminId:currentAdmin.uid,
+      adminUsername:currentAdmin.username,
+      timestamp:Date.now()
+    });
+    showToast(`¡${amount} 🥧 enviados a ${username}!`);
+    amountInput.value='';
+    reasonInput.value='';
+  }catch(e){
+    console.error('gift error',e);
+    showToast('No se pudo enviar el regalo 🥲');
+  }
+}
+</script>
+</body>
+</html>
