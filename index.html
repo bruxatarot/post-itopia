@@ -167,9 +167,86 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
 .buy-postibits-row{text-align:center;margin-top:1.2rem;padding-top:1rem;border-top:1px dashed #e0c8f0}
 .buy-postibits-row button{opacity:.55;cursor:not-allowed}
 
+/* Store tabs */
+.store-tabs{display:flex;gap:.5rem;justify-content:center;margin-bottom:1rem}
+.store-tab{background:white;border:2px solid #e8d0f0;border-radius:50px;padding:.35rem 1rem;font-family:var(--font);font-weight:700;font-size:.85rem;color:var(--text-soft);cursor:pointer;transition:all .15s}
+.store-tab.active{background:var(--lavender);border-color:#c090e0;color:var(--text)}
+
+/* Rareza badges */
+.rareza-badge{display:inline-block;font-size:.6rem;font-weight:800;padding:.1rem .4rem;border-radius:50px;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.3px}
+.rareza-comun{background:#e8e6ef;color:#6b6880}
+.rareza-rara{background:#d6e6fb;color:#2f6bb0}
+.rareza-legendaria{background:#fdeec3;color:#a07820}
+.rareza-mitica{background:linear-gradient(90deg,#f9c8d8,#e2d4f8,#c8e4f8,#c8f0dc);color:#6a3a8a}
+
+/* Emotion card glow by rareza */
+.emo-card.leg{border-color:#f0d060;box-shadow:0 0 10px rgba(240,200,80,.35)}
+.emo-card.mit{border-color:#d0a0e0;animation:mythicGlow 2.5s ease-in-out infinite}
+@keyframes mythicGlow{0%,100%{box-shadow:0 0 8px rgba(240,150,200,.4)}33%{box-shadow:0 0 14px rgba(180,150,240,.55)}66%{box-shadow:0 0 12px rgba(150,200,240,.5)}}
+.emo-svg{width:60px;height:66px;margin:0 auto .3rem;position:relative}
+.emo-svg svg{width:100%;height:100%}
+/* auras */
+.aura-sparkle::before,.aura-sparkle::after{content:'✨';position:absolute;font-size:.7rem;animation:sparkleFloat 1.8s ease-in-out infinite}
+.aura-sparkle::before{top:-2px;left:-2px}
+.aura-sparkle::after{bottom:2px;right:-2px;animation-delay:.9s}
+@keyframes sparkleFloat{0%,100%{opacity:.4;transform:scale(.85)}50%{opacity:1;transform:scale(1.15)}}
+.aura-halo::before{content:'';position:absolute;top:-3px;left:50%;transform:translateX(-50%);width:26px;height:9px;border:2px solid #fbd97a;border-radius:50%;opacity:.9}
+.aura-glow{animation:auraGlowPulse 2s ease-in-out infinite}
+@keyframes auraGlowPulse{0%,100%{filter:drop-shadow(0 0 2px rgba(251,191,36,.5))}50%{filter:drop-shadow(0 0 7px rgba(251,191,36,.85))}}
+.aura-cosmic{animation:cosmicPulse 3s ease-in-out infinite}
+@keyframes cosmicPulse{0%,100%{filter:drop-shadow(0 0 3px rgba(150,110,240,.6))}50%{filter:drop-shadow(0 0 9px rgba(190,140,240,.9))}}
+
+/* Emotion picker in create-note */
+.emo-picker{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.4rem}
+.emo-pick-btn{width:44px;height:48px;border:2px solid #e8d0f0;border-radius:12px;background:#faf5ff;cursor:pointer;padding:2px;transition:all .15s;position:relative}
+.emo-pick-btn svg{width:100%;height:100%}
+.emo-pick-btn.selected{border-color:#c090e0;background:var(--lavender);transform:scale(1.08)}
+.emo-pick-auto{width:auto;padding:0 .7rem;font-family:var(--font);font-weight:700;font-size:.75rem;color:var(--text-soft)}
+.emo-pick-locked-note{font-size:.72rem;color:var(--text-soft);margin-top:.2rem}
+
 /* Toast */
 .toast{position:fixed;bottom:-100px;left:50%;transform:translateX(-50%);background:white;border:2px solid #a8e0c0;border-radius:50px;padding:.7rem 1.5rem;font-weight:700;color:#1f5c3a;box-shadow:0 6px 24px rgba(0,0,0,.15);transition:bottom .4s cubic-bezier(.34,1.56,.64,1);z-index:300;white-space:nowrap;font-size:.9rem}
 .toast.show{bottom:2rem}
+
+/* Games hub */
+.game-cards{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0}
+@media(max-width:520px){.game-cards{grid-template-columns:1fr}}
+.game-card{background:#f8f0ff;border:2px solid #e8d0f0;border-radius:16px;padding:1.2rem;text-align:center;cursor:pointer;transition:all .15s}
+.game-card:hover{border-color:#c090e0;transform:translateY(-3px);box-shadow:0 6px 16px rgba(200,150,220,.25)}
+.game-card-emoji{font-size:2.4rem;display:block;margin-bottom:.4rem}
+.game-card-title{font-weight:800;color:var(--text);font-size:.95rem;margin-bottom:.2rem}
+.game-card-desc{font-size:.72rem;color:var(--text-soft);line-height:1.4}
+.game-earn-note{font-size:.78rem;color:var(--text-soft);text-align:center;margin-top:.5rem}
+
+/* Catch game */
+.catch-stage{position:relative;width:100%;height:340px;background:linear-gradient(180deg,#eaf4ff 0%,#f6ecff 100%);border-radius:16px;overflow:hidden;border:2px solid #e0caf8;touch-action:none;user-select:none}
+.catch-hud{display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem;font-weight:800;color:var(--text);font-size:.9rem}
+.catch-hud .hearts{letter-spacing:2px}
+.catch-player{position:absolute;bottom:6px;width:52px;height:58px;transform:translateX(-50%);transition:none;z-index:3}
+.catch-player svg{width:100%;height:100%}
+.falling{position:absolute;width:34px;height:34px;z-index:2}
+.falling svg{width:100%;height:100%}
+.catch-overlay{position:absolute;inset:0;background:rgba(255,255,255,.85);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;z-index:5;text-align:center;padding:1rem}
+.catch-overlay h3{color:var(--text);font-size:1.2rem}
+.catch-overlay p{color:var(--text-soft);font-size:.85rem}
+.catch-hint{font-size:.72rem;color:var(--text-soft);text-align:center;margin-top:.5rem}
+
+/* Pet care */
+.pet-stage{background:linear-gradient(180deg,#fff5fb 0%,#f3ecff 100%);border-radius:16px;padding:1.5rem 1rem;text-align:center;border:2px solid #e0caf8}
+.pet-mascot{width:120px;height:132px;margin:0 auto;transition:transform .3s}
+.pet-mascot svg{width:100%;height:100%}
+.pet-bounce{animation:petBounce .5s ease}
+@keyframes petBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+.pet-status{font-weight:700;color:var(--text);margin:.6rem 0;font-size:.95rem;min-height:1.4em}
+.pet-bars{display:flex;flex-direction:column;gap:.5rem;margin:1rem auto;max-width:280px}
+.pet-bar-row{display:flex;align-items:center;gap:.5rem}
+.pet-bar-label{font-size:.78rem;font-weight:700;color:var(--text-soft);width:80px;text-align:left}
+.pet-bar-track{flex:1;height:14px;background:#eadff5;border-radius:50px;overflow:hidden}
+.pet-bar-fill{height:100%;border-radius:50px;transition:width .3s}
+.pet-actions{display:flex;gap:.5rem;justify-content:center;margin-top:1rem;flex-wrap:wrap}
+.pet-action-btn{background:white;border:2px solid #c090e0;color:#9050c0;font-weight:700;font-family:var(--font);border-radius:50px;padding:.5rem 1rem;font-size:.85rem;cursor:pointer;transition:transform .15s}
+.pet-action-btn:hover{transform:scale(1.06);background:var(--lavender)}
+.pet-action-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
 
 /* Animations */
 @keyframes dropIn{0%{transform:translateY(-40px) rotate(var(--rot,0deg));opacity:0}100%{transform:translateY(0) rotate(var(--rot,0deg));opacity:1}}
@@ -204,6 +281,7 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
     </div>
     <div class="header-right">
       <span class="postibits-badge" id="postibitsBadge" style="display:none">🥧 <span id="postibitsAmount">0</span></span>
+      <button class="btn btn-secondary" id="gamesBtn">🎮 Juegos</button>
       <button class="btn btn-secondary" id="storeBtn">🛍️ Tienda</button>
       <button class="btn btn-primary" id="newNoteBtn">+ Drop it</button>
       <button class="btn btn-secondary" id="profileBtn">👤 Perfil</button>
@@ -239,6 +317,12 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
       <span class="companion-mascot" id="companionMascotIcon"></span>
       <span class="companion-text">Tu compañero: <strong id="companionMascotName">Posti-boo</strong></span>
       <button type="button" class="companion-change" id="changeMascotBtn">Cambiar 🛍️</button>
+    </div>
+
+    <div id="emotionPickerWrap" style="margin-bottom:1rem">
+      <p class="section-label" style="margin-top:0">🎭 Emoción de tu mascota</p>
+      <div class="emo-picker" id="emotionPicker"></div>
+      <p class="emo-pick-locked-note" id="emotionPickerNote"></p>
     </div>
 
     <div class="mood-grid" id="moodGrid"></div>
@@ -286,6 +370,72 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
+
+<!-- GAMES HUB MODAL -->
+<div class="modal-overlay" id="gamesModal">
+  <div class="modal-card">
+    <button class="modal-close" id="closeGamesModal">×</button>
+    <h2 class="modal-title">🎮 Juegos de Post-itopia</h2>
+    <p style="text-align:center;color:var(--text-soft);font-size:.85rem;margin-bottom:.3rem">Juega y gana Postibits 🥧</p>
+    <p class="game-earn-note" id="gamesEarnNote"></p>
+    <div class="game-cards">
+      <div class="game-card" id="openCatchGame">
+        <span class="game-card-emoji">🧺</span>
+        <div class="game-card-title">Atrapa las notitas</div>
+        <div class="game-card-desc">Mueve tu mascota y atrapa notitas y stickers. ¡Esquiva las tormentas!</div>
+      </div>
+      <div class="game-card" id="openPetGame">
+        <span class="game-card-emoji">🍰</span>
+        <div class="game-card-title">Cuida a tu Posti-boo</div>
+        <div class="game-card-desc">Aliméntala, juega y déjala descansar para mantenerla feliz.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CATCH GAME MODAL -->
+<div class="modal-overlay" id="catchGameModal">
+  <div class="modal-card">
+    <button class="modal-close" id="closeCatchGame">×</button>
+    <h2 class="modal-title">🧺 Atrapa las notitas</h2>
+    <div class="catch-hud">
+      <span>⭐ <span id="catchScore">0</span></span>
+      <span class="hearts" id="catchHearts">💗💗💗</span>
+    </div>
+    <div class="catch-stage" id="catchStage">
+      <div class="catch-player" id="catchPlayer"></div>
+      <div class="catch-overlay" id="catchOverlay">
+        <h3 id="catchOverlayTitle">¿List@?</h3>
+        <p id="catchOverlayText">Atrapa 🥧 notitas y stickers. Esquiva las nubes de tormenta 🌩️</p>
+        <button class="btn-drop" id="catchStartBtn">¡Jugar! ✨</button>
+      </div>
+    </div>
+    <p class="catch-hint">En compu: usa ← → o el mouse. En celular: arrastra con el dedo.</p>
+  </div>
+</div>
+
+<!-- PET CARE MODAL -->
+<div class="modal-overlay" id="petGameModal">
+  <div class="modal-card">
+    <button class="modal-close" id="closePetGame">×</button>
+    <h2 class="modal-title">🍰 Cuida a tu Posti-boo</h2>
+    <div class="pet-stage">
+      <div class="pet-mascot" id="petMascot"></div>
+      <div class="pet-status" id="petStatus"></div>
+      <div class="pet-bars">
+        <div class="pet-bar-row"><span class="pet-bar-label">🍰 Hambre</span><div class="pet-bar-track"><div class="pet-bar-fill" id="barHunger"></div></div></div>
+        <div class="pet-bar-row"><span class="pet-bar-label">🎾 Ánimo</span><div class="pet-bar-track"><div class="pet-bar-fill" id="barMood"></div></div></div>
+        <div class="pet-bar-row"><span class="pet-bar-label">😴 Energía</span><div class="pet-bar-track"><div class="pet-bar-fill" id="barEnergy"></div></div></div>
+      </div>
+      <div class="pet-actions">
+        <button class="pet-action-btn" id="petFeed">🍰 Alimentar</button>
+        <button class="pet-action-btn" id="petPlay">🎾 Jugar</button>
+        <button class="pet-action-btn" id="petSleep">😴 Dormir</button>
+      </div>
+    </div>
+    <p class="game-earn-note">Mantenla feliz (las 3 barras altas) para ganar Postibits 🥧</p>
+  </div>
+</div>
 
 <!-- RESPONSE MODAL -->
 <div class="response-modal" id="responseModal">
@@ -378,6 +528,42 @@ function faceParts(expr,yOff,mouthColor,extra){
   if(expr==='angry'){
     return `<ellipse cx="21" cy="${ex}" rx="4" ry="4.3" fill="white"/><ellipse cx="35" cy="${ex}" rx="4" ry="4.3" fill="white"/><circle cx="22" cy="${ex+1}" r="2.4" fill="#3b2a4a"/><circle cx="36" cy="${ex+1}" r="2.4" fill="#3b2a4a"/><path d="M17 ${ex-5} L25 ${ex-2}" stroke="#3b2a4a" stroke-width="1.6" stroke-linecap="round"/><path d="M39 ${ex-5} L31 ${ex-2}" stroke="#3b2a4a" stroke-width="1.6" stroke-linecap="round"/><ellipse cx="17" cy="${chy}" rx="4.5" ry="2.8" fill="#f47a7a" opacity=".7"/><ellipse cx="39" cy="${chy}" rx="4.5" ry="2.8" fill="#f47a7a" opacity=".7"/>${extra}<path d="M21 ${my+3} Q28 ${my-1} 35 ${my+3}" stroke="${mouthColor}" stroke-width="1.6" fill="none" stroke-linecap="round"/>`;
   }
+  if(expr==='dreamy'){
+    return `<path d="M17.5 ${ex} Q21 ${ex+3.5} 24.5 ${ex}" stroke="#3b2a4a" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M31.5 ${ex} Q35 ${ex+3.5} 38.5 ${ex}" stroke="#3b2a4a" stroke-width="1.6" fill="none" stroke-linecap="round"/><ellipse cx="17" cy="${chy}" rx="4" ry="2.6" fill="#fda4af" opacity=".6"/><ellipse cx="39" cy="${chy}" rx="4" ry="2.6" fill="#fda4af" opacity=".6"/><circle cx="41.5" cy="${ex-3}" r="1.1" fill="#c9b3f0"/><circle cx="43.5" cy="${ex-6}" r="0.7" fill="#dcc9f5"/>${extra}<path d="M23 ${my} Q28 ${my+3.5} 33 ${my}" stroke="${mouthColor}" stroke-width="1.4" fill="none" stroke-linecap="round"/>`;
+  }
+  if(expr==='surprised'){
+    return `<ellipse cx="21" cy="${ex}" rx="5" ry="5.6" fill="white"/><ellipse cx="35" cy="${ex}" rx="5" ry="5.6" fill="white"/><circle cx="21" cy="${ex}" r="2.9" fill="#3b2a4a"/><circle cx="35" cy="${ex}" r="2.9" fill="#3b2a4a"/><circle cx="22.2" cy="${ex-1.2}" r="0.9" fill="white"/><circle cx="36.2" cy="${ex-1.2}" r="0.9" fill="white"/><ellipse cx="16" cy="${chy+1}" rx="3.5" ry="2.4" fill="#fda4af" opacity=".55"/><ellipse cx="40" cy="${chy+1}" rx="3.5" ry="2.4" fill="#fda4af" opacity=".55"/>${extra}<ellipse cx="28" cy="${my+2}" rx="2.3" ry="2.9" fill="${mouthColor}"/>`;
+  }
+  if(expr==='curious'){
+    return `<ellipse cx="21" cy="${ex}" rx="4.3" ry="4.8" fill="white"/><ellipse cx="35" cy="${ex}" rx="4.3" ry="4.8" fill="white"/><circle cx="21" cy="${ex+1}" r="2.4" fill="#3b2a4a"/><circle cx="35" cy="${ex+1}" r="2.4" fill="#3b2a4a"/><circle cx="22" cy="${ex}" r="0.8" fill="white"/><circle cx="36" cy="${ex}" r="0.8" fill="white"/><path d="M17 ${ex-6} L25 ${ex-6}" stroke="#3b2a4a" stroke-width="1.3" stroke-linecap="round"/><path d="M31 ${ex-6.5} Q35 ${ex-9} 39 ${ex-6.5}" stroke="#3b2a4a" stroke-width="1.3" fill="none" stroke-linecap="round"/><ellipse cx="17" cy="${chy}" rx="4" ry="2.5" fill="#fda4af" opacity=".55"/><ellipse cx="39" cy="${chy}" rx="4" ry="2.5" fill="#fda4af" opacity=".55"/>${extra}<path d="M25 ${my+1} Q28 ${my+2.5} 31 ${my}" stroke="${mouthColor}" stroke-width="1.4" fill="none" stroke-linecap="round"/>`;
+  }
+  if(expr==='teary'){
+    return `<ellipse cx="21" cy="${ex+1}" rx="4.9" ry="5.4" fill="white"/><ellipse cx="35" cy="${ex+1}" rx="4.9" ry="5.4" fill="white"/><circle cx="21" cy="${ex+2}" r="3" fill="#3b2a4a"/><circle cx="35" cy="${ex+2}" r="3" fill="#3b2a4a"/><circle cx="22.6" cy="${ex}" r="1.5" fill="white"/><circle cx="36.6" cy="${ex}" r="1.5" fill="white"/><circle cx="19.5" cy="${ex+3.5}" r="0.9" fill="white" opacity=".85"/><circle cx="33.5" cy="${ex+3.5}" r="0.9" fill="white" opacity=".85"/><ellipse cx="16.5" cy="${chy+1}" rx="3.8" ry="2.4" fill="#f5b8c8" opacity=".6"/><ellipse cx="39.5" cy="${chy+1}" rx="3.8" ry="2.4" fill="#f5b8c8" opacity=".6"/>${extra}<path d="M24 ${my+2.5} Q28 ${my} 32 ${my+2.5}" stroke="${mouthColor}" stroke-width="1.4" fill="none" stroke-linecap="round"/>`;
+  }
+  if(expr==='smirk'){
+    return `<path d="M17 ${ex-1} Q21 ${ex-3.5} 25 ${ex-1}" stroke="#3b2a4a" stroke-width="1.4" fill="none" stroke-linecap="round"/><path d="M31 ${ex-1} Q35 ${ex-3.5} 39 ${ex-1}" stroke="#3b2a4a" stroke-width="1.4" fill="none" stroke-linecap="round"/><ellipse cx="21" cy="${ex+1.5}" rx="3.6" ry="2.6" fill="white"/><ellipse cx="35" cy="${ex+1.5}" rx="3.6" ry="2.6" fill="white"/><circle cx="22" cy="${ex+1.8}" r="1.9" fill="#3b2a4a"/><circle cx="36" cy="${ex+1.8}" r="1.9" fill="#3b2a4a"/><ellipse cx="17" cy="${chy}" rx="4" ry="2.5" fill="#fda4af" opacity=".55"/><ellipse cx="39" cy="${chy}" rx="4" ry="2.5" fill="#fda4af" opacity=".55"/>${extra}<path d="M22 ${my+2} Q28 ${my+1} 35 ${my-3}" stroke="${mouthColor}" stroke-width="1.5" fill="none" stroke-linecap="round"/>`;
+  }
+  if(expr==='love'){
+    return `<path d="M21 ${ex+3.4} C17 ${ex-0.4} 17 ${ex-3.6} 21 ${ex-1.4} C25 ${ex-3.6} 25 ${ex-0.4} 21 ${ex+3.4} Z" fill="#f56a94"/><path d="M35 ${ex+3.4} C31 ${ex-0.4} 31 ${ex-3.6} 35 ${ex-1.4} C39 ${ex-3.6} 39 ${ex-0.4} 35 ${ex+3.4} Z" fill="#f56a94"/><ellipse cx="16.5" cy="${chy}" rx="4.5" ry="3" fill="#fda4af" opacity=".8"/><ellipse cx="39.5" cy="${chy}" rx="4.5" ry="3" fill="#fda4af" opacity=".8"/>${extra}<path d="M20 ${my} Q28 ${my+7} 36 ${my}" stroke="${mouthColor}" stroke-width="1.6" fill="none" stroke-linecap="round"/>`;
+  }
+  if(expr==='mystic'){
+    return `<path d="M17.5 ${ex+1} Q21 ${ex-2.5} 24.5 ${ex+1}" stroke="#3b2a4a" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M31.5 ${ex+1} Q35 ${ex-2.5} 38.5 ${ex+1}" stroke="#3b2a4a" stroke-width="1.5" fill="none" stroke-linecap="round"/><circle cx="28" cy="${ex-6}" r="1.7" fill="#a78bfa"/><circle cx="28" cy="${ex-6}" r="0.7" fill="white"/><ellipse cx="17" cy="${chy}" rx="4" ry="2.5" fill="#c9b3f0" opacity=".55"/><ellipse cx="39" cy="${chy}" rx="4" ry="2.5" fill="#c9b3f0" opacity=".55"/>${extra}<path d="M24 ${my} Q28 ${my+2.5} 32 ${my}" stroke="${mouthColor}" stroke-width="1.4" fill="none" stroke-linecap="round"/>`;
+  }
+  if(expr==='celebrate'){
+    return `<path d="M17 ${ex-1} Q21 ${ex-5.5} 25 ${ex-1}" stroke="#3b2a4a" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M31 ${ex-1} Q35 ${ex-5.5} 39 ${ex-1}" stroke="#3b2a4a" stroke-width="1.6" fill="none" stroke-linecap="round"/><ellipse cx="16.5" cy="${chy}" rx="4.5" ry="3" fill="#fda4af" opacity=".8"/><ellipse cx="39.5" cy="${chy}" rx="4.5" ry="3" fill="#fda4af" opacity=".8"/>${extra}<path d="M20 ${my} Q28 ${my+9} 36 ${my} Z" fill="#d17a8a"/><path d="M22 ${my+1.5} Q28 ${my+4} 34 ${my+1.5}" fill="#f9a8b8"/>`;
+  }
+  if(expr==='starstruck'){
+    return `<polygon points="21.0,28.0 22.0,30.6 24.8,30.8 22.6,32.5 23.4,35.2 21.0,33.7 18.6,35.2 19.4,32.5 17.2,30.8 20.0,30.6" fill="#fbbf24"/><polygon points="35.0,28.0 36.0,30.6 38.8,30.8 36.6,32.5 37.4,35.2 35.0,33.7 32.6,35.2 33.4,32.5 31.2,30.8 34.0,30.6" fill="#fbbf24"/><ellipse cx="16.5" cy="${chy}" rx="4.5" ry="3" fill="#fda4af" opacity=".8"/><ellipse cx="39.5" cy="${chy}" rx="4.5" ry="3" fill="#fda4af" opacity=".8"/>${extra}<path d="M19 ${my} Q28 ${my+8} 37 ${my}" stroke="${mouthColor}" stroke-width="1.6" fill="none" stroke-linecap="round"/>`;
+  }
+  if(expr==='blessed'){
+    return `<path d="M17 ${ex} Q21 ${ex-4.5} 25 ${ex}" stroke="#3b2a4a" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M31 ${ex} Q35 ${ex-4.5} 39 ${ex}" stroke="#3b2a4a" stroke-width="1.5" fill="none" stroke-linecap="round"/><ellipse cx="17" cy="${chy}" rx="4.2" ry="2.8" fill="#fbd9a0" opacity=".7"/><ellipse cx="39" cy="${chy}" rx="4.2" ry="2.8" fill="#fbd9a0" opacity=".7"/>${extra}<path d="M23 ${my} Q28 ${my+3.5} 33 ${my}" stroke="${mouthColor}" stroke-width="1.4" fill="none" stroke-linecap="round"/>`;
+  }
+  if(expr==='illuminated'){
+    return `<path d="M17 ${ex-2} Q21 ${ex-6} 25 ${ex-2}" stroke="#3b2a4a" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M31 ${ex-2} Q35 ${ex-6} 39 ${ex-2}" stroke="#3b2a4a" stroke-width="1.6" fill="none" stroke-linecap="round"/><ellipse cx="16.5" cy="${chy}" rx="4.4" ry="3" fill="#fda4af" opacity=".75"/><ellipse cx="39.5" cy="${chy}" rx="4.4" ry="3" fill="#fda4af" opacity=".75"/><path d="M14 ${ex-3} l1 2 2 1 -2 1 -1 2 -1 -2 -2 -1 2 -1 Z" fill="#fde047"/><path d="M42 ${ex-2} l0.8 1.6 1.6 0.8 -1.6 0.8 -0.8 1.6 -0.8 -1.6 -1.6 -0.8 1.6 -0.8 Z" fill="#fde047"/>${extra}<path d="M20 ${my} Q28 ${my+7} 36 ${my}" stroke="${mouthColor}" stroke-width="1.6" fill="none" stroke-linecap="round"/>`;
+  }
+  if(expr==='cosmic'){
+    return `<ellipse cx="21" cy="${ex}" rx="4.6" ry="5.1" fill="#3a2470"/><ellipse cx="35" cy="${ex}" rx="4.6" ry="5.1" fill="#3a2470"/><circle cx="21" cy="${ex}" r="1.6" fill="#b98cf0"/><circle cx="19.5" cy="${ex-1.5}" r="0.6" fill="#fff"/><circle cx="22.5" cy="${ex+1.8}" r="0.5" fill="#fff"/><circle cx="20" cy="${ex+2.5}" r="0.4" fill="#fff"/><circle cx="35" cy="${ex}" r="1.6" fill="#b98cf0"/><circle cx="36.5" cy="${ex-1.5}" r="0.6" fill="#fff"/><circle cx="33.5" cy="${ex+1.8}" r="0.5" fill="#fff"/><circle cx="36" cy="${ex+2.5}" r="0.4" fill="#fff"/><ellipse cx="17" cy="${chy}" rx="4" ry="2.5" fill="#c9a8f0" opacity=".6"/><ellipse cx="39" cy="${chy}" rx="4" ry="2.5" fill="#c9a8f0" opacity=".6"/>${extra}<path d="M24 ${my} Q28 ${my+2.5} 32 ${my}" stroke="${mouthColor}" stroke-width="1.4" fill="none" stroke-linecap="round"/>`;
+  }
   return `<ellipse cx="21" cy="${ex}" rx="4.5" ry="5" fill="white"/><ellipse cx="35" cy="${ex}" rx="4.5" ry="5" fill="white"/><circle cx="22" cy="${ex}" r="2.5" fill="#3b2a4a"/><circle cx="36" cy="${ex}" r="2.5" fill="#3b2a4a"/><circle cx="23" cy="${hy}" r="1" fill="white"/><circle cx="37" cy="${hy}" r="1" fill="white"/><ellipse cx="17" cy="${chy}" rx="4" ry="2.5" fill="#fda4af" opacity=".6"/><ellipse cx="39" cy="${chy}" rx="4" ry="2.5" fill="#fda4af" opacity=".6"/>${extra}<path d="M23 ${my} Q28 ${my+4} 33 ${my}" stroke="${mouthColor}" stroke-width="1.5" fill="none" stroke-linecap="round"/>`;
 }
 
@@ -410,6 +596,41 @@ function getMascotSvg(mascotId,mood){
   return builder(expr);
 }
 
+/* Emociones coleccionables — cada una es una carita comprable */
+const EMOTIONS={
+  feliz:      {nombre:'Feliz',       precio:0,  rareza:'comun',      expr:'happy'},
+  sonadora:   {nombre:'Soñadora',    precio:15, rareza:'comun',      expr:'dreamy'},
+  sorprendida:{nombre:'Sorprendida', precio:20, rareza:'comun',      expr:'surprised'},
+  curiosa:    {nombre:'Curiosa',     precio:20, rareza:'comun',      expr:'curious'},
+  triste:     {nombre:'Melancólica', precio:25, rareza:'rara',       expr:'teary'},
+  picara:     {nombre:'Pícara',      precio:25, rareza:'rara',       expr:'smirk'},
+  enamorada:  {nombre:'Enamorada',   precio:35, rareza:'rara',       expr:'love'},
+  intuitiva:  {nombre:'Intuitiva',   precio:35, rareza:'rara',       expr:'mystic'},
+  celebrando: {nombre:'Celebrando',  precio:40, rareza:'rara',       expr:'celebrate'},
+  estelar:    {nombre:'Estelar',     precio:55, rareza:'legendaria', expr:'starstruck'},
+  bendecida:  {nombre:'Bendecida',   precio:65, rareza:'legendaria', expr:'blessed'},
+  iluminada:  {nombre:'Iluminada',   precio:80, rareza:'legendaria', expr:'illuminated'},
+  cosmica:    {nombre:'Cósmica',     precio:100,rareza:'mitica',     expr:'cosmic'}
+};
+const RAREZA_LABEL={comun:'Común',rara:'Rara',legendaria:'Legendaria',mitica:'Mítica'};
+
+function getEmotionExpr(emotionId){
+  return(emotionId&&EMOTIONS[emotionId])?EMOTIONS[emotionId].expr:null;
+}
+
+function getMascotSvgEmotion(mascotId,emotionId){
+  const builder=MASCOT_BUILDERS[mascotId]||MASCOT_BUILDERS.postiboo;
+  const expr=getEmotionExpr(emotionId)||'calm';
+  return builder(expr);
+}
+
+/* Carita a mostrar en una notita: emoción elegida gana; si no, la del mood */
+function noteMascotSvg(note){
+  const mid=note.mascotId||'postiboo';
+  if(note.emotionId&&EMOTIONS[note.emotionId])return getMascotSvgEmotion(mid,note.emotionId);
+  return getMascotSvg(mid,note.mood);
+}
+
 const MASCOTS={
   postiboo:{name:'Posti-boo',price:0,svg:postibooSvg('calm'),desc:'La mascota oficial 💛'},
   gatito:{name:'Gatito-boo',price:40,svg:gatitobooSvg('calm'),desc:'Curioso y juguetón 🐱'},
@@ -422,6 +643,8 @@ let currentUser=null;
 let currentUserData=null;
 let allNotes=[];
 let selectedMood=null;
+let selectedEmotion=null;
+let storeTab='mascotas';
 let currentFilter='all';
 let isAuthLogin=true;
 let unsubUserDoc=null;
@@ -452,7 +675,7 @@ function init(){
   document.getElementById('postibooWriter').innerHTML=MASCOTS.postiboo.svg;
   document.getElementById('companionMascotIcon').innerHTML=MASCOTS.postiboo.svg;
 
-  document.getElementById('newNoteBtn').onclick=()=>document.getElementById('createNoteModal').classList.add('active');
+  document.getElementById('newNoteBtn').onclick=()=>{renderEmotionPicker();document.getElementById('createNoteModal').classList.add('active')};
   document.getElementById('closeCreateModal').onclick=()=>closeCreateModal();
   document.getElementById('createNoteModal').onclick=(e)=>{
     if(e.target===document.getElementById('createNoteModal'))closeCreateModal();
@@ -464,6 +687,8 @@ function init(){
   document.getElementById('storeModal').onclick=(e)=>{
     if(e.target===document.getElementById('storeModal'))document.getElementById('storeModal').classList.remove('active');
   };
+
+  setupGames();
 
   document.getElementById('noteText').oninput=function(){document.getElementById('charCount').textContent=this.value.length};
   document.getElementById('dropBtn').onclick=dropNote;
@@ -569,7 +794,7 @@ function updatePostibitsBadge(){
 
 function updateWriterMascot(){
   const equippedId=getEquippedMascotId();
-  const svg=getMascotSvg(equippedId,selectedMood);
+  const svg=selectedEmotion?getMascotSvgEmotion(equippedId,selectedEmotion):getMascotSvg(equippedId,selectedMood);
 
   document.getElementById('postibooWriter').innerHTML=svg;
 
@@ -579,6 +804,40 @@ function updateWriterMascot(){
     companionIcon.innerHTML=svg;
     companionName.textContent=MASCOTS[equippedId].name;
   }
+}
+
+function getOwnedEmotions(){
+  const owned=(currentUserData&&currentUserData.ownedEmotions&&currentUserData.ownedEmotions.length)?currentUserData.ownedEmotions:['feliz'];
+  return Object.keys(EMOTIONS).filter(id=>owned.includes(id));
+}
+
+function renderEmotionPicker(){
+  const picker=document.getElementById('emotionPicker');
+  const note=document.getElementById('emotionPickerNote');
+  const mid=getEquippedMascotId();
+  const owned=getOwnedEmotions();
+  picker.innerHTML='';
+
+  const autoBtn=document.createElement('button');
+  autoBtn.type='button';
+  autoBtn.className='emo-pick-btn emo-pick-auto'+(selectedEmotion===null?' selected':'');
+  autoBtn.textContent='Auto 🎨';
+  autoBtn.title='La carita cambia según tu mood';
+  autoBtn.onclick=()=>{selectedEmotion=null;renderEmotionPicker();updateWriterMascot()};
+  picker.appendChild(autoBtn);
+
+  owned.forEach(id=>{
+    const e=EMOTIONS[id];
+    const b=document.createElement('button');
+    b.type='button';
+    b.className='emo-pick-btn'+(selectedEmotion===id?' selected':'');
+    b.title=e.nombre;
+    b.innerHTML=getMascotSvgEmotion(mid,id);
+    b.onclick=()=>{selectedEmotion=id;renderEmotionPicker();updateWriterMascot()};
+    picker.appendChild(b);
+  });
+
+  note.textContent=owned.length<=1?'Compra más emociones en la tienda 🛍️ para desbloquear caritas.':'';
 }
 
 function getEquippedMascotId(){
@@ -733,7 +992,8 @@ async function handleAuth(e){
         loginStreak:0,
         lastLoginDate:null,
         ownedMascots:['postiboo'],
-        equippedMascot:'postiboo'
+        equippedMascot:'postiboo',
+        ownedEmotions:['feliz']
       });
     }
     closeAuthModal();
@@ -770,12 +1030,35 @@ function showStoreModal(){
   document.getElementById('storeModal').classList.add('active');
 }
 
+function emotionAuraClass(rareza){
+  if(rareza==='mitica')return 'aura-cosmic';
+  if(rareza==='legendaria')return 'aura-glow';
+  return '';
+}
+
 function renderStoreContent(){
   if(!currentUser||!currentUserData)return;
   const content=document.getElementById('storeContent');
-  content.innerHTML=`<div class="postibits-badge" style="margin:0 auto 1rem;width:fit-content">🥧 Tienes ${currentUserData.postibits} Postibits</div><div class="mascot-grid" id="mascotGrid"></div><div class="buy-postibits-row"><button class="btn btn-primary" disabled>💳 Comprar Postibits (próximamente)</button></div>`;
+  content.innerHTML=`
+    <div class="postibits-badge" style="margin:0 auto 1rem;width:fit-content">🥧 Tienes ${currentUserData.postibits} Postibits</div>
+    <div class="store-tabs">
+      <button class="store-tab${storeTab==='mascotas'?' active':''}" data-tab="mascotas">🐾 Mascotas</button>
+      <button class="store-tab${storeTab==='emociones'?' active':''}" data-tab="emociones">🎭 Emociones</button>
+    </div>
+    <div id="storeGridWrap"></div>
+    <div class="buy-postibits-row"><button class="btn btn-primary" disabled>💳 Comprar Postibits (próximamente)</button></div>`;
 
-  const grid=document.getElementById('mascotGrid');
+  content.querySelectorAll('.store-tab').forEach(t=>{
+    t.onclick=()=>{storeTab=t.dataset.tab;renderStoreContent()};
+  });
+
+  const wrap=document.getElementById('storeGridWrap');
+  if(storeTab==='mascotas')renderMascotStore(wrap);
+  else renderEmotionStore(wrap);
+}
+
+function renderMascotStore(wrap){
+  const grid=document.createElement('div');grid.className='mascot-grid';
   Object.entries(MASCOTS).forEach(([id,m])=>{
     const owned=(currentUserData.ownedMascots||[]).includes(id);
     const equipped=currentUserData.equippedMascot===id;
@@ -790,6 +1073,28 @@ function renderStoreContent(){
     card.appendChild(btn);
     grid.appendChild(card);
   });
+  wrap.innerHTML='';wrap.appendChild(grid);
+}
+
+function renderEmotionStore(wrap){
+  const owned=currentUserData.ownedEmotions||['feliz'];
+  const mid=getEquippedMascotId();
+  const grid=document.createElement('div');grid.className='mascot-grid';
+  Object.entries(EMOTIONS).forEach(([id,e])=>{
+    const isOwned=owned.includes(id);
+    const card=document.createElement('div');
+    card.className='mascot-card emo-card'+(isOwned?' owned':'')+(e.rareza==='legendaria'?' leg':'')+(e.rareza==='mitica'?' mit':'');
+    const aura=emotionAuraClass(e.rareza);
+    card.innerHTML=`<div class="emo-svg ${aura}">${getMascotSvgEmotion(mid,id)}</div><span class="rareza-badge rareza-${e.rareza}">${RAREZA_LABEL[e.rareza]}</span><div class="mascot-name">${e.nombre}</div><div class="mascot-price">${e.precio===0?'Gratis':'🥧 '+e.precio}</div>`;
+    const btn=document.createElement('button');
+    btn.className='mascot-btn '+(isOwned?'equipped-label':(currentUserData.postibits<e.precio?'locked':'buy'));
+    btn.textContent=isOwned?'✓ Tuya':'Comprar';
+    btn.disabled=isOwned;
+    if(!isOwned)btn.onclick=()=>buyEmotion(id);
+    card.appendChild(btn);
+    grid.appendChild(card);
+  });
+  wrap.innerHTML='';wrap.appendChild(grid);
 }
 
 async function buyMascot(id){
@@ -817,6 +1122,24 @@ async function equipMascot(id){
   }catch(e){console.error('equipMascot error',e)}
 }
 
+async function buyEmotion(id){
+  const e=EMOTIONS[id];
+  if(currentUserData.postibits<e.precio){
+    showToast('No tienes suficientes Postibits 🥲');
+    return;
+  }
+  try{
+    await updateDoc(doc(db,'users',currentUser.id),{
+      postibits:increment(-e.precio),
+      ownedEmotions:arrayUnion(id)
+    });
+    showToast(`¡Desbloqueaste la emoción ${e.nombre}! 🎭`);
+  }catch(err){
+    console.error('buyEmotion error',err);
+    showToast('No se pudo completar la compra 🥲');
+  }
+}
+
 function renderMoodGrid(){
   const grid=document.getElementById('moodGrid');
   grid.innerHTML='';
@@ -840,6 +1163,7 @@ function renderMoodGrid(){
 function closeCreateModal(){
   document.getElementById('createNoteModal').classList.remove('active');
   selectedMood=null;
+  selectedEmotion=null;
   document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('selected'));
   document.getElementById('noteText').value='';
   document.getElementById('charCount').textContent='0';
@@ -869,7 +1193,8 @@ async function dropNote(){
     responseType:respType,
     responses:[],
     rot:ROTS[Math.floor(Math.random()*ROTS.length)],
-    mascotId:getEquippedMascotId()
+    mascotId:getEquippedMascotId(),
+    emotionId:selectedEmotion||null
   };
 
   try{
@@ -909,7 +1234,7 @@ function renderFeed(){
 
     const footer=document.createElement('div');footer.className='note-footer';
     const author=document.createElement('span');author.className='note-author';
-    const mascotSvgForNote=getMascotSvg(n.mascotId||'postiboo',n.mood);
+    const mascotSvgForNote=noteMascotSvg(n);
     author.innerHTML=`<span class="note-mascot-icon">${mascotSvgForNote}</span>${escapeHtml(n.author)}`;
     const reactions=document.createElement('div');reactions.className='note-reactions';
 
@@ -992,6 +1317,278 @@ function closeResponseModal(){
   document.getElementById('responseModal').classList.remove('active');
   currentOpenNoteId=null;
 }
+
+/* ════════ JUEGOS ════════ */
+const DAILY_GAME_CAP=15;
+const PIE_SVG='<svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg"><ellipse cx="14" cy="18" rx="11" ry="6.5" fill="#f0c060"/><path d="M3.5 18 Q14 8 24.5 18 Z" fill="#fde68a"/><ellipse cx="14" cy="14.5" rx="8.5" ry="3.6" fill="#fff2cc"/><circle cx="11" cy="13.5" r="1" fill="#e05070"/><circle cx="16" cy="14.5" r="1" fill="#e05070"/></svg>';
+const STORM_SVG='<svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg"><ellipse cx="10" cy="13" rx="6" ry="5" fill="#b4b8c6"/><ellipse cx="18" cy="13" rx="6.5" ry="5.5" fill="#b4b8c6"/><ellipse cx="14" cy="10" rx="6" ry="5" fill="#c8ccd8"/><polygon points="14,16 10,23 13.5,22 11,28 18,19 14.5,20 16.5,16" fill="#fde047"/></svg>';
+const CATCH_GOOD=['⭐','🌸','🌈','💜','✨','🐥','🌱'];
+
+function gameEarnedToday(){
+  if(currentUserData&&currentUserData.gameEarningsDate===todayStr())return currentUserData.gameEarningsToday||0;
+  return 0;
+}
+function gameEarnRemaining(){return Math.max(0,DAILY_GAME_CAP-gameEarnedToday())}
+
+async function awardGamePostibits(amount){
+  if(!currentUser||!currentUserData)return 0;
+  const toAward=Math.min(Math.max(0,Math.floor(amount)),gameEarnRemaining());
+  if(toAward<=0)return 0;
+  const newToday=gameEarnedToday()+toAward;
+  try{
+    await updateDoc(doc(db,'users',currentUser.id),{
+      postibits:increment(toAward),
+      gameEarningsToday:newToday,
+      gameEarningsDate:todayStr()
+    });
+  }catch(e){console.error('award game postibits',e);return 0}
+  return toAward;
+}
+
+function hideModal(id){document.getElementById(id).classList.remove('active')}
+function requireLoginForGame(){
+  if(!currentUser){showProfileModal();showToast('Crea una cuenta para jugar y ganar Postibits 🎮');return false}
+  return true;
+}
+
+function setupGames(){
+  document.getElementById('gamesBtn').onclick=showGamesHub;
+  document.getElementById('closeGamesModal').onclick=()=>hideModal('gamesModal');
+  document.getElementById('gamesModal').onclick=(e)=>{if(e.target.id==='gamesModal')hideModal('gamesModal')};
+  document.getElementById('openCatchGame').onclick=()=>{hideModal('gamesModal');openCatchGame()};
+  document.getElementById('openPetGame').onclick=()=>{hideModal('gamesModal');openPetGame()};
+  document.getElementById('closeCatchGame').onclick=closeCatchGame;
+  document.getElementById('closePetGame').onclick=closePetGame;
+  document.getElementById('catchStartBtn').onclick=startCatchGame;
+  document.getElementById('petFeed').onclick=()=>petAction('feed');
+  document.getElementById('petPlay').onclick=()=>petAction('play');
+  document.getElementById('petSleep').onclick=()=>petAction('sleep');
+}
+
+function showGamesHub(){
+  if(!requireLoginForGame())return;
+  document.getElementById('gamesEarnNote').textContent=`Puedes ganar ${gameEarnRemaining()} Postibits más hoy 🥧`;
+  document.getElementById('gamesModal').classList.add('active');
+}
+
+/* ─── Atrapa las notitas ─── */
+let catchState=null;
+let catchControls=null;
+
+function openCatchGame(){
+  if(!requireLoginForGame())return;
+  document.getElementById('catchPlayer').innerHTML=getMascotSvg(getEquippedMascotId(),'calm');
+  document.getElementById('catchScore').textContent='0';
+  document.getElementById('catchHearts').textContent='💗💗💗';
+  document.getElementById('catchOverlayTitle').textContent='¿List@?';
+  document.getElementById('catchOverlayText').textContent='Atrapa notitas y stickers 🥧. Esquiva las nubes de tormenta 🌩️';
+  document.getElementById('catchStartBtn').textContent='¡Jugar! ✨';
+  document.getElementById('catchOverlay').style.display='flex';
+  document.getElementById('catchGameModal').classList.add('active');
+}
+
+function startCatchGame(){
+  const stage=document.getElementById('catchStage');
+  document.getElementById('catchOverlay').style.display='none';
+  stage.querySelectorAll('.falling').forEach(el=>el.remove());
+  const w=stage.clientWidth,h=stage.clientHeight;
+  catchState={running:true,score:0,hearts:3,playerX:w/2,items:[],lastSpawn:0,elapsed:0,w,h,raf:null,last:performance.now()};
+  document.getElementById('catchScore').textContent='0';
+  document.getElementById('catchHearts').textContent='💗💗💗';
+  positionCatchPlayer();
+  bindCatchControls();
+  catchState.raf=requestAnimationFrame(catchLoop);
+}
+
+function positionCatchPlayer(){
+  const half=26;
+  catchState.playerX=Math.max(half,Math.min(catchState.w-half,catchState.playerX));
+  document.getElementById('catchPlayer').style.left=catchState.playerX+'px';
+}
+
+function bindCatchControls(){
+  const stage=document.getElementById('catchStage');
+  const move=(clientX)=>{
+    const rect=stage.getBoundingClientRect();
+    catchState.playerX=clientX-rect.left;
+    positionCatchPlayer();
+  };
+  const onMouse=(e)=>{if(catchState&&catchState.running)move(e.clientX)};
+  const onTouch=(e)=>{if(catchState&&catchState.running&&e.touches[0]){move(e.touches[0].clientX);e.preventDefault()}};
+  const onKey=(e)=>{
+    if(!catchState||!catchState.running)return;
+    if(e.key==='ArrowLeft'){catchState.playerX-=28;positionCatchPlayer()}
+    if(e.key==='ArrowRight'){catchState.playerX+=28;positionCatchPlayer()}
+  };
+  stage.addEventListener('mousemove',onMouse);
+  stage.addEventListener('touchmove',onTouch,{passive:false});
+  window.addEventListener('keydown',onKey);
+  catchControls={stage,onMouse,onTouch,onKey};
+}
+function unbindCatchControls(){
+  if(!catchControls)return;
+  catchControls.stage.removeEventListener('mousemove',catchControls.onMouse);
+  catchControls.stage.removeEventListener('touchmove',catchControls.onTouch);
+  window.removeEventListener('keydown',catchControls.onKey);
+  catchControls=null;
+}
+
+function spawnCatchItem(){
+  const stage=document.getElementById('catchStage');
+  const bad=Math.random()<0.22;
+  const el=document.createElement('div');
+  el.className='falling';
+  let pts=0;
+  if(bad){el.innerHTML=STORM_SVG}
+  else if(Math.random()<0.3){el.innerHTML=PIE_SVG;pts=3}
+  else{const k=CATCH_GOOD[Math.floor(Math.random()*CATCH_GOOD.length)];el.innerHTML=STICKER_SVGS[k]||PIE_SVG;pts=1}
+  const x=20+Math.random()*(catchState.w-40);
+  el.style.left=(x-17)+'px';
+  el.style.top='-34px';
+  stage.appendChild(el);
+  catchState.items.push({el,x,y:-34,bad,pts});
+}
+
+function catchLoop(now){
+  if(!catchState||!catchState.running)return;
+  const dt=Math.min(50,now-catchState.last)/1000;
+  catchState.last=now;
+  catchState.elapsed+=dt;
+  const speed=90+catchState.elapsed*8;
+  const spawnGap=Math.max(420,900-catchState.elapsed*12);
+  catchState.lastSpawn+=dt*1000;
+  if(catchState.lastSpawn>=spawnGap){catchState.lastSpawn=0;spawnCatchItem()}
+  const playerY=catchState.h-58-6;
+  for(let i=catchState.items.length-1;i>=0;i--){
+    const it=catchState.items[i];
+    it.y+=speed*dt;
+    it.el.style.top=it.y+'px';
+    if(it.y+34>=playerY&&it.y<=catchState.h-6&&Math.abs(it.x-catchState.playerX)<32){
+      if(it.bad){loseCatchHeart()}
+      else{catchState.score+=it.pts;document.getElementById('catchScore').textContent=catchState.score}
+      it.el.remove();catchState.items.splice(i,1);
+      continue;
+    }
+    if(it.y>catchState.h){it.el.remove();catchState.items.splice(i,1)}
+  }
+  if(catchState.running)catchState.raf=requestAnimationFrame(catchLoop);
+}
+
+function loseCatchHeart(){
+  catchState.hearts--;
+  document.getElementById('catchHearts').textContent='💗'.repeat(Math.max(0,catchState.hearts))+'🤍'.repeat(3-catchState.hearts);
+  if(catchState.hearts<=0)endCatchGame();
+}
+
+async function endCatchGame(){
+  catchState.running=false;
+  cancelAnimationFrame(catchState.raf);
+  unbindCatchControls();
+  const score=catchState.score;
+  document.getElementById('catchStage').querySelectorAll('.falling').forEach(el=>el.remove());
+  const earned=Math.floor(score/10);
+  const awarded=earned>0?await awardGamePostibits(earned):0;
+  document.getElementById('catchOverlayTitle').textContent='¡Buen trabajo! 🌟';
+  let msg=`Puntaje: ${score}. `;
+  if(awarded>0)msg+=`Ganaste ${awarded} Postibits 🥧`;
+  else if(earned>0)msg+='Ya llegaste a tu límite de hoy 🥧 ¡vuelve mañana!';
+  else msg+='¡Atrapa más para ganar Postibits!';
+  document.getElementById('catchOverlayText').textContent=msg;
+  document.getElementById('catchStartBtn').textContent='Jugar otra vez 🔁';
+  document.getElementById('catchOverlay').style.display='flex';
+}
+
+function closeCatchGame(){
+  if(catchState){catchState.running=false;cancelAnimationFrame(catchState.raf)}
+  unbindCatchControls();
+  document.getElementById('catchStage').querySelectorAll('.falling').forEach(el=>el.remove());
+  hideModal('catchGameModal');
+}
+
+/* ─── Cuida a tu Posti-boo ─── */
+const PET_DECAY_PER_MIN=0.7;
+let petState=null;
+let petRewardGuard=null;
+
+function clampStat(v){return Math.max(0,Math.min(100,Math.round(v)))}
+
+function readPet(){
+  const d=currentUserData||{};
+  const last=d.petLastUpdate||Date.now();
+  const mins=(Date.now()-last)/60000;
+  const dec=mins*PET_DECAY_PER_MIN;
+  return {
+    hunger:clampStat((d.petHunger!==undefined?d.petHunger:80)-dec),
+    mood:clampStat((d.petMood!==undefined?d.petMood:80)-dec),
+    energy:clampStat((d.petEnergy!==undefined?d.petEnergy:80)-dec*0.6),
+    last:Date.now()
+  };
+}
+
+function openPetGame(){
+  if(!requireLoginForGame())return;
+  petState=readPet();
+  renderPet();
+  document.getElementById('petGameModal').classList.add('active');
+}
+
+function petExpr(){
+  const avg=(petState.hunger+petState.mood+petState.energy)/3;
+  return avg>=66?'happy':avg>=33?'calm':'sad';
+}
+
+function setPetBar(id,val){
+  const el=document.getElementById(id);
+  el.style.width=val+'%';
+  el.style.background=val>=60?'#8fd6a8':val>=30?'#fbd36b':'#f3a0a0';
+}
+
+function renderPet(){
+  const id=getEquippedMascotId();
+  const builder=MASCOT_BUILDERS[id]||MASCOT_BUILDERS.postiboo;
+  document.getElementById('petMascot').innerHTML=builder(petExpr());
+  setPetBar('barHunger',petState.hunger);
+  setPetBar('barMood',petState.mood);
+  setPetBar('barEnergy',petState.energy);
+  const avg=(petState.hunger+petState.mood+petState.energy)/3;
+  const name=MASCOTS[id].name;
+  let status;
+  if(avg>=75)status=`${name} está feliz y contenta 💛`;
+  else if(avg>=45)status=`${name} está bien, pero te extraña 🩷`;
+  else status=`${name} necesita tu cariño 🥺`;
+  document.getElementById('petStatus').textContent=status;
+}
+
+function petRewardedToday(){
+  return (currentUserData&&currentUserData.petRewardDate===todayStr())||petRewardGuard===todayStr();
+}
+
+async function petAction(kind){
+  if(!petState)return;
+  if(kind==='feed'){petState.hunger=clampStat(petState.hunger+30)}
+  if(kind==='play'){petState.mood=clampStat(petState.mood+30);petState.energy=clampStat(petState.energy-10);petState.hunger=clampStat(petState.hunger-5)}
+  if(kind==='sleep'){petState.energy=clampStat(petState.energy+40);petState.mood=clampStat(petState.mood+5)}
+  petState.last=Date.now();
+  const mascot=document.getElementById('petMascot');
+  mascot.classList.remove('pet-bounce');void mascot.offsetWidth;mascot.classList.add('pet-bounce');
+  renderPet();
+  try{
+    await updateDoc(doc(db,'users',currentUser.id),{
+      petHunger:petState.hunger,petMood:petState.mood,petEnergy:petState.energy,petLastUpdate:petState.last
+    });
+  }catch(e){console.error('pet save',e)}
+  const allHigh=petState.hunger>=70&&petState.mood>=70&&petState.energy>=70;
+  if(allHigh&&!petRewardedToday()){
+    petRewardGuard=todayStr();
+    const got=await awardGamePostibits(3);
+    if(got>0){
+      try{await updateDoc(doc(db,'users',currentUser.id),{petRewardDate:todayStr()})}catch(e){console.error(e)}
+      showToast(`¡${MASCOTS[getEquippedMascotId()].name} está feliz! +${got} 🥧`);
+    }
+  }
+}
+
+function closePetGame(){petState=null;hideModal('petGameModal')}
 
 window.closeAuthModal=closeAuthModal;
 window.closeResponseModal=closeResponseModal;
