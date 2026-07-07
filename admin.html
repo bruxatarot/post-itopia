@@ -189,7 +189,18 @@ onAuthStateChanged(auth,async(user)=>{
     return;
   }
 
-  const adminSnap=await getDoc(doc(db,'admins',user.uid));
+  let adminSnap;
+  try{
+    adminSnap=await getDoc(doc(db,'admins',user.uid));
+  }catch(e){
+    console.error('admin check error',e);
+    document.getElementById('authView').style.display='none';
+    document.getElementById('adminView').style.display='none';
+    const nav=document.getElementById('noAccessView');
+    nav.style.display='block';
+    nav.querySelector('p').textContent='No se pudo verificar el acceso: las reglas de Firestore no permiten leer la colección "admins". Revisa que las reglas nuevas estén publicadas.';
+    return;
+  }
   if(!adminSnap.exists()){
     document.getElementById('authView').style.display='none';
     document.getElementById('noAccessView').style.display='block';

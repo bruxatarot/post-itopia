@@ -248,6 +248,33 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
 .pet-action-btn:hover{transform:scale(1.06);background:var(--lavender)}
 .pet-action-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
 
+/* Note skins */
+.note-card.skin-costura{border:2.5px dashed #a9825f}
+.note-card.skin-lace{border:3px dotted rgba(255,255,255,.95);box-shadow:3px 4px 12px rgba(0,0,0,.13),inset 0 0 0 5px rgba(255,255,255,.4)}
+.note-card.skin-bordado{border:3.5px double #b06a8a;box-shadow:3px 4px 12px rgba(0,0,0,.13),inset 0 0 0 3px rgba(255,255,255,.45)}
+.skin-corner{position:absolute;width:18px;height:18px;z-index:2;pointer-events:none}
+.skin-corner svg{width:100%;height:100%}
+.skin-corner.tl{top:3px;left:3px}
+.skin-corner.tr{top:3px;right:3px}
+.skin-corner.bl{bottom:4px;left:4px;width:22px;height:26px}
+/* Skin store preview */
+.skin-preview{width:86px;height:64px;border-radius:10px;background:#fff0b8;margin:0 auto .4rem;position:relative;box-shadow:2px 2px 6px rgba(0,0,0,.12)}
+.skin-preview.skin-costura{border:2px dashed #a9825f}
+.skin-preview.skin-lace{border:2.5px dotted rgba(255,255,255,.95);box-shadow:2px 2px 6px rgba(0,0,0,.12),inset 0 0 0 4px rgba(255,255,255,.4)}
+.skin-preview.skin-bordado{border:3px double #b06a8a;box-shadow:2px 2px 6px rgba(0,0,0,.12),inset 0 0 0 2px rgba(255,255,255,.45)}
+.skin-preview .skin-corner{width:14px;height:14px}
+.skin-preview .skin-corner.bl{width:16px;height:19px;bottom:2px;left:2px}
+
+/* Header decorative mascot */
+.header-mascot{width:44px;height:48px;display:inline-flex;flex-shrink:0;animation:float 2.8s ease-in-out infinite}
+.header-mascot svg{width:100%;height:100%}
+
+/* Walking mascot on the corkboard */
+.board-mascot{position:absolute;bottom:14px;left:0;width:52px;height:57px;z-index:4;pointer-events:none;animation:boardWalk 16s ease-in-out infinite;filter:drop-shadow(1px 2px 2px rgba(0,0,0,.15))}
+.board-mascot svg{width:100%;height:100%;animation:boardBob .6s ease-in-out infinite}
+@keyframes boardWalk{0%{left:2%;transform:scaleX(1)}45%{left:88%;transform:scaleX(1)}50%{left:88%;transform:scaleX(-1)}95%{left:2%;transform:scaleX(-1)}100%{left:2%;transform:scaleX(1)}}
+@keyframes boardBob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-4px) rotate(2deg)}}
+
 /* Animations */
 @keyframes dropIn{0%{transform:translateY(-40px) rotate(var(--rot,0deg));opacity:0}100%{transform:translateY(0) rotate(var(--rot,0deg));opacity:1}}
 @keyframes popIn{0%{transform:scale(.7);opacity:0}100%{transform:scale(1);opacity:1}}
@@ -273,6 +300,7 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
   <!-- Header -->
   <header class="site-header">
     <div class="header-left">
+      <span class="header-mascot" id="headerMascot"></span>
       <div class="logo">
         <span class="logo-icon">🌈</span>
         <span class="logo-text">Post-itopia</span>
@@ -302,7 +330,9 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
     </div>
 
     <!-- Corkboard -->
-    <div class="corkboard" id="corkboard"></div>
+    <div class="corkboard" id="corkboard">
+      <div class="board-mascot" id="boardMascot" aria-hidden="true"></div>
+    </div>
   </div>
 </div>
 
@@ -637,6 +667,26 @@ const MASCOTS={
   osito:{name:'Osito-boo',price:60,svg:ositobooSvg('calm'),desc:'Abrazos garantizados 🐻'},
   conejo:{name:'Conejo-boo',price:90,svg:conejobooSvg('calm'),desc:'Saltitos de esperanza 🐰'}
 };
+
+/* Skins de notita — "Viste tu Notita" */
+const LACE_FLOWER='<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><g fill="#fff" opacity=".9"><ellipse cx="10" cy="5" rx="3" ry="4"/><ellipse cx="10" cy="15" rx="3" ry="4"/><ellipse cx="5" cy="10" rx="4" ry="3"/><ellipse cx="15" cy="10" rx="4" ry="3"/></g><circle cx="10" cy="10" r="2.6" fill="#f9c8d8"/></svg>';
+const BORDADO_FLOWER='<svg viewBox="0 0 22 26" xmlns="http://www.w3.org/2000/svg"><path d="M11 12 L11 24" stroke="#5e8c4a" stroke-width="1.6" stroke-dasharray="2.5 1.5"/><path d="M11 18 Q6 16 5 12" stroke="#5e8c4a" stroke-width="1.4" fill="none" stroke-dasharray="2.5 1.5"/><g fill="#e087a8"><ellipse cx="11" cy="4" rx="2.5" ry="3.2"/><ellipse cx="6.5" cy="7" rx="2.5" ry="3.2" transform="rotate(-60 6.5 7)"/><ellipse cx="15.5" cy="7" rx="2.5" ry="3.2" transform="rotate(60 15.5 7)"/><ellipse cx="8" cy="11" rx="2.5" ry="3.2" transform="rotate(-120 8 11)"/><ellipse cx="14" cy="11" rx="2.5" ry="3.2" transform="rotate(120 14 11)"/></g><circle cx="11" cy="7.5" r="2" fill="#fde68a"/></svg>';
+const NOTE_SKINS={
+  clasica:{nombre:'Clásica',precio:0,desc:'El look de siempre 💛'},
+  costura:{nombre:'Costura',precio:30,desc:'Cosida a manita 🧵'},
+  lace:{nombre:'Lace de flores',precio:60,desc:'Encaje con florecitas 🌸'},
+  bordado:{nombre:'Bordado',precio:85,desc:'Flor bordada a mano 🪡'}
+};
+
+function skinDecorHtml(skinId){
+  if(skinId==='lace')return `<span class="skin-corner tl">${LACE_FLOWER}</span><span class="skin-corner tr">${LACE_FLOWER}</span>`;
+  if(skinId==='bordado')return `<span class="skin-corner bl">${BORDADO_FLOWER}</span>`;
+  return '';
+}
+
+function getEquippedSkinId(){
+  return(currentUserData&&currentUserData.equippedSkin&&NOTE_SKINS[currentUserData.equippedSkin])?currentUserData.equippedSkin:'clasica';
+}
 const STARTING_POSTIBITS=20;
 
 let currentUser=null;
@@ -674,6 +724,7 @@ function init(){
   renderMoodGrid();
   document.getElementById('postibooWriter').innerHTML=MASCOTS.postiboo.svg;
   document.getElementById('companionMascotIcon').innerHTML=MASCOTS.postiboo.svg;
+  updateDecorMascots();
 
   document.getElementById('newNoteBtn').onclick=()=>{renderEmotionPicker();document.getElementById('createNoteModal').classList.add('active')};
   document.getElementById('closeCreateModal').onclick=()=>closeCreateModal();
@@ -804,6 +855,16 @@ function updateWriterMascot(){
     companionIcon.innerHTML=svg;
     companionName.textContent=MASCOTS[equippedId].name;
   }
+  updateDecorMascots();
+}
+
+function updateDecorMascots(){
+  const equippedId=getEquippedMascotId();
+  const idle=getMascotSvg(equippedId,'grateful');
+  const header=document.getElementById('headerMascot');
+  const board=document.getElementById('boardMascot');
+  if(header)header.innerHTML=idle;
+  if(board)board.innerHTML=idle;
 }
 
 function getOwnedEmotions(){
@@ -993,7 +1054,9 @@ async function handleAuth(e){
         lastLoginDate:null,
         ownedMascots:['postiboo'],
         equippedMascot:'postiboo',
-        ownedEmotions:['feliz']
+        ownedEmotions:['feliz'],
+        ownedSkins:['clasica'],
+        equippedSkin:'clasica'
       });
     }
     closeAuthModal();
@@ -1044,6 +1107,7 @@ function renderStoreContent(){
     <div class="store-tabs">
       <button class="store-tab${storeTab==='mascotas'?' active':''}" data-tab="mascotas">🐾 Mascotas</button>
       <button class="store-tab${storeTab==='emociones'?' active':''}" data-tab="emociones">🎭 Emociones</button>
+      <button class="store-tab${storeTab==='skins'?' active':''}" data-tab="skins">📝 Notitas</button>
     </div>
     <div id="storeGridWrap"></div>
     <div class="buy-postibits-row"><button class="btn btn-primary" disabled>💳 Comprar Postibits (próximamente)</button></div>`;
@@ -1054,7 +1118,54 @@ function renderStoreContent(){
 
   const wrap=document.getElementById('storeGridWrap');
   if(storeTab==='mascotas')renderMascotStore(wrap);
-  else renderEmotionStore(wrap);
+  else if(storeTab==='emociones')renderEmotionStore(wrap);
+  else renderSkinStore(wrap);
+}
+
+function renderSkinStore(wrap){
+  const owned=currentUserData.ownedSkins||['clasica'];
+  const equipped=getEquippedSkinId();
+  const grid=document.createElement('div');grid.className='mascot-grid';
+  Object.entries(NOTE_SKINS).forEach(([id,s])=>{
+    const isOwned=owned.includes(id);
+    const isEquipped=equipped===id;
+    const card=document.createElement('div');
+    card.className='mascot-card'+(isOwned?' owned':'')+(isEquipped?' equipped':'');
+    card.innerHTML=`<div class="skin-preview skin-${id}">${skinDecorHtml(id)}</div><div class="mascot-name">${s.nombre}</div><div class="mascot-desc">${s.desc}</div><div class="mascot-price">${s.precio===0?'Gratis':'🥧 '+s.precio}</div>`;
+    const btn=document.createElement('button');
+    btn.className='mascot-btn '+(isEquipped?'equipped-label':isOwned?'equip':(currentUserData.postibits<s.precio?'locked':'buy'));
+    btn.textContent=isEquipped?'✓ Equipada':isOwned?'Equipar':'Comprar';
+    btn.disabled=isEquipped;
+    btn.onclick=()=>isOwned?equipSkin(id):buySkin(id);
+    card.appendChild(btn);
+    grid.appendChild(card);
+  });
+  wrap.innerHTML='';wrap.appendChild(grid);
+}
+
+async function buySkin(id){
+  const s=NOTE_SKINS[id];
+  if(currentUserData.postibits<s.precio){
+    showToast('No tienes suficientes Postibits 🥲');
+    return;
+  }
+  try{
+    await updateDoc(doc(db,'users',currentUser.id),{
+      postibits:increment(-s.precio),
+      ownedSkins:arrayUnion(id),
+      equippedSkin:id
+    });
+    showToast(`¡Tu notita ahora viste ${s.nombre}! 🎀`);
+  }catch(e){
+    console.error('buySkin error',e);
+    showToast('No se pudo completar la compra 🥲');
+  }
+}
+
+async function equipSkin(id){
+  try{
+    await updateDoc(doc(db,'users',currentUser.id),{equippedSkin:id});
+  }catch(e){console.error('equipSkin error',e)}
 }
 
 function renderMascotStore(wrap){
@@ -1194,7 +1305,8 @@ async function dropNote(){
     responses:[],
     rot:ROTS[Math.floor(Math.random()*ROTS.length)],
     mascotId:getEquippedMascotId(),
-    emotionId:selectedEmotion||null
+    emotionId:selectedEmotion||null,
+    skinId:getEquippedSkinId()
   };
 
   try{
@@ -1210,7 +1322,9 @@ async function dropNote(){
 
 function renderFeed(){
   const board=document.getElementById('corkboard');
+  const boardMascot=document.getElementById('boardMascot');
   board.innerHTML='';
+  if(boardMascot)board.appendChild(boardMascot);
 
   let notes=allNotes;
   if(currentFilter!=='all'){
@@ -1218,15 +1332,20 @@ function renderFeed(){
   }
 
   if(notes.length===0){
-    board.innerHTML='<div class="empty-board">Todavía no hay notitas por aquí… ¡sé la primera! 🌈</div>';
+    const empty=document.createElement('div');
+    empty.className='empty-board';
+    empty.textContent='Todavía no hay notitas por aquí… ¡sé la primera! 🌈';
+    board.appendChild(empty);
     return;
   }
 
   notes.forEach(n=>{
     const card=document.createElement('div');
-    card.className='note-card';
+    const skin=(n.skinId&&NOTE_SKINS[n.skinId])?n.skinId:'clasica';
+    card.className='note-card'+(skin!=='clasica'?' skin-'+skin:'');
     card.style.setProperty('--rot',n.rot+'deg');
     card.style.background=n.color;
+    if(skin!=='clasica')card.insertAdjacentHTML('beforeend',skinDecorHtml(skin));
 
     const pin=document.createElement('div');pin.className='note-pin';
     const emoji=document.createElement('div');emoji.className='note-mood-emoji';emoji.textContent=n.emoji;
