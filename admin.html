@@ -189,27 +189,28 @@ onAuthStateChanged(auth,async(user)=>{
     return;
   }
 
-  let adminSnap;
+  let isAdmin=false;
+  let userSnap=null;
   try{
-    adminSnap=await getDoc(doc(db,'admins',user.uid));
-  }catch(e){
-    console.error('admin check error',e);
-    document.getElementById('authView').style.display='none';
-    document.getElementById('adminView').style.display='none';
-    const nav=document.getElementById('noAccessView');
-    nav.style.display='block';
-    nav.querySelector('p').textContent='No se pudo verificar el acceso: las reglas de Firestore no permiten leer la colección "admins". Revisa que las reglas nuevas estén publicadas.';
-    return;
+    userSnap=await getDoc(doc(db,'users',user.uid));
+    if(userSnap.exists()&&userSnap.data().isAdmin===true)isAdmin=true;
+  }catch(e){console.error('user doc check error',e)}
+
+  if(!isAdmin){
+    try{
+      const adminSnap=await getDoc(doc(db,'admins',user.uid));
+      if(adminSnap.exists())isAdmin=true;
+    }catch(e){/* sin permiso de leer admins = no es admin, seguimos */}
   }
-  if(!adminSnap.exists()){
+
+  if(!isAdmin){
     document.getElementById('authView').style.display='none';
     document.getElementById('noAccessView').style.display='block';
     document.getElementById('adminView').style.display='none';
     return;
   }
 
-  const userSnap=await getDoc(doc(db,'users',user.uid));
-  currentAdmin={uid:user.uid,username:userSnap.exists()?userSnap.data().username:'Admin'};
+  currentAdmin={uid:user.uid,username:(userSnap&&userSnap.exists())?userSnap.data().username:'Admin'};
 
   document.getElementById('authView').style.display='none';
   document.getElementById('noAccessView').style.display='none';
