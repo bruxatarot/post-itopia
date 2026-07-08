@@ -154,6 +154,21 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
 .profile-owned-mascots{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center}
 .profile-owned-mascot-chip{display:flex;flex-direction:column;align-items:center;gap:.2rem;background:#eafaf0;border:2px solid #a8e0c0;border-radius:12px;padding:.5rem .7rem;font-size:.65rem;font-weight:700;color:#1f5c3a;min-width:60px}
 .profile-owned-mascot-chip .mascot-svg{width:32px;height:36px}
+/* Clóset */
+.closet-group{margin-bottom:.8rem}
+.closet-title{font-size:.75rem;font-weight:800;color:var(--text-soft);margin-bottom:.35rem}
+.closet-row{display:flex;gap:.4rem;flex-wrap:wrap;align-items:center}
+.closet-chip{display:flex;flex-direction:column;align-items:center;gap:.15rem;background:#faf5ff;border:2px solid #e8d0f0;border-radius:12px;padding:.35rem .5rem;font-family:var(--font);font-size:.6rem;font-weight:700;color:var(--text-soft);cursor:pointer;transition:all .15s;min-width:52px}
+.closet-chip:hover{border-color:#c090e0}
+.closet-chip.on{border-color:#c090e0;background:var(--lavender);color:var(--text)}
+.closet-svg{width:34px;height:38px;display:flex}
+.closet-svg svg{width:100%;height:100%}
+.closet-emoji{font-size:1.5rem;line-height:1}
+.closet-name{line-height:1.1;text-align:center}
+.closet-swatch{width:30px;height:30px;border-radius:50%;border:3px solid #ccc;cursor:pointer;transition:transform .15s}
+.closet-swatch:hover{transform:scale(1.12)}
+.closet-swatch.on{box-shadow:0 0 0 2px #fff,0 0 0 4px #c090e0}
+.closet-hint{font-size:.7rem;color:var(--text-soft)}
 .profile-avatar{width:56px;height:62px;margin:0 auto .3rem}
 .profile-avatar svg{width:100%;height:100%}
 
@@ -1035,7 +1050,8 @@ async function init(){
   renderFilterBar();
   document.getElementById('postibooWriter').innerHTML=MASCOTS.postiboo.svg;
   document.getElementById('companionMascotIcon').innerHTML=MASCOTS.postiboo.svg;
-  document.getElementById('companionBadgeIcon').innerHTML=MASCOTS.postiboo.svg;
+  document.getElementById('companionBadgeIcon').innerHTML=getMascotSvg('postiboo','grateful','clasico');
+  document.getElementById('companionBadge').title='Posti-boo, la mascota oficial de Post-itopia 💛';
 
   document.getElementById('newNoteBtn').onclick=()=>{renderEmotionPicker();document.getElementById('createNoteModal').classList.add('active')};
   document.getElementById('companionBadge').onclick=showStoreModal;
@@ -1246,12 +1262,7 @@ function updateWriterMascot(){
     companionIcon.innerHTML=svg;
     companionName.textContent=MASCOTS[equippedId].name;
   }
-
-  const badgeIcon=document.getElementById('companionBadgeIcon');
-  if(badgeIcon){
-    badgeIcon.innerHTML=getMascotSvg(equippedId,null,skinId);
-    document.getElementById('companionBadge').title=`Tu compañero: ${MASCOTS[equippedId].name}`;
-  }
+  // El badge junto al nombre queda SIEMPRE como la mascota oficial (Posti-boo), no cambia con el usuario.
 }
 
 function getEquippedMascotId(){
@@ -1301,8 +1312,8 @@ function renderProfileContent(){
       </div>
 
       <div class="profile-section">
-        <p class="section-label">🎁 Lo que he desbloqueado</p>
-        <div class="profile-owned-mascots" id="profileOwnedMascots"></div>
+        <p class="section-label">👗 Mi clóset · toca para equipar</p>
+        <div id="profileCloset"></div>
       </div>
 
       <div class="profile-section">
@@ -1314,7 +1325,7 @@ function renderProfileContent(){
     `;
     renderMoodTracker(document.getElementById('profileMoodTracker'));
     renderMyNotesList(document.getElementById('profileMyNotes'));
-    renderOwnedMascotsList(document.getElementById('profileOwnedMascots'));
+    renderCloset(document.getElementById('profileCloset'));
     renderSupportedNotesList(document.getElementById('profileSupportedNotes'));
   }else{
     content.innerHTML=`
@@ -1413,6 +1424,82 @@ function renderOwnedMascotsList(container){
     chip.innerHTML=`<span class="mascot-svg">${m.svg}</span>${m.name}`;
     container.appendChild(chip);
   });
+}
+
+async function closetEquipMascot(id){await equipMascot(id);renderProfileContent()}
+async function closetEquipColor(mid,skinId){await equipMascotSkin(mid,skinId);renderProfileContent()}
+async function closetEquipSkin(id){await equipSkin(id);renderProfileContent()}
+
+function renderCloset(container){
+  const equippedMid=getEquippedMascotId();
+  const ownedMascots=(currentUserData.ownedMascots&&currentUserData.ownedMascots.length)?currentUserData.ownedMascots:['postiboo'];
+  const ownedSkins=(currentUserData.ownedSkins&&currentUserData.ownedSkins.length)?currentUserData.ownedSkins:['clasica'];
+  const ownedEmos=getOwnedEmotions();
+  container.innerHTML='';
+
+  // Mascotas
+  const mSec=document.createElement('div');mSec.className='closet-group';
+  mSec.innerHTML='<p class="closet-title">🐾 Mascota</p>';
+  const mRow=document.createElement('div');mRow.className='closet-row';
+  ownedMascots.forEach(id=>{
+    const m=MASCOTS[id];if(!m)return;
+    const chip=document.createElement('button');
+    chip.className='closet-chip'+(equippedMid===id?' on':'');
+    chip.innerHTML=`<span class="closet-svg">${getMascotSvg(id,'grateful',getEquippedMascotSkinId(id))}</span><span class="closet-name">${m.name}</span>`;
+    chip.onclick=()=>closetEquipMascot(id);
+    mRow.appendChild(chip);
+  });
+  mSec.appendChild(mRow);container.appendChild(mSec);
+
+  // Colores de la mascota equipada
+  const palettes=MASCOT_SKIN_PALETTES[equippedMid]||[];
+  const ownedColors=getOwnedMascotSkins(equippedMid);
+  const equippedColor=getEquippedMascotSkinId(equippedMid);
+  const cSec=document.createElement('div');cSec.className='closet-group';
+  cSec.innerHTML=`<p class="closet-title">🎨 Color de ${MASCOTS[equippedMid].name}</p>`;
+  const cRow=document.createElement('div');cRow.className='closet-row';
+  const ownedPals=palettes.filter(p=>ownedColors.includes(p.id));
+  if(ownedPals.length<=1){
+    const hint=document.createElement('span');hint.className='closet-hint';hint.textContent='Compra colores en la tienda 🛍️';cRow.appendChild(hint);
+  }
+  ownedPals.forEach(p=>{
+    const chip=document.createElement('button');
+    chip.className='closet-swatch'+(equippedColor===p.id?' on':'');
+    chip.title=p.name;
+    chip.style.background=p.body;chip.style.borderColor=p.border;
+    chip.onclick=()=>closetEquipColor(equippedMid,p.id);
+    cRow.appendChild(chip);
+  });
+  cSec.appendChild(cRow);container.appendChild(cSec);
+
+  // Skins de notita
+  const sSec=document.createElement('div');sSec.className='closet-group';
+  sSec.innerHTML='<p class="closet-title">📝 Skin de notita</p>';
+  const sRow=document.createElement('div');sRow.className='closet-row';
+  const equippedSkin=getEquippedSkinId();
+  ownedSkins.forEach(id=>{
+    const s=NOTE_SKINS[id];if(!s)return;
+    const chip=document.createElement('button');
+    chip.className='closet-chip'+(equippedSkin===id?' on':'');
+    chip.innerHTML=`<span class="closet-emoji">${s.preview}</span><span class="closet-name">${s.name}</span>`;
+    chip.onclick=()=>closetEquipSkin(id);
+    sRow.appendChild(chip);
+  });
+  sSec.appendChild(sRow);container.appendChild(sSec);
+
+  // Emociones (galería — se eligen al escribir)
+  const eSec=document.createElement('div');eSec.className='closet-group';
+  eSec.innerHTML='<p class="closet-title">🎭 Emociones · elígelas al escribir una notita</p>';
+  const eRow=document.createElement('div');eRow.className='closet-row';
+  ownedEmos.forEach(id=>{
+    const e=EMOTIONS[id];
+    const chip=document.createElement('div');
+    chip.className='closet-chip';
+    chip.title=e.nombre;
+    chip.innerHTML=`<span class="closet-svg">${getMascotSvgEmotion(equippedMid,id,getEquippedMascotSkinId(equippedMid))}</span><span class="closet-name">${e.nombre}</span>`;
+    eRow.appendChild(chip);
+  });
+  eSec.appendChild(eRow);container.appendChild(eSec);
 }
 
 function mapAuthError(code){
