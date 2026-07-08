@@ -131,7 +131,7 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
 .auth-toggle button{background:none;border:none;color:#c090e0;font-weight:700;cursor:pointer;text-decoration:underline}
 
 /* Response modal */
-.response-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:white;border-radius:20px;padding:2rem;border:2px solid #e8d0f0;z-index:150;max-width:400px;width:90%;box-shadow:0 10px 40px rgba(0,0,0,.2);display:none}
+.response-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:white;border-radius:20px;padding:2rem;border:2px solid #e8d0f0;z-index:150;max-width:400px;width:90%;max-height:88vh;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,.2);display:none}
 .response-modal.active{display:block}
 .response-option{padding:1rem;background:#f8f0ff;border:2px solid #e8d0f0;border-radius:12px;margin-bottom:.8rem;cursor:pointer;transition:all .15s}
 .response-options-grid.is-apoyo{display:flex;flex-wrap:wrap;gap:.6rem}
@@ -451,6 +451,29 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
   .filter-bar{padding:0 1rem}
   .header-right{flex-wrap:wrap;justify-content:center;gap:.5rem}
   .btn{font-size:.82rem;padding:.5rem .8rem}
+
+  /* Modal de respuesta → hoja inferior deslizable en móvil */
+  .response-modal{top:auto;left:0;right:0;bottom:0;transform:none;width:100%;max-width:100%;border-radius:22px 22px 0 0;max-height:90vh;padding:1.2rem 1rem 1.4rem}
+  .response-modal h3{font-size:1rem;padding-right:1.6rem}
+  .response-modal>p{font-size:.9rem;margin-bottom:1rem}
+  .response-option{padding:.7rem;margin-bottom:.5rem}
+  .existing-responses{max-height:120px}
+  .existing-response-item{font-size:.82rem;padding:.5rem .7rem}
+
+  /* Juegos responsive */
+  .game-cards{gap:.7rem}
+  .game-card{padding:.9rem}
+  .game-card-emoji{font-size:2rem}
+  .catch-stage{height:60vh;max-height:420px}
+  .catch-hud{font-size:.85rem}
+  .pet-stage{padding:1.1rem .8rem}
+  .pet-mascot{width:96px;height:106px}
+  .pet-actions{gap:.4rem}
+  .pet-action-btn{padding:.45rem .8rem;font-size:.8rem}
+  .emo-picker{gap:.3rem}
+
+  /* Evitar el zoom automático de iOS al enfocar campos (necesita >=16px) */
+  .modal-textarea,.auth-input,#customResponseText,.filter-select{font-size:16px}
 }
 
 @media(max-width:380px){
@@ -1263,6 +1286,12 @@ function updateWriterMascot(){
     companionName.textContent=MASCOTS[equippedId].name;
   }
   // El badge junto al nombre queda SIEMPRE como la mascota oficial (Posti-boo), no cambia con el usuario.
+  // El mascota que camina en el corcho SÍ es el del usuario: lo refrescamos al equipar.
+  const walker=document.querySelector('.postiboo-main');
+  if(walker){
+    walker.innerHTML=getMascotSvg(equippedId,null,skinId);
+    walker.title=`${MASCOTS[equippedId].name}, tu compañero`;
+  }
 }
 
 function getEquippedMascotId(){
