@@ -502,117 +502,6 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
   .mood-grid{grid-template-columns:repeat(3,1fr)}
   .modal-textarea{height:64px}
 }
-
-/* === NUEVO: Indicador Bombillo de Posti-boo === */
-.mascot-indicator {
-  position: absolute;
-  top: -22px;
-  right: -10px;
-  width: 32px;
-  height: 32px;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 20;
-  animation: bulbPulse 2.8s ease-in-out infinite;
-}
-
-.mascot-indicator .bulb {
-  font-size: 1.5rem;
-  filter: drop-shadow(0 0 8px #fde047);
-  transition: transform 0.2s ease;
-}
-
-.mascot-indicator:hover .bulb {
-  transform: scale(1.2);
-}
-
-@keyframes bulbPulse {
-  0%, 100% { opacity: 0.75; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.08); }
-}
-
-/* === GLOBITO DE SALUDO DE POSTI-BOO === */
-.mascot-speech {
-  position: absolute;
-  bottom: 100px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #fffaf0;
-  border: 2px solid #f0d8a0;
-  border-radius: 22px;
-  padding: 1.1rem 1.3rem;
-  max-width: 280px;
-  width: 92%;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-  z-index: 60;
-  display: none;
-  animation: popIn 0.35s ease;
-}
-
-.mascot-speech.active {
-  display: block;
-}
-
-.mascot-speech::after {
-  content: '';
-  position: absolute;
-  bottom: -11px;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 9px solid transparent;
-  border-top-color: #f0d8a0;
-}
-
-.mascot-speech p {
-  font-size: 0.95rem;
-  color: #5a4a3a;
-  line-height: 1.55;
-  margin-bottom: 0.9rem;
-}
-
-.mascot-speech .mood-selector {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.45rem;
-  margin-bottom: 1rem;
-}
-
-.mascot-speech .mood-btn {
-  background: #fdf4e8;
-  border: 1.5px solid #e8d5b0;
-  border-radius: 12px;
-  padding: 0.4rem 0.3rem;
-  font-size: 0.72rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  text-align: center;
-}
-
-.mascot-speech .mood-btn:hover {
-  background: #f8e9c8;
-  border-color: #d4b36e;
-}
-
-.mascot-speech .mood-btn.selected {
-  background: #f0d8a0;
-  border-color: #c9a25e;
-  font-weight: 700;
-}
-
-.mascot-speech .action-btn {
-  width: 100%;
-  background: linear-gradient(135deg, #f48fb1, #ce93d8);
-  color: white;
-  border: none;
-  border-radius: 50px;
-  padding: 0.6rem;
-  font-weight: 700;
-  font-size: 0.88rem;
-  cursor: pointer;
-  box-shadow: 0 4px 14px rgba(240,100,160,.3);
-}
 </style>
 </head>
 <body>
@@ -664,7 +553,7 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
     </div>
     <div class="header-right">
       <span class="postibits-badge" id="postibitsBadge" style="display:none"><span id="postibitsAmount">0</span> PostiBits</span>
-      <button class="btn btn-secondary" id="hugBtn">🤗 <span class="hug-bear">Abrazo</span></button>
+      <button class="btn btn-secondary" id="hugBtn">🫂 <span class="hug-bear">Abrazo</span></button>
       <button class="btn btn-secondary" id="gamesBtn">🎮 Juegos</button>
       <button class="btn btn-secondary" id="storeBtn">🛍️ Post-itienda</button>
       <button class="btn btn-primary" id="newNoteBtn">+ Post-it</button>
@@ -723,7 +612,7 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
     </div>
 
     <div class="modal-footer">
-      <label class="anon-toggle"><input type="checkbox" id="anonCheck" checked/> Anónima 🤗</label>
+      <label class="anon-toggle"><input type="checkbox" id="anonCheck" checked/> Anónima 🫧</label>
       <button class="btn-drop" id="dropBtn">Post-it ✨</button>
     </div>
   </div>
@@ -733,7 +622,7 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
 <div class="hug-overlay" id="hugOverlay">
   <div class="hug-card">
     <button class="hug-close" id="hugClose">×</button>
-    <span class="hug-bear-big">🤗</span>
+    <span class="hug-bear-big">🫂</span>
     <p>Te mando un abrazo bien fuerte 💞</p>
   </div>
 </div>
@@ -814,25 +703,25 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
       <div class="pet-status" id="petStatus"></div>
       <div class="pet-bars">
         <div class="pet-bar-row"><span class="pet-bar-label">🍰 Hambre</span><div class="pet-bar-track"><div class="pet-bar-fill" id="barHunger"></div></div></div>
-        <div class="pet-bar-row"><span class="pet-bar-label">🏀 Ánimo</span><div class="pet-bar-track"><div class="pet-bar-fill" id="barMood"></div></div></div>
+        <div class="pet-bar-row"><span class="pet-bar-label">🎾 Ánimo</span><div class="pet-bar-track"><div class="pet-bar-fill" id="barMood"></div></div></div>
         <div class="pet-bar-row"><span class="pet-bar-label">😴 Energía</span><div class="pet-bar-track"><div class="pet-bar-fill" id="barEnergy"></div></div></div>
       </div>
       <div class="pet-actions">
         <button class="pet-action-btn" id="petFeed">🍰 Alimentar</button>
-        <button class="pet-action-btn" id="petPlay">🏀 Jugar</button>
+        <button class="pet-action-btn" id="petPlay">🎾 Jugar</button>
         <button class="pet-action-btn" id="petSleep">😴 Dormir</button>
       </div>
     </div>
-    <p class="game-earn-note">Manténla feliz (las 3 barras altas) para ganar Postibits 🥧</p>
+    <p class="game-earn-note">Mantenla feliz (las 3 barras altas) para ganar Postibits 🥧</p>
   </div>
 </div>
 
 <!-- RESPONSE MODAL -->
 <div class="response-modal" id="responseModal">
   <button class="modal-close" onclick="closeResponseModal()">×</button>
-    <h3 id="responseTitle" style="margin-bottom:1rem;color:var(--text);font-size:1.1rem"></h3>
+  <h3 id="responseTitle" style="margin-bottom:1rem;color:var(--text);font-size:1.1rem"></h3>
   <p id="responseText" style="margin-bottom:1rem;color:var(--text);line-height:1.6"></p>
-  <button id="noteHugBtn" class="note-hug-btn">🤗 Mandar un abrazo <span id="noteHugCount">0</span></button>
+  <button id="noteHugBtn" class="note-hug-btn">🫂 Mandar un abrazo <span id="noteHugCount">0</span></button>
   <div id="adminControls" class="admin-controls" style="display:none">
     <span class="admin-tag" id="adminRoleTag">🛡️ Admin</span>
     <button id="adminDeleteNoteBtn" class="admin-btn admin-btn-delete">🗑️ Eliminar notita</button>
@@ -845,11 +734,6 @@ body{font-family:var(--font);background:#fdf0f8;color:var(--text);min-height:100
   <p class="section-label">O escribe tu propio mensaje</p>
   <textarea id="customResponseText" class="modal-textarea" style="height:70px" maxlength="240" placeholder="Comparte tu apoyo, consejo o historia parecida…"></textarea>
   <button id="sendCustomResponse" class="btn-drop" style="width:100%;margin-top:.6rem">Enviar 💌</button>
-</div>
-
-<!-- NUEVO: Indicador Bombillo de Posti-boo -->
-<div id="mascotIndicator" class="mascot-indicator" title="¡Posti-boo quiere saludarte!">
-  <span class="bulb">💡</span>
 </div>
 
 <script type="module">
@@ -895,22 +779,22 @@ const MOOD_COLORS={calm:'#c8f0dc',sad:'#b3c6e8',overwhelmed:'#e8c3e8',angry:'#f4
 const MOOD_EMOJIS={calm:'😌',sad:'😔',overwhelmed:'😵',angry:'😡',confused:'😕',lonely:'🤍',anxious:'🧿',grateful:'✨',motivated:'🔥',drained:'🌧️',hopeful:'🌈'};
 const MOOD_LABELS_ES={calm:'Calma',sad:'Triste',overwhelmed:'Abrumada',angry:'Enojada',confused:'Confundida',lonely:'Sola',anxious:'Ansiosa',grateful:'Agradecida',motivated:'Motivada',drained:'Agotada',hopeful:'Esperanzada'};
 function moodLabel(mood){return MOOD_LABELS_ES[mood]||mood}
-const PROMPTS={sad:'¿Qué te apachurró el corazón hoy? 💙',calm:'Qué bien que estés tranqui… ¿qué te dio paz hoy? 🌿',overwhelmed:'Respira. Cuéntale a tu notita qué te tiene así 💜',angry:'¿Qué te hizo enojar? Aquí puedes soltarlo todo 🔴',confused:'¿Qué te tiene con la cabeza hecha bola? 🌀',lonely:'No estás sola/solo. Cuéntame qué sientes 🤍',anxious:'Respira suavito. ¿Qué te está preocupando? 🤗',grateful:'¡Qué bonito! ¿Qué te hizo sonreír hoy? ✨',motivated:'¡Eso! ¿Qué te está llenando de energía? 🔥',drained:'Está bien descansar. ¿Qué te dejó sin pilas? 🌧️',hopeful:'Se siente bien tener esperanza 🌈 ¿Qué la generó?'};
+const PROMPTS={sad:'¿Qué te apachurró el corazón hoy? 💙',calm:'Qué bien que estés tranqui… ¿qué te dio paz hoy? 🌿',overwhelmed:'Respira. Cuéntale a tu notita qué te tiene así 💜',angry:'¿Qué te hizo enojar? Aquí puedes soltarlo todo 🔴',confused:'¿Qué te tiene con la cabeza hecha bola? 🌀',lonely:'No estás sola/solo. Cuéntame qué sientes 🤍',anxious:'Respira suavito. ¿Qué te está preocupando? 🫧',grateful:'¡Qué bonito! ¿Qué te hizo sonreír hoy? ✨',motivated:'¡Eso! ¿Qué te está llenando de energía? 🔥',drained:'Está bien descansar. ¿Qué te dejó sin pilas? 🌧️',hopeful:'Se siente bien tener esperanza 🌈 ¿Qué la generó?'};
 
 // Post-itapoyo = pura reacción con emoji, sin frase. Post-itistoria = frase corta.
 const RESPONSES_PACK={
   heavy:{
-    apoyo:['🐻','☁️','🤗','⭐','💛','🤗'],
-    historias:['🤗 Una vez yo también…','💜 Pasé algo similar','🌈 Salí adelante, tú puedes','🐣 No eres la única']
+    apoyo:['🐻','☁️','🤗','⭐','💛','🫂'],
+    historias:['🫂 Una vez yo también…','💜 Pasé algo similar','🌈 Salí adelante, tú puedes','🐣 No eres la única']
   },
   positive:{
     apoyo:['🎉','✨','🙌','🌟','💛','🎊'],
-    historias:['🤗 A mí también me pasó algo así de bonito','💛 Amo leer estas historias','🌈 Qué rico se siente cuando pasa esto','🐣 Gracias por compartirlo']
+    historias:['🫂 A mí también me pasó algo así de bonito','💛 Amo leer estas historias','🌈 Qué rico se siente cuando pasa esto','🐣 Gracias por compartirlo']
   }
 };
 const EMOJI_MEANINGS={
-  '🐻':'Un abrazo de oso','☁️':'Respiro contigo','🤗':'Aquí estoy para ti','⭐':'Lo estás haciendo bien','💛':'Con todo mi cariño','🤗':'Un abrazo',
-  '🎉':' ¡Me alegra por ti!','✨':'Brillas','🙌':' ¡Sigue así!','🌟':'Qué bonito leer esto','🎊':' ¡A celebrar!'
+  '🐻':'Un abrazo de oso','☁️':'Respiro contigo','🤗':'Aquí estoy para ti','⭐':'Lo estás haciendo bien','💛':'Con todo mi cariño','🫂':'Un abrazo',
+  '🎉':'¡Me alegra por ti!','✨':'Brillas','🙌':'¡Sigue así!','🌟':'Qué bonito leer esto','🎊':'¡A celebrar!'
 };
 function emojiMeaning(e){return EMOJI_MEANINGS[e]||''}
 const POSITIVE_MOODS_SET=new Set(['calm','grateful','motivated','hopeful']);
@@ -941,7 +825,7 @@ function faceParts(expr,yOff,mouthColor,extra){
     return `<path d="M17 ${ex-2} Q21 ${ex-6} 25 ${ex-2}" stroke="#3b2a4a" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M31 ${ex-2} Q35 ${ex-6} 39 ${ex-2}" stroke="#3b2a4a" stroke-width="1.6" fill="none" stroke-linecap="round"/><ellipse cx="17" cy="${chy}" rx="4.5" ry="3" fill="#fda4af" opacity=".75"/><ellipse cx="39" cy="${chy}" rx="4.5" ry="3" fill="#fda4af" opacity=".75"/>${extra}<path d="M19 ${my-1} Q28 ${my+8} 37 ${my-1}" stroke="${mouthColor}" stroke-width="1.6" fill="none" stroke-linecap="round"/>`;
   }
   if(expr==='sad'){
-    return `<ellipse cx="21" cy="${ex+1}" rx="4" ry="4.3" fill="white"/><ellipse cx="35" cy="${ex+1}" rx="4" ry="4.3" fill="white"/><circle cx="21" cy="${ex+2}" r="2.3" fill="#3b2a4a"/><circle cx="36" cy="${ex+2}" r="2.3" fill="#3b2a4a"/><path d="M19 ${ex+4} Q18 ${ex+9} 20 ${ex+11} Q22 ${ex+9} 21 ${ex+4}" fill="#8ec4f0"/><ellipse cx="17" cy="${chy}" rx="3.5" ry="2.2" fill="#a8c8e8" opacity=".5"/><ellipse cx="39" cy="${chy}" rx="3.5" ry="2.2" fill="#a8c8e8" opacity=".5"/>${extra}<path d="M22 ${my+3} Q28 ${my} 34 ${my+3}" stroke="${mouthColor}" stroke-width="1.5" fill="none" stroke-linecap="round"/>`;
+    return `<ellipse cx="21" cy="${ex+1}" rx="4" ry="4.3" fill="white"/><ellipse cx="35" cy="${ex+1}" rx="4" ry="4.3" fill="white"/><circle cx="21" cy="${ex+2}" r="2.3" fill="#3b2a4a"/><circle cx="35" cy="${ex+2}" r="2.3" fill="#3b2a4a"/><path d="M19 ${ex+4} Q18 ${ex+9} 20 ${ex+11} Q22 ${ex+9} 21 ${ex+4}" fill="#8ec4f0"/><ellipse cx="17" cy="${chy}" rx="3.5" ry="2.2" fill="#a8c8e8" opacity=".5"/><ellipse cx="39" cy="${chy}" rx="3.5" ry="2.2" fill="#a8c8e8" opacity=".5"/>${extra}<path d="M22 ${my+3} Q28 ${my} 34 ${my+3}" stroke="${mouthColor}" stroke-width="1.5" fill="none" stroke-linecap="round"/>`;
   }
   if(expr==='worried'){
     return `<ellipse cx="21" cy="${ex}" rx="4.5" ry="5" fill="white"/><ellipse cx="35" cy="${ex}" rx="4.5" ry="5" fill="white"/><circle cx="21" cy="${ex+1}" r="2.5" fill="#3b2a4a"/><circle cx="35" cy="${ex+1}" r="2.5" fill="#3b2a4a"/><path d="M17 ${ex-5} L25 ${ex-3}" stroke="#3b2a4a" stroke-width="1.3" stroke-linecap="round"/><path d="M39 ${ex-5} L31 ${ex-3}" stroke="#3b2a4a" stroke-width="1.3" stroke-linecap="round"/><ellipse cx="17" cy="${chy}" rx="4" ry="2.5" fill="#fda4af" opacity=".5"/><ellipse cx="39" cy="${chy}" rx="4" ry="2.5" fill="#fda4af" opacity=".5"/>${extra}<path d="M22 ${my+1} Q25 ${my-2} 28 ${my+1} Q31 ${my+3} 34 ${my+1}" stroke="${mouthColor}" stroke-width="1.4" fill="none" stroke-linecap="round"/>`;
@@ -1170,10 +1054,10 @@ function todayStr(){return new Date().toISOString().slice(0,10)}
 function buildLocalSeedNotes(){
   const seed=[
     {mood:'hopeful',text:'Hoy por fin dormí bien. Es poco pero es algo 🌈',author:'Sol 💛',responseType:'apoyo',responses:[{id:'r1',text:'🐻 Estoy contigo',timestamp:Date.now()}],anonymous:false},
-    {mood:'sad',text:'Extraño a mi mejor amiga. La distancia duele.',author:'Anónima 🤗',responseType:'apoyo',responses:[],anonymous:true},
+    {mood:'sad',text:'Extraño a mi mejor amiga. La distancia duele.',author:'Anónima 🫧',responseType:'apoyo',responses:[],anonymous:true},
     {mood:'grateful',text:'Mi mamá me hizo mi comida favorita sin que se lo pidiera. La amo tanto.',author:'Luna 🌙',responseType:'historias',responses:[],anonymous:false},
-    {mood:'anxious',text:'Tengo presentación mañana y siento que no estoy lista para nada 🤧',author:'Anónima 🤗',responseType:'aqui',responses:[],anonymous:true},
-    {mood:'motivated',text:'¡Por fin terminé el proyecto que tenía abandonado desde hace meses! ¡LOGRÉ!',author:'Vale 🔥',responseType:'apoyo',responses:[],anonymous:false},
+    {mood:'anxious',text:'Tengo presentación mañana y siento que no estoy lista para nada 😬',author:'Anónima 🫧',responseType:'aqui',responses:[],anonymous:true},
+    {mood:'motivated',text:'¡Por fin terminé el proyecto que tenía abandonado desde hace meses!',author:'Vale 🔥',responseType:'apoyo',responses:[],anonymous:false},
     {mood:'calm',text:'Tarde con té, lluvia y un libro. Esto es todo lo que necesitaba hoy.',author:'Ro 🌿',responseType:'consejos',responses:[],anonymous:false}
   ];
   return seed.map((n,i)=>({
@@ -1264,12 +1148,6 @@ async function init(){
       try{localStorage.setItem(WELCOME_KEY,'1')}catch(e){}
     }
     welcomeModal.classList.remove('active');
-
-    // === NUEVO: Mostrar bombillo después del welcome ===
-    setTimeout(() => {
-      const ind = document.getElementById('mascotIndicator');
-      if (ind) ind.style.display = 'flex';
-    }, 1400);
   };
   welcomeModal.onclick=(e)=>{
     if(e.target===welcomeModal)welcomeModal.classList.remove('active');
@@ -1438,6 +1316,8 @@ function updateWriterMascot(){
     companionIcon.innerHTML=svg;
     companionName.textContent=MASCOTS[equippedId].name;
   }
+  // El badge junto al nombre queda SIEMPRE como la mascota oficial (Posti-boo), no cambia con el usuario.
+  // El mascota que camina en el corcho SÍ es el del usuario: lo refrescamos al equipar.
   const walker=document.querySelector('.postiboo-main');
   if(walker){
     walker.innerHTML=getMascotSvg(equippedId,null,skinId);
@@ -1547,7 +1427,7 @@ function renderProfileContent(){
         <div id="authError" class="auth-error"></div>
       </form>
       <div class="auth-toggle">
-        ${isAuthLogin?'¿Sin cuenta?':' ¿Ya tienes cuenta?'} <button type="button" onclick="toggleAuthMode()">Click aquí</button>
+        ${isAuthLogin?'¿Sin cuenta?':'¿Ya tienes cuenta?'} <button type="button" onclick="toggleAuthMode()">Click aquí</button>
       </div>
     `;
     document.getElementById('authForm').onsubmit=handleAuth;
@@ -1661,7 +1541,7 @@ function renderCloset(container){
   const ownedColors=getOwnedMascotSkins(equippedMid);
   const equippedColor=getEquippedMascotSkinId(equippedMid);
   const cSec=document.createElement('div');cSec.className='closet-group';
-  cSec.innerHTML=`<p class="closet-title">🎨 Color de ${MASCOTS[equippedMid].name}</p>';
+  cSec.innerHTML=`<p class="closet-title">🎨 Color de ${MASCOTS[equippedMid].name}</p>`;
   const cRow=document.createElement('div');cRow.className='closet-row';
   const ownedPals=palettes.filter(p=>ownedColors.includes(p.id));
   if(ownedPals.length<=1){
@@ -1714,7 +1594,7 @@ function mapAuthError(code){
     'auth/wrong-password':'Usuario o contraseña incorrectos',
     'auth/user-not-found':'Usuario o contraseña incorrectos',
     'auth/weak-password':'La contraseña debe tener al menos 6 caracteres',
-    'auth/too-many-requests':'Demasiados intentos, espera un momento 🤗'
+    'auth/too-many-requests':'Demasiados intentos, espera un momento 🫧'
   };
   return map[code]||'Algo salió mal, intenta de nuevo';
 }
@@ -2110,13 +1990,14 @@ async function dropNote(){
     text:text||'…',
     color:MOOD_COLORS[selectedMood],
     emoji:MOOD_EMOJIS[selectedMood],
-    author:anon?'Anónima 🤗':(currentUser?currentUser.username:'Anónima 🤗'),
+    author:anon?'Anónima 🫧':(currentUser?currentUser.username:'Anónima 🫧'),
     authorBadge:(!anon&&currentUserData)?(currentUserData.isAdmin?'👑':currentUserData.isModerator?'🧹':null):null,
     anonymous:anon,
     timestamp:Date.now(),
     responseType:respType,
     responses:[],
-    rot:ROTS[Math.floor(Math.random()*ROTS.length)],n    mascotId:getEquippedMascotId(),
+    rot:ROTS[Math.floor(Math.random()*ROTS.length)],
+    mascotId:getEquippedMascotId(),
     mascotSkin:getEquippedMascotSkinId(getEquippedMascotId()),
     skin:getEquippedSkinId(),
     emotionId:selectedEmotion||null,
@@ -2156,7 +2037,7 @@ async function dropNote(){
 
 function showWinToast(){
   const opts=[
-    {i:'🐣',t:'¡Lo estás haciendo bien! 🌟'},
+    {i:'🐥',t:'¡Lo estás haciendo bien! 🌟'},
     {i:'⭐',t:'¡Pequeña victoria celebrada! ✨'},
     {i:'🌈',t:'¡Tu notita llegó al corcho! 💛'},
     {i:'🌸',t:'¡Eso es! ¡Sigue así! 🎉'}
@@ -2243,7 +2124,7 @@ function renderFeed(){
     if((n.hugs||0)>0){
       const hugEl=document.createElement('span');
       hugEl.className='note-response-count';
-      hugEl.textContent=`🤗 ${n.hugs}`;
+      hugEl.textContent=`🫂 ${n.hugs}`;
       rightSide.appendChild(hugEl);
     }
 
@@ -2515,89 +2396,6 @@ function renderEmotionPicker(){
   note.textContent=owned.length<=1?'Compra más emociones en la tienda 🛍️ para desbloquear caritas.':'';
 }
 
-/* === NUEVO: Saludo de Posti-boo con Bombillo === */
-function showMascotGreeting() {
-  const ind = document.getElementById('mascotIndicator');
-  if (ind) ind.style.display = 'none';
-
-  let speech = document.getElementById('mascotSpeech');
-  if (!speech) {
-    speech = document.createElement('div');
-    speech.id = 'mascotSpeech';
-    speech.className = 'mascot-speech';
-    speech.innerHTML = `
-      <p>Hola… soy Posti-boo 💛<br>
-      Tu compañerita de bolsillo.<br>
-      Me alegra mucho que estés aquí hoy.<br>
-      ¿Cómo te sientes?</p>
-      
-      <div class="mood-selector" id="greetingMoodSelector"></div>
-      
-      <button class="action-btn" id="startNoteBtn">Escribir mi post-it ✨</button>
-    `;
-    const board = document.getElementById('corkboard');
-    if (board) board.appendChild(speech);
-  }
-
-  speech.style.display = 'block';
-  speech.classList.add('active');
-
-  // Render 11 moods
-  const container = document.getElementById('greetingMoodSelector');
-  if (container) {
-    container.innerHTML = '';
-    Object.entries(MOOD_EMOJIS).forEach(([mood, emoji]) => {
-      const btn = document.createElement('button');
-      btn.className = 'mood-btn';
-      btn.innerHTML = `${emoji} <span style="font-size:0.65rem">${moodLabel(mood)}</span>`;
-      btn.onclick = () => {
-        container.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        updateMascotExpression(mood);
-      };
-      container.appendChild(btn);
-    });
-  }
-
-  const startBtn = document.getElementById('startNoteBtn');
-  if (startBtn) {
-    startBtn.onclick = () => {
-      if (speech) speech.style.display = 'none';
-      document.getElementById('createNoteModal').classList.add('active');
-    };
-  }
-}
-
-function updateMascotExpression(mood) {
-  const walker = document.querySelector('.postiboo-main');
-  if (!walker) return;
-
-  // Usamos la lógica existente (happy/sad) + extensión futura
-  const sadMoods = ['sad', 'overwhelmed', 'lonely', 'anxious', 'drained'];
-  if (sadMoods.includes(mood)) {
-    walker.innerHTML = getPostiboo ? getPostiboo('sad') : walker.innerHTML;
-  } else {
-    walker.innerHTML = getPostiboo ? getPostiboo('calm') : walker.innerHTML;
-  }
-}
-
-// Mostrar bombillo después del welcome
-setTimeout(() => {
-  const ind = document.getElementById('mascotIndicator');
-  if (ind) {
-    ind.style.display = 'flex';
-    ind.onclick = showMascotGreeting;
-  }
-}, 800);
-
-// Click también en la mascotita caminadora
-setTimeout(() => {
-  const walker = document.querySelector('.postiboo-main');
-  if (walker) {
-    walker.onclick = showMascotGreeting;
-  }
-}, 1200);
-
 /* ════════ JUEGOS ════════ */
 const DAILY_GAME_CAP=15;
 const PIE_SVG='<svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg"><ellipse cx="14" cy="18" rx="11" ry="6.5" fill="#f0c060"/><path d="M3.5 18 Q14 8 24.5 18 Z" fill="#fde68a"/><ellipse cx="14" cy="14.5" rx="8.5" ry="3.6" fill="#fff2cc"/><circle cx="11" cy="13.5" r="1" fill="#e05070"/><circle cx="16" cy="14.5" r="1" fill="#e05070"/></svg>';
@@ -2661,7 +2459,7 @@ function openCatchGame(){
   document.getElementById('catchScore').textContent='0';
   document.getElementById('catchHearts').textContent='💗💗💗';
   document.getElementById('catchOverlayTitle').textContent='¿List@?';
-  document.getElementById('catchOverlayText').textContent='Atrapa 🥧 notitas y stickers. Esquiva las nubes de tormenta 🌩️';
+  document.getElementById('catchOverlayText').textContent='Atrapa notitas y stickers 🥧. Esquiva las nubes de tormenta 🌩️';
   document.getElementById('catchStartBtn').textContent='¡Jugar! ✨';
   document.getElementById('catchOverlay').style.display='flex';
   document.getElementById('catchGameModal').classList.add('active');
@@ -2756,7 +2554,7 @@ function catchLoop(now){
 
 function loseCatchHeart(){
   catchState.hearts--;
-  document.getElementById('catchHearts').textContent='💗'.repeat(Math.max(0,catchState.hearts))+'⚝️'.repeat(3-catchState.hearts);
+  document.getElementById('catchHearts').textContent='💗'.repeat(Math.max(0,catchState.hearts))+'🤍'.repeat(3-catchState.hearts);
   if(catchState.hearts<=0)endCatchGame();
 }
 
@@ -2834,7 +2632,7 @@ function renderPet(){
   let status;
   if(avg>=75)status=`${name} está feliz y contenta 💛`;
   else if(avg>=45)status=`${name} está bien, pero te extraña 🩷`;
-  else status=`${name} necesita tu cariño 🥲`;
+  else status=`${name} necesita tu cariño 🥺`;
   document.getElementById('petStatus').textContent=status;
 }
 
