@@ -318,6 +318,92 @@
   .overlay .col { display: flex; flex-direction: column; align-items: center; }
   #defeat-overlay .big-title { color: #ff9ad5; text-shadow: 0 0 30px rgba(255, 107, 157, 0.7); animation: none; }
 
+  /* ===== INTRO TELEPÁTICA ===== */
+  #intro-overlay {
+    background: radial-gradient(ellipse at center, rgba(14, 10, 28, 0.88), rgba(4, 3, 10, 0.98));
+    z-index: 30;
+  }
+  .intro-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 460px;
+    text-align: center;
+  }
+  .intro-title {
+    font-family: Georgia, serif;
+    font-size: clamp(24px, 5vw, 36px);
+    letter-spacing: 4px;
+    color: var(--gold);
+    text-shadow: 0 0 26px rgba(245, 217, 126, 0.6);
+    margin-bottom: 2px;
+  }
+  .intro-sub {
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--violet);
+    margin-bottom: 22px;
+  }
+  #intro-pet {
+    position: relative;
+    margin-bottom: 6px;
+    animation: pet-flot 4.5s ease-in-out infinite;
+    filter: drop-shadow(0 0 22px rgba(70, 130, 255, 0.55));
+  }
+  #intro-pet::before, #intro-pet::after {
+    content: '✦';
+    position: absolute;
+    color: rgba(160, 190, 255, 0.7);
+    font-size: 12px;
+    animation: pet-tw 2s ease-in-out infinite;
+  }
+  #intro-pet::before { left: -26px; top: 12px; }
+  #intro-pet::after { right: -26px; top: 34px; animation-delay: 1s; }
+  .tele-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(160, 190, 255, 0.75);
+    margin-bottom: 12px;
+    animation: telePulse 1.8s ease-in-out infinite;
+  }
+  @keyframes telePulse { 0%,100% { opacity: 0.45; } 50% { opacity: 1; } }
+  #tele-lines {
+    min-height: 118px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 18px;
+  }
+  .tele-line {
+    font-family: Georgia, serif;
+    font-style: italic;
+    font-size: clamp(14px, 3.4vw, 17px);
+    line-height: 1.55;
+    color: #cfe0ff;
+    text-shadow: 0 0 14px rgba(120, 160, 255, 0.45);
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .tele-line.on { opacity: 1; transform: translateY(0); }
+  .tele-line.gris { color: #a8a4b8; text-shadow: none; }
+  #intro-btn { opacity: 0; pointer-events: none; transition: opacity 0.6s ease; }
+  #intro-btn.on { opacity: 1; pointer-events: all; }
+  .intro-skip {
+    margin-top: 12px;
+    background: none;
+    border: none;
+    color: rgba(207, 195, 232, 0.45);
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-family: inherit;
+  }
+  .intro-skip:hover { color: rgba(207, 195, 232, 0.85); }
+
   @media (max-width: 640px) {
     .ui-pill { font-size: 10.5px; padding: 5px 11px; gap: 6px; }
     .hp-track { width: 84px; }
@@ -328,7 +414,6 @@
 
   /* ═══════════════════════════════════════════════
      GUARDIANES DEL TEMPLO — CSS ART ORIGINAL
-     (mismo arte del muro, para las revelaciones)
      ═══════════════════════════════════════════════ */
   .petw{position:relative;display:inline-flex;align-items:center;justify-content:center;overflow:visible}
   .pets{position:relative;width:96px;height:100px;transform-origin:center;display:flex;align-items:center;justify-content:center;flex:none}
@@ -445,7 +530,20 @@
   <div id="btn-shoot">✦</div>
 
   <div class="instructions" id="instructions">
-    Flechas / WASD caminar · Espacio disparar · Avanza a la derecha →
+    Flechas / WASD caminar · Espacio: varita mágica · Avanza a la derecha →
+  </div>
+
+  <!-- INTRO: mensaje telepático de Nazari -->
+  <div class="overlay show" id="intro-overlay">
+    <div class="intro-box">
+      <div class="intro-title">BRUXA</div>
+      <div class="intro-sub">✦ Bosque Prisma ✦</div>
+      <div id="intro-pet"><span class="petw" style="width:100px;height:100px"><span class="pets" style="transform:scale(0.92)"><span class="po"><span class="a1"><span class="a2"><span class="a3"><span class="pupila"></span></span></span></span></span></span></span></div>
+      <div class="tele-label">✧ mensaje telepático ✧</div>
+      <div id="tele-lines"></div>
+      <button class="reveal-btn" id="intro-btn" onclick="startJourney()">Tomar la Varita ✦</button>
+      <button class="intro-skip" onclick="skipIntro()">saltar intro</button>
+    </div>
   </div>
 
   <!-- Overlay revelación (cartas y guardianes) -->
@@ -473,11 +571,11 @@
   <!-- Victoria -->
   <div class="overlay" id="victory-overlay">
     <div class="col">
-      <div class="big-title">✦ NABI ES LIBRE ✦</div>
+      <div class="big-title">✦ EL BOSQUE FLORECE ✦</div>
       <div class="big-sub">
-        El último cristal se quiebra y el Bosque Prisma respira de nuevo.<br>
-        Los ocho guardianes danzan alrededor de Bruxa,<br>
-        y Nabi aletea sus alas de mariposa iluminando el camino a casa. 🌙
+        Nabi es libre, y con ella el último gris se disuelve.<br>
+        El Bosque Prisma respira en colores otra vez,<br>
+        y los ocho guardianes danzan alrededor de Bruxa y su varita. 🌙🦋
       </div>
       <button class="reveal-btn" onclick="restartGame()">Jugar de nuevo ✦</button>
     </div>
@@ -486,9 +584,9 @@
 
 <script>
 // ============================================================
-//  BRUXA • BOSQUE PRISMA — v4
-//  Los Guardianes del Templo llegan al bosque:
-//  Lumi · Stella · Selene · Cristalia · Nazari · Glimmer · Alma · Nabi
+//  BRUXA • BOSQUE PRISMA — v5
+//  El bosque gris: Nazari llama telepáticamente a Bruxa.
+//  Con su varita mágica, cada rescate devuelve el color. 🌈
 // ============================================================
 
 // ---------- BLOQUEO DE ZOOM EN MÓVIL ----------
@@ -516,22 +614,21 @@ const GROUND_BOTTOM = H - 46;
 const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
 if (isTouch) {
   document.body.classList.add('touch');
-  document.getElementById('instructions').textContent = 'Arrastra para caminar · ✦ para disparar';
+  document.getElementById('instructions').textContent = 'Arrastra para caminar · ✦ varita mágica';
 }
 
 // ---------------- GUARDIANES DEL TEMPLO ----------------
 const GUARDIANS = {
   lumi:      { key:'lumi',      nombre:'Lumi',      energia:'Luz interior, guía',        color:'#ffd24a', buffText:'✦ +20 Vida máxima',            apply: () => { player.maxHp += 20; player.hp = player.maxHp; } },
-  stella:    { key:'stella',    nombre:'Stella',    energia:'Deseos, esperanza',         color:'#ffd75e', buffText:'✦ Disparo más veloz',           apply: () => { player.shootCd = Math.max(170, player.shootCd - 75); } },
+  stella:    { key:'stella',    nombre:'Stella',    energia:'Deseos, esperanza',         color:'#ffd75e', buffText:'✦ Varita más veloz',            apply: () => { player.shootCd = Math.max(170, player.shootCd - 75); } },
   selene:    { key:'selene',    nombre:'Selene',    energia:'Intuición, sueños',         color:'#ccc8ec', buffText:'✦ +1 Daño mágico',              apply: () => { player.dmg += 1; } },
   cristalia: { key:'cristalia', nombre:'Cristalia', energia:'Claridad, visión',          color:'#b58aff', buffText:'✦ Escudo: −20% daño recibido',  apply: () => { player.shield *= 0.8; } },
   nazari:    { key:'nazari',    nombre:'Nazari',    energia:'Protección, poder',         color:'#3d7ae8', buffText:'✦ +25 Vida máxima',             apply: () => { player.maxHp += 25; player.hp = player.maxHp; } },
-  glimmer:   { key:'glimmer',   nombre:'Glimmer',   energia:'Chispa, alegría',           color:'#ffde6a', buffText:'✦ Disparo aún más veloz',       apply: () => { player.shootCd = Math.max(150, player.shootCd - 75); } },
+  glimmer:   { key:'glimmer',   nombre:'Glimmer',   energia:'Chispa, alegría',           color:'#ffde6a', buffText:'✦ Varita aún más veloz',        apply: () => { player.shootCd = Math.max(150, player.shootCd - 75); } },
   alma:      { key:'alma',      nombre:'Alma',      energia:'Conciencia, luz interior',  color:'#f5e8cf', buffText:'✦ Regeneración de luz',         apply: () => { player.regen = true; } },
   nabi:      { key:'nabi',      nombre:'Nabi',      energia:'Magia felina, amor dulce',  color:'#ff9ad5', buffText:'✦ La magia felina te acompaña 🦋', apply: () => {} },
 };
 
-// CSS art original del muro (para las revelaciones)
 const FACE = `<span class="pface"><span class="pojos"><span class="pojo"></span><span class="pojo"></span></span><span class="pboca"></span></span>`;
 const FACE_ZZZ = `<span class="pface pzzz"><span class="pojos"><span class="pojo"></span><span class="pojo"></span></span><span class="pboca"></span></span>`;
 const PET_ART = {
@@ -555,7 +652,11 @@ const ZONES = [
   { name: 'Hondonada del Eco',  tint: 'rgba(255, 140, 210, 0.05)', pair: ['nazari', 'glimmer'] },
   { name: 'Santuario Prisma',   tint: 'rgba(200, 160, 255, 0.07)', pair: ['alma', 'nabi'] },
 ];
-const SEG_W = WORLD_W / ZONES.length; // 1300
+const SEG_W = WORLD_W / ZONES.length;
+
+// El bosque gris: color de cada zona (0 = gris, 1 = colores hermosos)
+let zoneColor = [0, 0, 0, 0];
+let zoneTarget = [0, 0, 0, 0];
 
 const CARD_DATA = [
   { color: '#8fd6ff', glow: 'rgba(143,214,255,0.6)', name: 'Luna Prisma',     type: 'Esencia de Luz',   effect: '"La luna guía tus pasos entre las sombras."', symbol: 'moon' },
@@ -579,7 +680,7 @@ const player = {
   speed: 3.3,
   facing: 1, moving: false,
   hp: 100, maxHp: 100,
-  dmg: 2, shootCd: 380, lastShot: 0,
+  dmg: 2, shootCd: 380, lastShot: -9999,
   shield: 1, regen: false,
   iframes: 0,
   dead: false,
@@ -595,7 +696,7 @@ let shots = [], orbs = [];
 let particles = [], ripples = [], sparkleTrail = [];
 let fireflies = [], mistBands = [], stars = [], grassTufts = [], mushrooms = [], flowers = [], farTrees = [];
 let TREES = [];
-let paused = false;
+let paused = true; // comienza en la intro
 let keys = {};
 let touchTarget = null;
 let shootHeld = false;
@@ -604,12 +705,53 @@ let lastRegen = 0;
 
 function rand(a, b) { return a + Math.random() * (b - a); }
 
+// ---------------- INTRO TELEPÁTICA ----------------
+const TELE_LINES = [
+  '«Bruxa… ¿me escuchas? Soy Nazari…»',
+  '«Estamos en problemas. Los ocho hemos sido capturados.»',
+  { text: '«El bosque… se ha vuelto gris. Su color se apaga.»', gris: true },
+  '«Toma tu varita mágica, Bruxa. Tienes que ayudarnos…»',
+];
+let introDone = false;
+
+function playIntro() {
+  const cont = document.getElementById('tele-lines');
+  cont.innerHTML = '';
+  let delay = 600;
+  TELE_LINES.forEach(line => {
+    const obj = typeof line === 'string' ? { text: line } : line;
+    const div = document.createElement('div');
+    div.className = 'tele-line' + (obj.gris ? ' gris' : '');
+    div.textContent = obj.text;
+    cont.appendChild(div);
+    setTimeout(() => div.classList.add('on'), delay);
+    delay += 1500;
+  });
+  setTimeout(() => {
+    document.getElementById('intro-btn').classList.add('on');
+  }, delay - 500);
+}
+
+function startJourney() {
+  if (introDone) return;
+  introDone = true;
+  document.getElementById('intro-overlay').classList.remove('show');
+  paused = false;
+  // Chispa inicial de la varita ✨
+  burst(player.x + 24, player.y - 8, '#ffd76e', 18, 3);
+  burst(player.x + 24, player.y - 8, '#c9a0ff', 10, 2.5);
+}
+
+function skipIntro() { startJourney(); }
+
 // ---------------- SETUP MUNDO ----------------
 function buildWorld() {
   cards = []; bosses = []; enemies = []; shots = []; orbs = [];
   guardiansFreed = []; particles = []; ripples = []; sparkleTrail = [];
   TREES = []; grassTufts = []; mushrooms = []; flowers = []; farTrees = [];
   stars = []; fireflies = []; mistBands = [];
+  zoneColor = [0, 0, 0, 0];
+  zoneTarget = [0, 0, 0, 0];
 
   for (let i = 0; i < 70; i++) stars.push({ x: Math.random() * W, y: Math.random() * H * 0.42, r: rand(0.4, 1.7), tw: rand(0, Math.PI * 2), spd: rand(0.5, 1.5) });
   for (let i = 0; i < 34; i++) fireflies.push({ x: rand(0, WORLD_W), y: rand(GROUND_TOP, GROUND_BOTTOM), a: rand(0, Math.PI * 2), spd: rand(0.15, 0.45), r: rand(1.4, 3), ph: rand(0, Math.PI * 2), hue: Math.random() < 0.7 ? '#ffe9a8' : '#c9a0ff' });
@@ -629,7 +771,6 @@ function buildWorld() {
     TREES.push({ x, y: rand(GROUND_TOP + 40, GROUND_BOTTOM - 40), s: rand(0.85, 1.35) });
   }
 
-  // Cartas ocultas
   CARD_DATA.forEach((cd, i) => {
     cards.push({
       ...cd,
@@ -640,7 +781,6 @@ function buildWorld() {
     });
   });
 
-  // Jefes con 2 guardianes cautivos cada uno
   for (let i = 0; i < ZONES.length; i++) {
     const bx = i * SEG_W + SEG_W * 0.8;
     const st = BOSS_STATS[i];
@@ -657,7 +797,6 @@ function buildWorld() {
     });
   }
 
-  // Criaturas menores
   for (let i = 0; i < ZONES.length; i++) {
     const count = 3 + i * 2;
     for (let k = 0; k < count; k++) {
@@ -754,6 +893,15 @@ function burst(x, y, color, count = 20, force = 4) {
   ripples.push({ x, y, r: 6, maxR: 70, color, life: 1 });
 }
 
+// Onda de color: cuando una zona recupera sus colores 🌈
+function colorWave(x, y) {
+  const rainbow = ['#ff8ab8', '#ffd76a', '#8af0b0', '#7ac8ff', '#c89aff', '#fffbe8'];
+  rainbow.forEach((col, i) => {
+    setTimeout(() => burst(x + rand(-160, 160), y + rand(-120, 120), col, 16, 4.5), i * 130);
+  });
+  ripples.push({ x, y, r: 10, maxR: 300, color: '#fffbe8', life: 1 });
+}
+
 function updateParticles() {
   for (let i = particles.length - 1; i >= 0; i--) {
     const p = particles[i];
@@ -786,8 +934,7 @@ function pathStar(c, cx, cy, r, rot = 0, points = 5, inner = 0.45) {
 }
 
 // ============================================================
-//  GUARDIANES EN CANVAS — versiones fieles al CSS art del muro
-//  (para las jaulas de cristal y los acompañantes)
+//  GUARDIANES EN CANVAS
 // ============================================================
 
 function gFace(x, y, o = {}) {
@@ -819,19 +966,15 @@ function drawGuardianSprite(key, gx, gy, s, t, o = {}) {
     case 'lumi': {
       const sway = Math.sin(t / 800) * 0.03;
       ctx.rotate(sway);
-      // cuerpo vela
       const g = ctx.createLinearGradient(-22, -20, 22, 30);
       g.addColorStop(0, '#fdf3dc'); g.addColorStop(0.6, '#ecd9ae'); g.addColorStop(1, '#d8bd85');
       ctx.fillStyle = g;
       ctx.beginPath(); ctx.roundRect(-20, -18, 40, 52, 9); ctx.fill();
-      // chapitas
       ctx.fillStyle = 'rgba(255,150,130,0.55)';
       ctx.beginPath(); ctx.ellipse(-13, -8, 3.6, 2.2, 0, 0, Math.PI * 2); ctx.fill();
       ctx.beginPath(); ctx.ellipse(13, -8, 3.6, 2.2, 0, 0, Math.PI * 2); ctx.fill();
-      // pabilo
       ctx.fillStyle = '#4a3520';
       ctx.fillRect(-1.2, -26, 2.4, 7);
-      // llama
       const fl = 1 + Math.sin(t / 90) * 0.12;
       ctx.save();
       ctx.translate(0, -34);
@@ -860,7 +1003,6 @@ function drawGuardianSprite(key, gx, gy, s, t, o = {}) {
       pathStar(ctx, 0, 0, 34, 0, 5, 0.5);
       ctx.fill();
       gFace(0, 2, o);
-      // chispa orbital
       const oa = t / 480;
       ctx.fillStyle = '#ffe9a0';
       pathStar(ctx, Math.cos(oa) * 40, Math.sin(oa) * 40, 3, oa);
@@ -869,22 +1011,18 @@ function drawGuardianSprite(key, gx, gy, s, t, o = {}) {
     }
     case 'selene': {
       ctx.translate(0, flot);
-      ctx.fillStyle = '#ccc8ec';
       const g = ctx.createRadialGradient(-10, -10, 4, 0, 0, 32);
       g.addColorStop(0, '#f4f2ff'); g.addColorStop(0.55, '#ccc8ec'); g.addColorStop(1, '#9a92c8');
       ctx.fillStyle = g;
-      // creciente
       ctx.beginPath();
       ctx.arc(0, 0, 30, Math.PI * 0.42, Math.PI * 1.58);
       ctx.arc(11, 0, 23, Math.PI * 1.52, Math.PI * 0.48, true);
       ctx.closePath();
       ctx.fill();
-      // cráteres
       ctx.fillStyle = 'rgba(140,130,190,0.45)';
       ctx.beginPath(); ctx.arc(-16, -10, 4, 0, Math.PI * 2); ctx.fill();
       ctx.beginPath(); ctx.arc(-12, 14, 2.8, 0, Math.PI * 2); ctx.fill();
       gFace(-8, -2, { sleep: true });
-      // estrellita
       ctx.globalAlpha = 0.5 + 0.5 * Math.sin(t / 600);
       ctx.fillStyle = '#e8e4ff';
       pathStar(ctx, 22, -24, 3.4, t / 1000);
@@ -893,12 +1031,10 @@ function drawGuardianSprite(key, gx, gy, s, t, o = {}) {
       break;
     }
     case 'cristalia': {
-      // base dorada
       const bg = ctx.createLinearGradient(-20, 22, 20, 36);
       bg.addColorStop(0, '#e8c97a'); bg.addColorStop(1, '#a07828');
       ctx.fillStyle = bg;
       ctx.beginPath(); ctx.roundRect(-20, 22, 40, 15, 5); ctx.fill();
-      // esfera
       const hue = Math.sin(t / 1400) * 20;
       ctx.save();
       ctx.filter = `hue-rotate(${hue}deg)`;
@@ -910,7 +1046,6 @@ function drawGuardianSprite(key, gx, gy, s, t, o = {}) {
       ctx.fillStyle = g;
       ctx.beginPath(); ctx.arc(0, -4, 28, 0, Math.PI * 2); ctx.fill();
       ctx.restore();
-      // niebla
       const nx = Math.sin(t / 1100) * 5;
       ctx.globalAlpha = 0.55 + 0.35 * Math.sin(t / 1100);
       const ng = ctx.createRadialGradient(nx, -10, 2, nx, -10, 16);
@@ -929,7 +1064,6 @@ function drawGuardianSprite(key, gx, gy, s, t, o = {}) {
       ctx.beginPath(); ctx.arc(0, 0, 33, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = '#eef4ff';
       ctx.beginPath(); ctx.arc(0, 0, 23, 0, Math.PI * 2); ctx.fill();
-      // parpadeo
       const blink = (Math.sin(t / 2300) > 0.965) ? 0.12 : 1;
       ctx.save();
       ctx.scale(1, blink);
@@ -948,7 +1082,6 @@ function drawGuardianSprite(key, gx, gy, s, t, o = {}) {
       const jump = Math.max(0, Math.sin(t / 280)) * -7;
       ctx.translate(0, jump);
       ctx.rotate(Math.sin(t / 280) * 0.08);
-      // anillo punteado
       ctx.strokeStyle = 'rgba(255,225,140,0.55)';
       ctx.lineWidth = 1.6;
       ctx.setLineDash([5, 6]);
@@ -957,39 +1090,33 @@ function drawGuardianSprite(key, gx, gy, s, t, o = {}) {
       ctx.beginPath(); ctx.arc(0, 0, 38, 0, Math.PI * 2); ctx.stroke();
       ctx.restore();
       ctx.setLineDash([]);
-      // cuerpo estallido
       const g = ctx.createRadialGradient(-7, -9, 3, 0, 0, 32);
       g.addColorStop(0, '#fff9d8'); g.addColorStop(0.5, '#ffde6a'); g.addColorStop(1, '#f0a830');
       ctx.fillStyle = g;
       pathStar(ctx, 0, 0, 32, 0, 8, 0.55);
       ctx.fill();
       gFace(0, 0, o);
-      // boca grande sonriente
       ctx.fillStyle = '#7a3010';
       ctx.beginPath(); ctx.arc(0, 7, 4.2, 0.15, Math.PI - 0.15); ctx.fill();
       break;
     }
     case 'alma': {
       ctx.translate(0, flot);
-      // anillo trasero
       ctx.strokeStyle = 'rgba(232,201,122,0.75)';
       ctx.lineWidth = 2.2;
       ctx.save();
       ctx.rotate(-0.21);
       ctx.beginPath(); ctx.ellipse(0, 4, 40, 10, 0, Math.PI * 0.05, Math.PI * 0.95); ctx.stroke();
       ctx.restore();
-      // cuerpo
       const g = ctx.createRadialGradient(-9, -10, 3, 0, 0, 30);
       g.addColorStop(0, '#fffdf4'); g.addColorStop(0.5, '#f5e8cf'); g.addColorStop(1, '#d8c4e0');
       ctx.fillStyle = g;
       ctx.beginPath(); ctx.arc(0, 0, 27, 0, Math.PI * 2); ctx.fill();
-      // anillo frente
       ctx.save();
       ctx.rotate(-0.21);
       ctx.strokeStyle = 'rgba(232,201,122,0.85)';
       ctx.beginPath(); ctx.ellipse(0, 4, 40, 10, 0, Math.PI * 1.08, Math.PI * 1.92, false); ctx.stroke();
       ctx.restore();
-      // halo
       const hp = 0.75 + 0.25 * Math.sin(t / 600);
       ctx.globalAlpha = hp;
       ctx.strokeStyle = '#ffd870';
@@ -1000,7 +1127,6 @@ function drawGuardianSprite(key, gx, gy, s, t, o = {}) {
       ctx.restore();
       ctx.globalAlpha = 1;
       gFace(0, -2, o);
-      // polvito estelar
       ctx.globalAlpha = 0.5 + 0.5 * Math.sin(t / 500);
       ctx.fillStyle = 'rgba(255,236,190,0.85)';
       pathStar(ctx, -12, 32, 2.4, t / 800); ctx.fill();
@@ -1011,7 +1137,6 @@ function drawGuardianSprite(key, gx, gy, s, t, o = {}) {
     }
     case 'nabi': {
       ctx.translate(0, flot);
-      // alas mariposa (flap)
       const flap = Math.sin(t / 180);
       const wingColors = ['#ff8ab8', '#ffd76a', '#8af0b0', '#7ac8ff', '#c89aff'];
       for (const side of [-1, 1]) {
@@ -1019,7 +1144,6 @@ function drawGuardianSprite(key, gx, gy, s, t, o = {}) {
         ctx.translate(side * 12, -4);
         ctx.scale(side * (0.82 + 0.18 * Math.abs(flap)), 1);
         ctx.rotate(side * flap * 0.22);
-        // ala con bandas de color
         for (let b = 0; b < 5; b++) {
           ctx.fillStyle = wingColors[b];
           ctx.globalAlpha = 0.88;
@@ -1033,7 +1157,6 @@ function drawGuardianSprite(key, gx, gy, s, t, o = {}) {
         ctx.globalAlpha = 1;
         ctx.restore();
       }
-      // orejitas
       ctx.fillStyle = '#ecdcc8';
       for (const side of [-1, 1]) {
         ctx.save();
@@ -1049,26 +1172,21 @@ function drawGuardianSprite(key, gx, gy, s, t, o = {}) {
         ctx.fillStyle = '#ecdcc8';
         ctx.restore();
       }
-      // cabeza
       const g = ctx.createRadialGradient(-8, -10, 3, 0, -4, 26);
       g.addColorStop(0, '#fffdf6'); g.addColorStop(0.55, '#f2e4d2'); g.addColorStop(1, '#ddc8b2');
       ctx.fillStyle = g;
       ctx.beginPath(); ctx.ellipse(0, -4, 23, 21, 0, 0, Math.PI * 2); ctx.fill();
-      // mejillas peludas
       ctx.fillStyle = '#efe1cd';
       ctx.beginPath(); ctx.ellipse(-21, 3, 5.4, 7.4, -0.24, 0, Math.PI * 2); ctx.fill();
       ctx.beginPath(); ctx.ellipse(21, 3, 5.4, 7.4, 0.24, 0, Math.PI * 2); ctx.fill();
       gFace(0, -8, o);
-      // nariz
       ctx.fillStyle = '#e88aa0';
       ctx.beginPath(); ctx.ellipse(0, 0, 3, 2.3, 0, 0, Math.PI * 2); ctx.fill();
-      // corona (mítica 👑)
       ctx.fillStyle = '#ffd76e';
       ctx.beginPath();
       ctx.moveTo(-9, -25); ctx.lineTo(-6, -33); ctx.lineTo(-2, -25);
       ctx.lineTo(0, -34); ctx.lineTo(2, -25); ctx.lineTo(6, -33); ctx.lineTo(9, -24);
       ctx.closePath(); ctx.fill();
-      // brillito
       ctx.globalAlpha = 0.5 + 0.5 * Math.sin(t / 500);
       ctx.fillStyle = '#ffc8e8';
       pathStar(ctx, 20, -26, 3, t / 900);
@@ -1113,7 +1231,6 @@ function drawBackground(t) {
   ctx.beginPath(); ctx.arc(mx - 10, my - 5, 6, 0, Math.PI * 2); ctx.fill();
   ctx.beginPath(); ctx.arc(mx + 9, my + 10, 4.4, 0, Math.PI * 2); ctx.fill();
   ctx.beginPath(); ctx.arc(mx + 4, my - 13, 3, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.arc(mx + 4, my - 13, 3, 0, Math.PI * 2); ctx.fill();
 
   ctx.fillStyle = 'rgba(22, 14, 40, 0.9)';
   const fOff = camX * 0.35;
@@ -1145,6 +1262,56 @@ function drawBackground(t) {
   path.addColorStop(1, 'rgba(201, 176, 255, 0)');
   ctx.fillStyle = path;
   ctx.fillRect(0, GROUND_TOP - 60, W, H);
+  ctx.restore();
+}
+
+// ---------- EL VELO GRIS 🌫️ (se disuelve al rescatar) ----------
+function grayAt(worldX) {
+  const z = Math.min(ZONES.length - 1, Math.max(0, Math.floor(worldX / SEG_W)));
+  return 0.92 * (1 - zoneColor[z]);
+}
+
+function drawGrayVeil() {
+  const anyGray = zoneColor.some(c => c < 0.995);
+  if (!anyGray) return;
+
+  const blend = 110; // transición suave entre zonas (px)
+  const stops = [];
+  stops.push([0, grayAt(camX + 1)]);
+  for (let i = 1; i < ZONES.length; i++) {
+    const sx = i * SEG_W - camX;
+    if (sx > -blend && sx < W + blend) {
+      stops.push([Math.max(0, Math.min(1, (sx - blend) / W)), grayAt(i * SEG_W - 2)]);
+      stops.push([Math.max(0, Math.min(1, (sx + blend) / W)), grayAt(i * SEG_W + 2)]);
+    }
+  }
+  stops.push([1, grayAt(camX + W - 1)]);
+  stops.sort((a, b) => a[0] - b[0]);
+
+  ctx.save();
+  // 1) Desaturación (el gris roba el color)
+  ctx.globalCompositeOperation = 'saturation';
+  const g1 = ctx.createLinearGradient(0, 0, W, 0);
+  let last = -1;
+  for (const [p, a] of stops) {
+    const pos = Math.min(1, Math.max(0, p <= last ? last + 0.0001 : p));
+    g1.addColorStop(pos, `rgba(128,128,128,${a.toFixed(3)})`);
+    last = pos;
+  }
+  ctx.fillStyle = g1;
+  ctx.fillRect(0, 0, W, H);
+
+  // 2) Penumbra fría (el bosque triste)
+  ctx.globalCompositeOperation = 'source-over';
+  const g2 = ctx.createLinearGradient(0, 0, W, 0);
+  last = -1;
+  for (const [p, a] of stops) {
+    const pos = Math.min(1, Math.max(0, p <= last ? last + 0.0001 : p));
+    g2.addColorStop(pos, `rgba(70, 74, 92, ${(a * 0.28).toFixed(3)})`);
+    last = pos;
+  }
+  ctx.fillStyle = g2;
+  ctx.fillRect(0, 0, W, H);
   ctx.restore();
 }
 
@@ -1394,231 +1561,210 @@ function drawCard(c, t) {
   ctx.restore();
 }
 
-// ---------- BRUXA MEJORADA (capa + pelo con más flujo) ----------
+// ---------- BRUXA (con su varita mágica ✨) ----------
 function drawBruxa(t) {
   if (player.iframes > 0 && Math.floor(t / 80) % 2 === 0) return;
 
-  const x = player.x - camX;
-  const y = player.y;
-  const moving = player.moving;
-  const facing = player.facing;
-
-  // === Movimiento más orgánico y vivo ===
-  const speedFactor = moving ? 1.0 : 0.35;
-  const bob = Math.sin(t / 160) * 2.2 * speedFactor + Math.sin(t / 420) * 0.6;
-  const sway = Math.sin(t / 190) * 2.8 * speedFactor + Math.sin(t / 650) * 0.8;
-
-  // Pelo con dos capas de movimiento (más realista)
-  const hairFlow1 = Math.sin(t / 280) * 3.2 * speedFactor + (moving ? Math.sin(t / 140) * 2.5 : 0);
-  const hairFlow2 = Math.sin(t / 410) * 4.5 * speedFactor + (moving ? Math.sin(t / 95) * 3.2 : 0);
-
-  // Sombrero más reactivo
-  const hatTip = Math.sin(t / 380) * 3.5 + (moving ? Math.sin(t / 160) * 4.5 : 0);
-
+  const x = player.x - camX, y = player.y;
+  const moving = player.moving, facing = player.facing;
   ctx.save();
   ctx.translate(x, y);
   if (facing < 0) ctx.scale(-1, 1);
 
-  // Sombra
-  ctx.fillStyle = 'rgba(8, 4, 18, 0.45)';
-  ctx.beginPath();
-  ctx.ellipse(0, 36, 21 - Math.abs(bob) * 0.6, 7.5, 0, 0, Math.PI * 2);
-  ctx.fill();
+  const bob = moving ? Math.sin(t / 150) * 2 : Math.sin(t / 850) * 0.8;
+  const sway = moving ? Math.sin(t / 210) * 1.4 : Math.sin(t / 1100) * 0.4;
+  const y0 = bob;
 
-  // Aura mágica
-  ctx.globalAlpha = 0.12 + 0.05 * Math.sin(t / 700);
-  const aura = ctx.createRadialGradient(0, bob + 4, 8, 0, bob + 4, 52);
+  ctx.fillStyle = 'rgba(8, 4, 18, 0.4)';
+  ctx.beginPath(); ctx.ellipse(0, 34, 20 - Math.abs(bob), 6.5, 0, 0, Math.PI * 2); ctx.fill();
+
+  ctx.globalAlpha = 0.14 + 0.04 * Math.sin(t / 600);
+  const aura = ctx.createRadialGradient(0, y0 + 2, 5, 0, y0 + 2, 45);
   aura.addColorStop(0, '#c084fc');
   aura.addColorStop(1, 'rgba(192, 132, 252, 0)');
   ctx.fillStyle = aura;
-  ctx.beginPath();
-  ctx.arc(0, bob + 4, 52, 0, Math.PI * 2);
-  ctx.fill();
+  ctx.beginPath(); ctx.arc(0, y0 + 2, 45, 0, Math.PI * 2); ctx.fill();
   ctx.globalAlpha = 1;
 
-  // === CAPA MEJORADA ===
-  const capeSwing = moving 
-    ? Math.sin(t / 170) * 9 + Math.sin(t / 90) * 4.5 
-    : Math.sin(t / 1100) * 2.5;
-
-  const capeG = ctx.createLinearGradient(0, bob - 8, 0, bob + 32);
+  const flap = moving ? Math.sin(t / 170) * 6 : Math.sin(t / 900) * 2;
+  const capeG = ctx.createLinearGradient(0, y0 - 8, 0, y0 + 30);
   capeG.addColorStop(0, '#4c1d95');
   capeG.addColorStop(1, '#31115c');
   ctx.fillStyle = capeG;
-
   ctx.beginPath();
-  ctx.moveTo(-14, bob - 8);
-  ctx.quadraticCurveTo(-26 - capeSwing * 0.7, bob + 14, -20 - capeSwing, bob + 30);
-  ctx.quadraticCurveTo(-8, bob + 26, 0, bob + 29);
-  ctx.quadraticCurveTo(9, bob + 26, 19 + capeSwing * 0.85, bob + 30);
-  ctx.quadraticCurveTo(25 + capeSwing * 0.6, bob + 14, 14, bob - 8);
-  ctx.closePath();
-  ctx.fill();
-
-  ctx.strokeStyle = 'rgba(192, 132, 252, 0.45)';
-  ctx.lineWidth = 1.8;
+  ctx.moveTo(-13, y0 - 6);
+  ctx.quadraticCurveTo(-24 - flap, y0 + 12, -18 - flap * 1.4, y0 + 28);
+  ctx.quadraticCurveTo(-6, y0 + 24, 0, y0 + 27);
+  ctx.quadraticCurveTo(8, y0 + 24, 17 + flap * 1.2, y0 + 28);
+  ctx.quadraticCurveTo(23 + flap, y0 + 12, 13, y0 - 6);
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = 'rgba(192, 132, 252, 0.5)';
+  ctx.lineWidth = 1.2;
   ctx.beginPath();
-  ctx.moveTo(-20 - capeSwing, bob + 30);
-  ctx.quadraticCurveTo(-8, bob + 26, 0, bob + 29);
-  ctx.quadraticCurveTo(9, bob + 26, 19 + capeSwing * 0.85, bob + 30);
+  ctx.moveTo(-18 - flap * 1.4, y0 + 28);
+  ctx.quadraticCurveTo(-6, y0 + 24, 0, y0 + 27);
+  ctx.quadraticCurveTo(8, y0 + 24, 17 + flap * 1.2, y0 + 28);
   ctx.stroke();
 
-  // Cuerpo
-  const body = ctx.createLinearGradient(-14, bob, 14, bob + 22);
+  if (moving) {
+    const step = Math.sin(t / 130) * 5;
+    ctx.fillStyle = '#3b2a55';
+    ctx.beginPath(); ctx.ellipse(-5, y0 + 29 + Math.max(0, step) * 0.3, 4, 6, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(5, y0 + 29 + Math.max(0, -step) * 0.3, 4, 6, 0, 0, Math.PI * 2); ctx.fill();
+  }
+
+  const body = ctx.createLinearGradient(-14, y0, 14, y0 + 20);
   body.addColorStop(0, '#7c3aed');
   body.addColorStop(1, '#5b21b6');
   ctx.fillStyle = body;
   ctx.beginPath();
-  ctx.moveTo(-10, bob - 8);
-  ctx.quadraticCurveTo(-18, bob + 16, -14, bob + 28);
-  ctx.quadraticCurveTo(0, bob + 34, 14, bob + 28);
-  ctx.quadraticCurveTo(18, bob + 16, 10, bob - 8);
-  ctx.closePath();
-  ctx.fill();
+  ctx.moveTo(-9, y0 - 6);
+  ctx.quadraticCurveTo(-17, y0 + 14, -13, y0 + 26);
+  ctx.quadraticCurveTo(0, y0 + 32, 13, y0 + 26);
+  ctx.quadraticCurveTo(17, y0 + 14, 9, y0 - 6);
+  ctx.closePath(); ctx.fill();
 
-  ctx.fillStyle = '#ffd76e';
-  pathStar(ctx, 0, bob + 12, 3.5, t / 1400);
-  ctx.fill();
-
-  // Brazos
-  const armSwing = moving ? Math.sin(t / 125) * 4.5 : 0;
-  ctx.fillStyle = '#6d28d9';
-  ctx.beginPath();
-  ctx.ellipse(-13, bob + 5 + armSwing * 0.3, 3.8, 9, -0.35, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.ellipse(13, bob + 5 - armSwing * 0.3, 3.8, 9, 0.35, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.fillStyle = '#fdf4ff';
-  ctx.beginPath();
-  ctx.arc(-14, bob + 13 + armSwing * 0.4, 2.6, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.arc(14, bob + 13 - armSwing * 0.4, 2.6, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Cabeza
-  ctx.fillStyle = '#fdf4ff';
-  ctx.beginPath();
-  ctx.ellipse(sway * 0.4, bob - 13, 14, 14.5, 0, 0, Math.PI * 2);
-  ctx.fill();
-
-  // PELO MEJORADO (dos capas)
-  ctx.fillStyle = '#332a6e';
-  ctx.beginPath();
-  ctx.ellipse(sway * 0.4, bob - 15, 15, 13, 0, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Mechones laterales principales
-  ctx.beginPath();
-  ctx.moveTo(-14 + sway * 0.4, bob - 17);
-  ctx.quadraticCurveTo(-21 - hairFlow1 * 0.8, bob - 3, -18 - hairFlow1, bob + 13);
-  ctx.quadraticCurveTo(-13, bob + 9, -12, bob - 7);
-  ctx.closePath();
-  ctx.fill();
-
-  ctx.beginPath();
-  ctx.moveTo(14 + sway * 0.4, bob - 17);
-  ctx.quadraticCurveTo(21 + hairFlow1 * 0.8, bob - 3, 18 + hairFlow1, bob + 13);
-  ctx.quadraticCurveTo(13, bob + 9, 12, bob - 7);
-  ctx.closePath();
-  ctx.fill();
-
-  // Mechones finos sueltos (segunda capa)
-  ctx.globalAlpha = 0.85;
-  ctx.fillStyle = '#453a8a';
-  ctx.beginPath();
-  ctx.moveTo(-11, bob - 18);
-  ctx.quadraticCurveTo(-17 - hairFlow2 * 0.6, bob + 2, -15 - hairFlow2 * 0.9, bob + 11);
-  ctx.quadraticCurveTo(-10, bob + 7, -9, bob - 8);
-  ctx.closePath();
-  ctx.fill();
-
-  ctx.beginPath();
-  ctx.moveTo(11, bob - 18);
-  ctx.quadraticCurveTo(17 + hairFlow2 * 0.6, bob + 2, 15 + hairFlow2 * 0.9, bob + 11);
-  ctx.quadraticCurveTo(10, bob + 7, 9, bob - 8);
-  ctx.closePath();
-  ctx.fill();
+  ctx.globalAlpha = 0.3;
+  ctx.fillStyle = '#a78bfa';
+  ctx.beginPath(); ctx.ellipse(-4 + sway, y0 + 8, 5, 11, -0.25, 0, Math.PI * 2); ctx.fill();
   ctx.globalAlpha = 1;
 
-  // SOMBRERO
-  const hatG = ctx.createLinearGradient(0, bob - 60, 0, bob - 22);
+  ctx.fillStyle = '#31115c';
+  ctx.fillRect(-11, y0 + 10, 22, 3.4);
+  ctx.fillStyle = '#ffd76e';
+  pathStar(ctx, 0, y0 + 11.7, 3, t / 1500);
+  ctx.fill();
+
+  // Brazo trasero
+  ctx.fillStyle = '#6d28d9';
+  const armSwing = moving ? Math.sin(t / 130) * 3 : 0;
+  ctx.beginPath(); ctx.ellipse(-12, y0 + 4 + armSwing * 0.4, 3.4, 8, -0.3, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#fdf4ff';
+  ctx.beginPath(); ctx.arc(-13, y0 + 11 + armSwing * 0.5, 2.4, 0, Math.PI * 2); ctx.fill();
+
+  // ✨ BRAZO DELANTERO CON VARITA MÁGICA ✨
+  const casting = (t - player.lastShot) < 200;
+  const armLift = casting ? -6 : (moving ? -armSwing * 0.4 : Math.sin(t / 1000) * 0.8);
+  ctx.fillStyle = '#6d28d9';
+  ctx.beginPath(); ctx.ellipse(12, y0 + 2 + armLift * 0.5, 3.4, 8, 0.45, 0, Math.PI * 2); ctx.fill();
+  // manita
+  ctx.fillStyle = '#fdf4ff';
+  const hx = 15, hy = y0 + 8 + armLift * 0.6;
+  ctx.beginPath(); ctx.arc(hx, hy, 2.6, 0, Math.PI * 2); ctx.fill();
+  // varita
+  ctx.save();
+  ctx.translate(hx, hy);
+  ctx.rotate(-0.85 + (casting ? -0.18 : Math.sin(t / 800) * 0.05));
+  const wandG = ctx.createLinearGradient(0, 0, 22, 0);
+  wandG.addColorStop(0, '#8a5a2e');
+  wandG.addColorStop(1, '#5a3a1e');
+  ctx.fillStyle = wandG;
+  ctx.beginPath(); ctx.roundRect(0, -1.4, 21, 2.8, 1.4); ctx.fill();
+  // detalle espiral dorado
+  ctx.strokeStyle = 'rgba(245, 217, 126, 0.8)';
+  ctx.lineWidth = 0.9;
+  ctx.beginPath(); ctx.moveTo(4, -1.4); ctx.lineTo(6.5, 1.4); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(9, -1.4); ctx.lineTo(11.5, 1.4); ctx.stroke();
+  // estrella en la punta
+  const wp = casting ? 1.6 : (1 + Math.sin(t / 300) * 0.2);
+  ctx.globalAlpha = 0.4;
+  ctx.fillStyle = '#fde047';
+  ctx.beginPath(); ctx.arc(24, 0, 8 * wp, 0, Math.PI * 2); ctx.fill();
+  ctx.globalAlpha = 1;
+  ctx.fillStyle = '#ffd76e';
+  pathStar(ctx, 24, 0, 4.6 * wp, t / 500);
+  ctx.fill();
+  ctx.fillStyle = '#fffbeb';
+  ctx.beginPath(); ctx.arc(23, -1, 1.5, 0, Math.PI * 2); ctx.fill();
+  // destello al lanzar
+  if (casting) {
+    ctx.globalAlpha = 0.7 * (1 - (t - player.lastShot) / 200);
+    ctx.strokeStyle = '#fffbe8';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.arc(24, 0, 10 + (t - player.lastShot) / 14, 0, Math.PI * 2); ctx.stroke();
+    ctx.globalAlpha = 1;
+  }
+  ctx.restore();
+
+  ctx.fillStyle = '#fdf4ff';
+  ctx.beginPath(); ctx.ellipse(sway * 0.5, y0 - 12, 13.5, 14, 0, 0, Math.PI * 2); ctx.fill();
+
+  const hairFlow = Math.sin(t / 400) * 1.6 + (moving ? Math.sin(t / 180) * 1.8 : 0);
+  ctx.fillStyle = '#332a6e';
+  ctx.beginPath(); ctx.ellipse(sway * 0.5, y0 - 14, 14.5, 12.5, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(-13 + sway * 0.5, y0 - 16);
+  ctx.quadraticCurveTo(-19 - hairFlow, y0 - 2, -16 - hairFlow * 1.6, y0 + 12);
+  ctx.quadraticCurveTo(-12, y0 + 8, -11, y0 - 6);
+  ctx.closePath(); ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(13 + sway * 0.5, y0 - 16);
+  ctx.quadraticCurveTo(19 + hairFlow, y0 - 2, 16 + hairFlow * 1.6, y0 + 12);
+  ctx.quadraticCurveTo(12, y0 + 8, 11, y0 - 6);
+  ctx.closePath(); ctx.fill();
+  ctx.globalAlpha = 0.35;
+  ctx.strokeStyle = '#8b7fd6';
+  ctx.lineWidth = 1.4;
+  ctx.beginPath(); ctx.arc(sway * 0.5 - 2, y0 - 16, 10, Math.PI * 1.1, Math.PI * 1.7); ctx.stroke();
+  ctx.globalAlpha = 1;
+  ctx.fillStyle = '#453a8a';
+  ctx.beginPath(); ctx.ellipse(sway * 0.5, y0 - 19, 11.5, 6.2, 0, 0, Math.PI * 2); ctx.fill();
+
+  const hatTip = Math.sin(t / 500) * 2.5 + (moving ? Math.sin(t / 190) * 2 : 0);
+  const hatG = ctx.createLinearGradient(0, y0 - 58, 0, y0 - 18);
   hatG.addColorStop(0, '#7c3aed');
   hatG.addColorStop(1, '#5b21b6');
   ctx.fillStyle = hatG;
-
   ctx.beginPath();
-  ctx.moveTo(-17 + sway * 0.4, bob - 22);
-  ctx.quadraticCurveTo(-5, bob - 46, 3 + hatTip, bob - 58);
-  ctx.quadraticCurveTo(11 + hatTip * 1.3, bob - 62, 9 + hatTip, bob - 52);
-  ctx.quadraticCurveTo(13, bob - 36, 17 + sway * 0.4, bob - 22);
-  ctx.closePath();
-  ctx.fill();
-
+  ctx.moveTo(-16 + sway * 0.5, y0 - 21);
+  ctx.quadraticCurveTo(-4, y0 - 44, 4 + hatTip, y0 - 56);
+  ctx.quadraticCurveTo(10 + hatTip * 1.5, y0 - 60, 8 + hatTip, y0 - 50);
+  ctx.quadraticCurveTo(12, y0 - 34, 16 + sway * 0.5, y0 - 21);
+  ctx.closePath(); ctx.fill();
   ctx.fillStyle = '#31115c';
-  ctx.beginPath();
-  ctx.ellipse(sway * 0.4, bob - 22, 17.5, 5.5, 0, 0, Math.PI * 2);
-  ctx.fill();
-
+  ctx.beginPath(); ctx.ellipse(sway * 0.5, y0 - 21, 16.5, 5, 0, 0, Math.PI * 2); ctx.fill();
   ctx.fillStyle = '#6d28d9';
-  ctx.beginPath();
-  ctx.ellipse(sway * 0.4, bob - 22, 21, 6.8, 0, 0, Math.PI * 2);
-  ctx.fill();
-
+  ctx.beginPath(); ctx.ellipse(sway * 0.5, y0 - 21, 20, 6.2, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = 'rgba(192, 132, 252, 0.55)';
+  ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.ellipse(sway * 0.5, y0 - 21, 20, 6.2, 0, 0, Math.PI * 2); ctx.stroke();
   ctx.fillStyle = '#ffd76e';
-  ctx.beginPath();
-  ctx.ellipse(sway * 0.4, bob - 25.5, 2.8, 3.4, 0, 0, Math.PI * 2);
-  ctx.fill();
-
+  ctx.beginPath(); ctx.ellipse(sway * 0.5, y0 - 24.5, 2.6, 3.2, 0, 0, Math.PI * 2); ctx.fill();
   ctx.fillStyle = '#fffbeb';
-  ctx.beginPath();
-  ctx.arc(sway * 0.4 - 0.8, bob - 26.5, 1.1, 0, Math.PI * 2);
-  ctx.fill();
+  ctx.beginPath(); ctx.arc(sway * 0.5 - 0.7, y0 - 25.5, 1, 0, Math.PI * 2); ctx.fill();
 
-  // Cara
-  const blink = (Math.sin(t / 1850) > 0.965) ? 0.12 : 1;
+  const starP = Math.sin(t / 280) * 0.25 + 1.05;
+  ctx.globalAlpha = 0.35;
+  ctx.fillStyle = '#fde047';
+  ctx.beginPath(); ctx.arc(6 + hatTip, y0 - 54, 8 * starP, 0, Math.PI * 2); ctx.fill();
+  ctx.globalAlpha = 1;
+  pathStar(ctx, 6 + hatTip, y0 - 54, 4.5 * starP, t / 1000);
+  ctx.fill();
+  ctx.fillStyle = '#fffbeb';
+  ctx.beginPath(); ctx.arc(5 + hatTip, y0 - 55, 1.4, 0, Math.PI * 2); ctx.fill();
+
+  const blink = (Math.sin(t / 1900) > 0.97) ? 0.15 : 1;
   ctx.fillStyle = '#332a6e';
-  ctx.beginPath();
-  ctx.ellipse(-5.5 + sway * 0.4, bob - 13, 3.7, 4.8 * blink, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.ellipse(5.5 + sway * 0.4, bob - 13, 3.7, 4.8 * blink, 0, 0, Math.PI * 2);
-  ctx.fill();
-
+  ctx.beginPath(); ctx.ellipse(-5 + sway * 0.5, y0 - 12, 3.6, 4.6 * blink, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(5 + sway * 0.5, y0 - 12, 3.6, 4.6 * blink, 0, 0, Math.PI * 2); ctx.fill();
   if (blink > 0.5) {
     ctx.fillStyle = '#fff';
-    ctx.beginPath();
-    ctx.arc(-4 + sway * 0.4, bob - 15, 1.35, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(7 + sway * 0.4, bob - 15, 1.35, 0, Math.PI * 2);
-    ctx.fill();
+    ctx.beginPath(); ctx.arc(-3.6 + sway * 0.5, y0 - 14, 1.3, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(6.4 + sway * 0.5, y0 - 14, 1.3, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#c7f0ff';
+    ctx.beginPath(); ctx.arc(-2.4 + sway * 0.5, y0 - 12.2, 0.6, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(7.6 + sway * 0.5, y0 - 12.2, 0.6, 0, Math.PI * 2); ctx.fill();
   }
-
   ctx.strokeStyle = '#453a8a';
-  ctx.lineWidth = 1.15;
-  ctx.beginPath();
-  ctx.arc(-5.5 + sway * 0.4, bob - 18, 3.1, Math.PI * 1.12, Math.PI * 1.88);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.arc(5.5 + sway * 0.4, bob - 18, 3.1, Math.PI * 1.12, Math.PI * 1.88);
-  ctx.stroke();
-
+  ctx.lineWidth = 1.1;
+  ctx.beginPath(); ctx.arc(-5 + sway * 0.5, y0 - 17, 3, Math.PI * 1.15, Math.PI * 1.85); ctx.stroke();
+  ctx.beginPath(); ctx.arc(5 + sway * 0.5, y0 - 17, 3, Math.PI * 1.15, Math.PI * 1.85); ctx.stroke();
   ctx.strokeStyle = '#c084fc';
-  ctx.lineWidth = 1.3;
-  ctx.beginPath();
-  ctx.arc(sway * 0.4, bob - 7, 2.2, 0.2, Math.PI - 0.2);
-  ctx.stroke();
-
-  ctx.fillStyle = 'rgba(251, 113, 133, 0.28)';
-  ctx.beginPath();
-  ctx.ellipse(-9 + sway * 0.4, bob - 9, 4, 2.4, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.ellipse(9 + sway * 0.4, bob - 9, 4, 2.4, 0, 0, Math.PI * 2);
-  ctx.fill();
+  ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.arc(sway * 0.5, y0 - 6, 2.1, 0.25, Math.PI - 0.25); ctx.stroke();
+  ctx.fillStyle = 'rgba(251, 113, 133, 0.32)';
+  ctx.beginPath(); ctx.ellipse(-8.5 + sway * 0.5, y0 - 8, 3.8, 2.3, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(8.5 + sway * 0.5, y0 - 8, 3.8, 2.3, 0, 0, Math.PI * 2); ctx.fill();
 
   ctx.restore();
 }
@@ -1635,16 +1781,11 @@ function drawFreedGuardians(t) {
     halo.addColorStop(0, g.color);
     halo.addColorStop(1, 'rgba(255,255,255,0)');
     ctx.fillStyle = halo;
-    ctx.beginPath();
-    ctx.arc(tx, ty, 24, 0, Math.PI * 2);
-    ctx.fill();
+    ctx.beginPath(); ctx.arc(tx, ty, 24, 0, Math.PI * 2); ctx.fill();
     ctx.restore();
     drawGuardianSprite(g.key, tx, ty, 0.4, t, { ph: i });
   });
 }
-
-// Resto del código (drawEnemy, drawCage, etc.) se mantiene igual...
-// (el resto del archivo continúa exactamente igual que antes)
 
 // ---------- CRIATURAS ----------
 function drawEnemy(e, t) {
@@ -1653,7 +1794,7 @@ function drawEnemy(e, t) {
   ctx.save();
   ctx.translate(sx, e.y + Math.sin(t / 300 + e.ph) * 4);
 
-  const zoneColor = ['#6fb3ff', '#ffb66e', '#ff8ccb', '#c9a0ff'][e.zone];
+  const zoneColorE = ['#6fb3ff', '#ffb66e', '#ff8ccb', '#c9a0ff'][e.zone];
 
   if (e.hitFlash > 0) ctx.filter = 'brightness(2)';
 
@@ -1682,7 +1823,7 @@ function drawEnemy(e, t) {
   ctx.closePath();
   ctx.fill();
 
-  ctx.strokeStyle = zoneColor;
+  ctx.strokeStyle = zoneColorE;
   ctx.globalAlpha = 0.5 + 0.3 * Math.sin(t / 300 + e.ph);
   ctx.lineWidth = 1.6;
   ctx.beginPath();
@@ -1691,7 +1832,7 @@ function drawEnemy(e, t) {
   ctx.globalAlpha = 1;
 
   const look = Math.sign(player.x - e.x) * 1.6;
-  ctx.fillStyle = zoneColor;
+  ctx.fillStyle = zoneColorE;
   ctx.beginPath(); ctx.ellipse(-4 + look, -3, 2.6, 3.6, 0, 0, Math.PI * 2); ctx.fill();
   ctx.beginPath(); ctx.ellipse(4 + look, -3, 2.6, 3.6, 0, 0, Math.PI * 2); ctx.fill();
   ctx.fillStyle = '#ffffff';
@@ -1702,12 +1843,790 @@ function drawEnemy(e, t) {
   if (e.hitFlash > 0) e.hitFlash--;
 }
 
-// (El resto del código del juego permanece exactamente igual)
-// ... todo lo demás del script se mantiene sin cambios ...
+// ---------- JAULAS DE CRISTAL ----------
+function drawCage(b, cage, t) {
+  const sx = cage.x - camX;
+  if (sx < -110 || sx > W + 110) return;
+  const g = cage.g;
+  ctx.save();
+  ctx.translate(sx, cage.y);
+
+  ctx.fillStyle = 'rgba(8,4,18,0.4)';
+  ctx.beginPath(); ctx.ellipse(0, 52, 36, 9, 0, 0, Math.PI * 2); ctx.fill();
+
+  if (!b.dead) {
+    const shimmer = 0.5 + 0.3 * Math.sin(t / 500 + cage.ph);
+    ctx.globalAlpha = 0.22;
+    const halo = ctx.createRadialGradient(0, 0, 8, 0, 0, 72);
+    halo.addColorStop(0, g.color);
+    halo.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = halo;
+    ctx.beginPath(); ctx.arc(0, 0, 72, 0, Math.PI * 2); ctx.fill();
+    ctx.globalAlpha = 1;
+
+    drawGuardianSprite(g.key, 0, Math.sin(t / 600 + cage.ph) * 4, 0.62, t, { ph: cage.ph });
+
+    ctx.fillStyle = 'rgba(140, 110, 200, 0.24)';
+    ctx.strokeStyle = 'rgba(220, 200, 255, ' + (0.5 + shimmer * 0.4) + ')';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(0, -58);
+    ctx.lineTo(28, -30); ctx.lineTo(32, 26); ctx.lineTo(0, 52);
+    ctx.lineTo(-32, 26); ctx.lineTo(-28, -30);
+    ctx.closePath();
+    ctx.fill(); ctx.stroke();
+    ctx.globalAlpha = 0.35;
+    ctx.beginPath(); ctx.moveTo(0, -58); ctx.lineTo(0, 52); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(-28, -30); ctx.lineTo(32, 26); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(28, -30); ctx.lineTo(-32, 26); ctx.stroke();
+    ctx.globalAlpha = 1;
+
+    ctx.strokeStyle = 'rgba(30, 16, 50, 0.9)';
+    ctx.lineWidth = 3.4;
+    ctx.beginPath(); ctx.moveTo(-32, -12); ctx.quadraticCurveTo(0, 4 + Math.sin(t / 700) * 3, 32, -8); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(-30, 16); ctx.quadraticCurveTo(0, 28 + Math.sin(t / 800) * 3, 32, 14); ctx.stroke();
+
+    ctx.font = '600 11px Georgia, serif';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba(240, 232, 255, 0.75)';
+    ctx.fillText(g.nombre, 0, -68);
+  }
+  ctx.restore();
+}
+
+function drawBoss(b, t) {
+  if (b.dead) return;
+  const sx = b.x - camX;
+  if (sx < -140 || sx > W + 140) return;
+
+  const scale = 1 + b.idx * 0.15;
+  ctx.save();
+  ctx.translate(sx, b.y + Math.sin(t / 400 + b.ph) * 6);
+  ctx.scale(scale * (player.x < b.x ? 1 : -1), scale);
+  if (b.hitFlash > 0) { ctx.filter = 'brightness(2.2)'; b.hitFlash--; }
+
+  ctx.save();
+  ctx.scale(player.x < b.x ? 1 : -1, 1);
+  ctx.fillStyle = 'rgba(8,4,18,0.45)';
+  ctx.beginPath(); ctx.ellipse(0, 52, 40, 10, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
+
+  ctx.globalAlpha = 0.16 + 0.06 * Math.sin(t / 350);
+  const aura = ctx.createRadialGradient(0, 0, 8, 0, 0, 66);
+  aura.addColorStop(0, '#ff4f8b');
+  aura.addColorStop(1, 'rgba(255, 79, 139, 0)');
+  ctx.fillStyle = aura;
+  ctx.beginPath(); ctx.arc(0, 0, 66, 0, Math.PI * 2); ctx.fill();
+  ctx.globalAlpha = 1;
+
+  const g = ctx.createRadialGradient(0, -6, 6, 0, 0, 42);
+  g.addColorStop(0, '#4a2050');
+  g.addColorStop(1, '#150a26');
+  ctx.fillStyle = g;
+  ctx.beginPath();
+  ctx.moveTo(-30, 30);
+  ctx.quadraticCurveTo(-42, -8, -20, -26);
+  ctx.quadraticCurveTo(0, -40, 20, -26);
+  ctx.quadraticCurveTo(42, -8, 30, 30);
+  ctx.quadraticCurveTo(0, 44, -30, 30);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.fillStyle = '#2a1440';
+  ctx.beginPath();
+  ctx.moveTo(-16, -26);
+  ctx.quadraticCurveTo(-34, -40, -28, -58 - Math.sin(t / 500) * 3);
+  ctx.quadraticCurveTo(-20, -44, -8, -32);
+  ctx.closePath(); ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(16, -26);
+  ctx.quadraticCurveTo(34, -40, 28, -58 + Math.sin(t / 470) * 3);
+  ctx.quadraticCurveTo(20, -44, 8, -32);
+  ctx.closePath(); ctx.fill();
+
+  ctx.strokeStyle = '#ff4f8b';
+  ctx.globalAlpha = 0.55 + 0.35 * Math.sin(t / 260 + b.ph);
+  ctx.lineWidth = 1.8;
+  ctx.beginPath(); ctx.moveTo(-14, 4); ctx.lineTo(-8, 12); ctx.lineTo(-13, 20); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(14, 0); ctx.lineTo(9, 10); ctx.lineTo(15, 18); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(0, -30); ctx.lineTo(3, -20); ctx.lineTo(-2, -12); ctx.stroke();
+  ctx.globalAlpha = 1;
+
+  const rage = b.aggro ? 1.3 : 1;
+  ctx.fillStyle = '#ff4f8b';
+  ctx.beginPath(); ctx.ellipse(-11, -10, 4.5 * rage, 6 * rage, -0.2, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(11, -10, 4.5 * rage, 6 * rage, 0.2, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#ffe0ec';
+  ctx.beginPath(); ctx.arc(-11, -12, 1.6, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(11, -12, 1.6, 0, Math.PI * 2); ctx.fill();
+
+  ctx.fillStyle = '#0d0618';
+  ctx.beginPath();
+  ctx.moveTo(-14, 10);
+  ctx.quadraticCurveTo(0, 20 + (b.aggro ? Math.sin(t / 150) * 3 : 0), 14, 10);
+  ctx.quadraticCurveTo(0, 26, -14, 10);
+  ctx.fill();
+  ctx.fillStyle = '#ffd9e6';
+  for (let k = -2; k <= 2; k++) {
+    ctx.beginPath();
+    ctx.moveTo(k * 5 - 2, 11 + Math.abs(k));
+    ctx.lineTo(k * 5, 16 + Math.abs(k));
+    ctx.lineTo(k * 5 + 2, 11 + Math.abs(k));
+    ctx.closePath(); ctx.fill();
+  }
+
+  const claw = Math.sin(t / 300 + b.ph) * 4;
+  ctx.fillStyle = '#2a1440';
+  ctx.beginPath(); ctx.ellipse(-44, 6 + claw, 8, 12, -0.4, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(44, 6 - claw, 8, 12, 0.4, 0, Math.PI * 2); ctx.fill();
+
+  ctx.restore();
+}
+
+// ---------- PROYECTILES ----------
+function drawShots(t) {
+  for (const s of shots) {
+    const sx = s.x - camX;
+    ctx.save();
+    ctx.translate(sx, s.y);
+    ctx.globalAlpha = 0.3;
+    const g = ctx.createRadialGradient(0, 0, 1, 0, 0, 14);
+    g.addColorStop(0, '#ffe9a8');
+    g.addColorStop(1, 'rgba(255, 233, 168, 0)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(0, 0, 14, 0, Math.PI * 2); ctx.fill();
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = '#ffd76e';
+    pathStar(ctx, 0, 0, 6, t / 120 + s.spin);
+    ctx.fill();
+    ctx.fillStyle = '#fffbeb';
+    ctx.beginPath(); ctx.arc(-1, -1, 1.8, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
+  for (const o of orbs) {
+    const sx = o.x - camX;
+    ctx.save();
+    ctx.translate(sx, o.y);
+    ctx.globalAlpha = 0.35;
+    const g = ctx.createRadialGradient(0, 0, 1, 0, 0, 13);
+    g.addColorStop(0, '#ff4f8b');
+    g.addColorStop(1, 'rgba(255, 79, 139, 0)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(0, 0, 13, 0, Math.PI * 2); ctx.fill();
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = '#a32cc4';
+    ctx.beginPath(); ctx.arc(0, 0, 5.5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#ff8fb8';
+    ctx.beginPath(); ctx.arc(-1.4, -1.4, 1.6, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
+}
+
+function drawFireflies(t) {
+  for (const f of fireflies) {
+    f.a += (Math.random() - 0.5) * 0.15;
+    f.x += Math.cos(f.a) * f.spd;
+    f.y += Math.sin(f.a) * f.spd * 0.6 + Math.sin(t / 900 + f.ph) * 0.15;
+    if (f.x < 0) f.x = WORLD_W; if (f.x > WORLD_W) f.x = 0;
+    if (f.y < GROUND_TOP - 40) f.y = GROUND_BOTTOM; if (f.y > GROUND_BOTTOM + 10) f.y = GROUND_TOP;
+    const sx = f.x - camX;
+    if (sx < -20 || sx > W + 20) continue;
+    const p = 0.3 + 0.7 * Math.abs(Math.sin(t / 500 + f.ph));
+    ctx.globalAlpha = p * 0.25;
+    ctx.fillStyle = f.hue;
+    ctx.beginPath(); ctx.arc(sx, f.y, f.r * 4, 0, Math.PI * 2); ctx.fill();
+    ctx.globalAlpha = p;
+    ctx.beginPath(); ctx.arc(sx, f.y, f.r, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+}
+
+function drawMist(t) {
+  for (const m of mistBands) {
+    m.x += m.spd;
+    if (m.x > WORLD_W + 300) m.x = -300;
+    const sx = m.x - camX * 0.85;
+    if (sx < -m.w || sx > W + m.w) continue;
+    ctx.save();
+    ctx.globalAlpha = m.op;
+    const g = ctx.createLinearGradient(0, m.y - m.h / 2, 0, m.y + m.h / 2);
+    g.addColorStop(0, 'rgba(210, 195, 245, 0)');
+    g.addColorStop(0.5, '#d2c3f5');
+    g.addColorStop(1, 'rgba(210, 195, 245, 0)');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.ellipse(sx, m.y + Math.sin(t / 2000 + m.y) * 8, m.w / 2, m.h / 2, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+function drawParticlesAll() {
+  ctx.save();
+  for (const r of ripples) {
+    ctx.globalAlpha = Math.max(0, r.life) * 0.5;
+    ctx.strokeStyle = r.color;
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(r.x - camX, r.y, r.r, 0, Math.PI * 2); ctx.stroke();
+  }
+  for (const s of sparkleTrail) {
+    ctx.globalAlpha = Math.max(0, s.life) * 0.7;
+    ctx.fillStyle = s.color;
+    pathStar(ctx, s.x - camX, s.y, s.size, s.life * 3);
+    ctx.fill();
+  }
+  for (const p of particles) {
+    ctx.globalAlpha = Math.max(0, p.life / p.maxLife);
+    ctx.fillStyle = p.color;
+    if (p.star) { pathStar(ctx, p.x - camX, p.y, p.size, p.spin); ctx.fill(); }
+    else { ctx.beginPath(); ctx.arc(p.x - camX, p.y, p.size, 0, Math.PI * 2); ctx.fill(); }
+  }
+  ctx.restore();
+}
+
+function drawVignette() {
+  const v = ctx.createRadialGradient(W / 2, H / 2, H * 0.35, W / 2, H / 2, H * 0.8);
+  v.addColorStop(0, 'rgba(0,0,0,0)');
+  v.addColorStop(1, 'rgba(6, 3, 16, 0.55)');
+  ctx.fillStyle = v;
+  ctx.fillRect(0, 0, W, H);
+}
+
+function drawGuideArrow(t) {
+  const next = bosses.find(b => !b.dead);
+  if (!next) return;
+  if (next.x - player.x < W * 0.4) return;
+  const a = 0.4 + 0.3 * Math.sin(t / 400);
+  ctx.save();
+  ctx.globalAlpha = a;
+  ctx.fillStyle = '#f5d97e';
+  const ax = W - 46, ay = H / 2 + Math.sin(t / 500) * 6;
+  ctx.beginPath();
+  ctx.moveTo(ax, ay - 12);
+  ctx.lineTo(ax + 18, ay);
+  ctx.lineTo(ax, ay + 12);
+  ctx.lineTo(ax + 5, ay);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+// ============================================================
+//  LÓGICA
+// ============================================================
+
+function collideTrees(nx, ny) {
+  for (const tr of TREES) {
+    const dx = nx - tr.x;
+    const dy = ny - (tr.y + 15);
+    const r = 26 * tr.s;
+    if (dx * dx + dy * dy < r * r) {
+      const d = Math.sqrt(dx * dx + dy * dy) || 0.001;
+      return { x: tr.x + (dx / d) * r, y: tr.y + 15 + (dy / d) * r };
+    }
+  }
+  return null;
+}
+
+function nearestTarget() {
+  let best = null, bestD = 430 * 430;
+  for (const e of enemies) {
+    if (e.dead) continue;
+    const dx = e.x - player.x, dy = e.y - player.y;
+    const d = dx * dx + dy * dy;
+    if (d < bestD) { bestD = d; best = e; }
+  }
+  for (const b of bosses) {
+    if (b.dead) continue;
+    const dx = b.x - player.x, dy = b.y - player.y;
+    const d = dx * dx + dy * dy;
+    if (d < bestD) { bestD = d; best = b; }
+  }
+  return best;
+}
+
+function tryShoot(t) {
+  if (t - player.lastShot < player.shootCd) return;
+  player.lastShot = t;
+  // La magia nace en la punta de la varita ✨
+  const wandX = player.x + player.facing * 26;
+  const wandY = player.y - 12;
+  const tgt = nearestTarget();
+  let vx, vy;
+  if (tgt) {
+    const dx = tgt.x - wandX, dy = (tgt.y - 10) - wandY;
+    const d = Math.sqrt(dx * dx + dy * dy) || 1;
+    vx = (dx / d) * 7.5; vy = (dy / d) * 7.5;
+    player.facing = (tgt.x - player.x) >= 0 ? 1 : -1;
+  } else {
+    vx = player.facing * 7.5; vy = 0;
+  }
+  shots.push({ x: wandX, y: wandY, vx, vy, life: 90, spin: Math.random() * 6 });
+  burst(wandX, wandY, '#ffe9a8', 5, 1.8);
+}
+
+function hurtPlayer(dmg, srcX) {
+  if (player.iframes > 0 || player.dead) return;
+  const real = Math.max(1, Math.round(dmg * player.shield));
+  player.hp -= real;
+  player.iframes = 900;
+  shakeT = 260;
+  burst(player.x, player.y - 8, '#ff9ad5', 12, 3);
+  const dir = Math.sign(player.x - srcX) || 1;
+  player.x += dir * 18;
+  updateHP();
+  if (player.hp <= 0) {
+    player.dead = true;
+    paused = true;
+    setTimeout(() => document.getElementById('defeat-overlay').classList.add('show'), 500);
+  }
+}
+
+function updateEnemies(dt, t) {
+  for (const e of enemies) {
+    if (e.dead) continue;
+    const dx = player.x - e.x, dy = player.y - e.y;
+    const d = Math.sqrt(dx * dx + dy * dy);
+    e.chasing = d < 300;
+    if (e.chasing) {
+      e.x += (dx / d) * e.spd;
+      e.y += (dy / d) * e.spd * 0.8;
+    } else {
+      e.wanderA += (Math.random() - 0.5) * 0.1;
+      e.x += Math.cos(e.wanderA) * 0.4;
+      e.y += Math.sin(e.wanderA) * 0.3;
+    }
+    e.y = Math.max(GROUND_TOP + 20, Math.min(GROUND_BOTTOM - 10, e.y));
+    e.x = Math.max(e.zone * SEG_W + 30, Math.min((e.zone + 1) * SEG_W + 120, e.x));
+
+    if (d < 30) hurtPlayer(8, e.x);
+  }
+}
+
+function updateBosses(dt, t) {
+  for (const b of bosses) {
+    if (b.dead) continue;
+    const dx = player.x - b.x, dy = player.y - b.y;
+    const d = Math.sqrt(dx * dx + dy * dy);
+    const wasAggro = b.aggro;
+    b.aggro = d < 460 && Math.abs(player.x - b.homeX) < SEG_W * 0.5;
+
+    if (b.aggro && !wasAggro) {
+      document.getElementById('boss-name').textContent =
+        b.name + ' — retiene a ' + b.cages[0].g.nombre + ' y ' + b.cages[1].g.nombre;
+      document.getElementById('boss-bar').classList.add('show');
+    }
+
+    if (b.aggro) {
+      b.x += Math.sin(t / 600 + b.ph) * 0.6 + (dx / (d || 1)) * b.speed * 0.4;
+      b.y += Math.cos(t / 500 + b.ph) * 0.5;
+      b.x = Math.max(b.homeX - 190, Math.min(b.homeX + 55, b.x));
+      b.y = Math.max(GROUND_TOP + 60, Math.min(GROUND_BOTTOM - 60, b.y));
+
+      if (t - b.lastFire > b.fireRate) {
+        b.lastFire = t;
+        const dd = d || 1;
+        const spd = 3 + b.idx * 0.4;
+        orbs.push({ x: b.x, y: b.y, vx: (dx / dd) * spd, vy: (dy / dd) * spd, dmg: b.orbDmg, life: 220 });
+        if (b.idx === 3) {
+          for (const off of [-0.35, 0.35]) {
+            const a = Math.atan2(dy, dx) + off;
+            orbs.push({ x: b.x, y: b.y, vx: Math.cos(a) * spd, vy: Math.sin(a) * spd, dmg: b.orbDmg, life: 220 });
+          }
+        }
+      }
+
+      if (b.lunge) {
+        b.lungeT += dt;
+        if (b.lungeT > 3600) {
+          b.lungeT = 0;
+          b.vx = (dx / (d || 1)) * 6;
+          b.vy = (dy / (d || 1)) * 5;
+        }
+      }
+      b.x += b.vx; b.y += b.vy;
+      b.vx *= 0.92; b.vy *= 0.92;
+
+      if (d < 52 * (1 + b.idx * 0.15)) hurtPlayer(b.orbDmg, b.x);
+
+      document.getElementById('boss-fill').style.width = Math.max(0, (b.hp / b.maxHp) * 100) + '%';
+    } else if (wasAggro) {
+      document.getElementById('boss-bar').classList.remove('show');
+    }
+  }
+}
+
+function updateShots(dt) {
+  for (let i = shots.length - 1; i >= 0; i--) {
+    const s = shots[i];
+    s.x += s.vx; s.y += s.vy; s.life--;
+    let hit = false;
+
+    for (const e of enemies) {
+      if (e.dead) continue;
+      const dx = s.x - e.x, dy = s.y - e.y;
+      if (dx * dx + dy * dy < 24 * 24) {
+        e.hp -= player.dmg;
+        e.hitFlash = 5;
+        burst(s.x, s.y, '#ffd76e', 7, 2.5);
+        hit = true;
+        if (e.hp <= 0) {
+          e.dead = true;
+          burst(e.x, e.y, '#c9a0ff', 22, 4);
+          burst(e.x, e.y, '#ffe9a8', 8, 2.5);
+        }
+        break;
+      }
+    }
+    if (!hit) {
+      for (const b of bosses) {
+        if (b.dead) continue;
+        const dx = s.x - b.x, dy = s.y - b.y;
+        const r = 46 * (1 + b.idx * 0.15);
+        if (dx * dx + dy * dy < r * r) {
+          b.hp -= player.dmg;
+          b.hitFlash = 5;
+          burst(s.x, s.y, '#ff8fb8', 8, 2.5);
+          hit = true;
+          if (b.hp <= 0) defeatBoss(b);
+          break;
+        }
+      }
+    }
+    if (hit || s.life <= 0 || s.x < 0 || s.x > WORLD_W) shots.splice(i, 1);
+  }
+
+  for (let i = orbs.length - 1; i >= 0; i--) {
+    const o = orbs[i];
+    o.x += o.vx; o.y += o.vy; o.life--;
+    const dx = o.x - player.x, dy = o.y - (player.y - 8);
+    if (dx * dx + dy * dy < 22 * 22) {
+      hurtPlayer(o.dmg, o.x);
+      burst(o.x, o.y, '#ff4f8b', 10, 3);
+      orbs.splice(i, 1);
+      continue;
+    }
+    if (o.life <= 0) orbs.splice(i, 1);
+  }
+}
+
+function defeatBoss(b) {
+  b.dead = true;
+  document.getElementById('boss-bar').classList.remove('show');
+  shakeT = 500;
+  burst(b.x, b.y, '#ff4f8b', 36, 6);
+  burst(b.x, b.y, '#a32cc4', 20, 4);
+  for (const cage of b.cages) {
+    burst(cage.x, cage.y, cage.g.color, 36, 5.5);
+    burst(cage.x, cage.y, '#ffffff', 14, 3);
+  }
+  checkpointX = b.cages[1].x;
+
+  // 🌈 ¡La zona recupera sus colores hermosos!
+  zoneTarget[b.idx] = 1;
+  colorWave(b.x, b.y);
+
+  revealQueue.push({ kind: 'guardian', data: b.cages[0].g });
+  revealQueue.push({ kind: 'guardian', data: b.cages[1].g });
+  setTimeout(showNextReveal, 700);
+}
+
+// ---------- CARTAS ----------
+function updateCards(t) {
+  for (const c of cards) {
+    if (c.collected) continue;
+    const dx = player.x - c.x, dy = player.y - c.y;
+    const d2 = dx * dx + dy * dy;
+    if (c.hidden && d2 < 85 * 85) {
+      c.hidden = false;
+      burst(c.x, c.y, c.color, 18, 3.5);
+    }
+    if (!c.hidden) {
+      c.revealT = Math.min(1, c.revealT + 0.04);
+      if (c.revealT >= 0.6 && d2 < 42 * 42) {
+        c.collected = true;
+        burst(c.x, c.y, c.color, 26, 4.5);
+        burst(c.x, c.y, '#fffbe8', 10, 2.5);
+        // Cada carta devuelve un poco de color a su zona 🌸
+        const cz = Math.min(ZONES.length - 1, Math.floor(c.x / SEG_W));
+        zoneTarget[cz] = Math.min(1, zoneTarget[cz] + 0.35);
+        buildHUD();
+        revealQueue.push({ kind: 'card', data: c });
+        showNextReveal();
+      }
+    }
+  }
+}
+
+// ---------- OVERLAYS Y REVELACIONES ----------
+let revealQueue = [];
+let revealShowing = false;
+let revealQueueVictory = false;
+
+function showNextReveal() {
+  if (revealShowing || revealQueue.length === 0) return;
+  const item = revealQueue.shift();
+  revealShowing = true;
+  paused = true;
+
+  const el = document.getElementById('reveal-card');
+  const artDiv = document.getElementById('reveal-art');
+
+  if (item.kind === 'card') {
+    const c = item.data;
+    el.style.setProperty('--card-color', c.color);
+    el.style.setProperty('--card-glow', c.glow);
+    document.getElementById('reveal-eyebrow').textContent = '✦ Carta del Oráculo ✦';
+    document.getElementById('reveal-name').textContent = c.name;
+    document.getElementById('reveal-type').textContent = c.type;
+    document.getElementById('reveal-effect').textContent = c.effect;
+    document.getElementById('reveal-buff').textContent = '✦ La zona recupera parte de su color';
+    artDiv.innerHTML = '<canvas id="reveal-art-canvas" width="232" height="232"></canvas>';
+    const ac = document.getElementById('reveal-art-canvas');
+    const a = ac.getContext('2d');
+    const cx = 116, cy = 116;
+    const hg = a.createRadialGradient(cx, cy, 10, cx, cy, 108);
+    hg.addColorStop(0, c.glow);
+    hg.addColorStop(1, 'rgba(0,0,0,0)');
+    a.fillStyle = hg;
+    a.fillRect(0, 0, 232, 232);
+    a.save();
+    a.fillStyle = c.color; a.strokeStyle = c.color;
+    const r = 44;
+    switch (c.symbol) {
+      case 'moon':
+        a.beginPath(); a.arc(cx, cy, r, 0, Math.PI * 2); a.fill();
+        a.fillStyle = '#1e1440';
+        a.beginPath(); a.arc(cx + r * 0.45, cy - r * 0.28, r * 0.85, 0, Math.PI * 2); a.fill();
+        break;
+      case 'sun':
+        a.beginPath(); a.arc(cx, cy, r * 0.6, 0, Math.PI * 2); a.fill();
+        a.lineWidth = 5;
+        for (let k = 0; k < 10; k++) {
+          const an = (k / 10) * Math.PI * 2;
+          a.beginPath();
+          a.moveTo(cx + Math.cos(an) * r * 0.8, cy + Math.sin(an) * r * 0.8);
+          a.lineTo(cx + Math.cos(an) * r * 1.15, cy + Math.sin(an) * r * 1.15);
+          a.stroke();
+        }
+        break;
+      case 'echo':
+        a.lineWidth = 6;
+        for (let k = 1; k <= 3; k++) {
+          a.globalAlpha = 1.2 - k * 0.3;
+          a.beginPath(); a.arc(cx, cy, r * 0.35 * k, -Math.PI * 0.7, Math.PI * 0.7); a.stroke();
+        }
+        a.globalAlpha = 1;
+        break;
+      case 'wind':
+        a.lineWidth = 6;
+        for (let k = 0; k < 3; k++) {
+          a.beginPath();
+          a.moveTo(cx - r, cy - r * 0.5 + k * r * 0.5);
+          a.quadraticCurveTo(cx, cy - r * 0.95 + k * r * 0.5, cx + r, cy - r * 0.4 + k * r * 0.5);
+          a.stroke();
+        }
+        break;
+      case 'star': {
+        a.beginPath();
+        for (let i = 0; i < 5; i++) {
+          const a1 = (i * 2 * Math.PI) / 5 - Math.PI / 2;
+          const a2 = a1 + Math.PI / 5;
+          a.lineTo(cx + Math.cos(a1) * r, cy + Math.sin(a1) * r);
+          a.lineTo(cx + Math.cos(a2) * r * 0.45, cy + Math.sin(a2) * r * 0.45);
+        }
+        a.closePath(); a.fill();
+        break;
+      }
+    }
+    a.restore();
+  } else {
+    const g = item.data;
+    el.style.setProperty('--card-color', g.color);
+    el.style.setProperty('--card-glow', g.color + 'aa');
+    document.getElementById('reveal-eyebrow').textContent = '✦ Guardián Liberado ✦';
+    document.getElementById('reveal-name').textContent = g.nombre;
+    document.getElementById('reveal-type').textContent = g.energia;
+    document.getElementById('reveal-effect').textContent =
+      g.key === 'nabi' ? '"Sabía que vendrías. Siempre lo supe." 🦋'
+      : g.key === 'nazari' ? '"Escuchaste mi llamado… Gracias, Bruxa."'
+      : '"Gracias, Bruxa. Caminaré contigo hasta el final."';
+    document.getElementById('reveal-buff').textContent = g.buffText;
+    artDiv.innerHTML = petMarkup(g.key);
+
+    guardiansFreed.push(g);
+    g.apply();
+    buildHUD();
+
+    if (g.key === 'nabi') revealQueueVictory = true;
+  }
+
+  document.getElementById('reveal-overlay').classList.add('show');
+}
+
+function closeReveal() {
+  document.getElementById('reveal-overlay').classList.remove('show');
+  revealShowing = false;
+  touchTarget = null;
+
+  if (revealQueue.length > 0) {
+    setTimeout(showNextReveal, 320);
+    return;
+  }
+
+  paused = false;
+  if (revealQueueVictory) {
+    revealQueueVictory = false;
+    setTimeout(() => {
+      paused = true;
+      document.getElementById('victory-overlay').classList.add('show');
+    }, 600);
+  }
+}
+
+function respawn() {
+  document.getElementById('defeat-overlay').classList.remove('show');
+  player.hp = player.maxHp;
+  player.dead = false;
+  player.iframes = 1500;
+  player.x = checkpointX;
+  player.y = 440;
+  orbs = [];
+  updateHP();
+  paused = false;
+}
+
+function restartGame() {
+  document.getElementById('victory-overlay').classList.remove('show');
+  player.x = 180; player.y = 440;
+  player.hp = 100; player.maxHp = 100;
+  player.dmg = 2; player.shootCd = 380; player.shield = 1; player.regen = false;
+  player.dead = false; player.iframes = 0;
+  checkpointX = 180;
+  camX = 0;
+  revealQueue = []; revealShowing = false; revealQueueVictory = false;
+  buildWorld();
+  buildHUD();
+  paused = false;
+}
+
+// ============================================================
+//  LOOP PRINCIPAL
+// ============================================================
+let lastT = 0, lastTrail = 0;
+
+function loop(t) {
+  const dt = Math.min(50, t - lastT);
+  lastT = t;
+
+  // El color florece hacia su objetivo 🌈
+  for (let i = 0; i < ZONES.length; i++) {
+    zoneColor[i] += (zoneTarget[i] - zoneColor[i]) * 0.012;
+  }
+
+  if (!paused) {
+    let mx = 0, my = 0;
+    if (keys['arrowup'] || keys['w']) my -= 1;
+    if (keys['arrowdown'] || keys['s']) my += 1;
+    if (keys['arrowleft'] || keys['a']) mx -= 1;
+    if (keys['arrowright'] || keys['d']) mx += 1;
+
+    if (touchTarget) {
+      const wx = touchTarget.x + camX;
+      const dx = wx - player.x;
+      const dy = touchTarget.y - player.y;
+      const d = Math.sqrt(dx * dx + dy * dy);
+      if (d > 14) { mx = dx / d; my = dy / d; }
+    }
+
+    player.moving = (mx !== 0 || my !== 0);
+    if (player.moving) {
+      const len = Math.sqrt(mx * mx + my * my);
+      let nx = player.x + (mx / len) * player.speed;
+      let ny = player.y + (my / len) * player.speed;
+      const col = collideTrees(nx, ny);
+      if (col) { nx = col.x; ny = col.y; }
+      player.x = Math.max(30, Math.min(WORLD_W - 30, nx));
+      player.y = Math.max(GROUND_TOP + 14, Math.min(GROUND_BOTTOM, ny));
+      if (mx !== 0) player.facing = mx > 0 ? 1 : -1;
+
+      if (t - lastTrail > 90) {
+        lastTrail = t;
+        sparkleTrail.push({
+          x: player.x + (Math.random() - 0.5) * 16,
+          y: player.y + 26 + Math.random() * 6,
+          size: 2 + Math.random() * 2, life: 1,
+          color: Math.random() < 0.6 ? '#c9a0ff' : '#ffe9a8'
+        });
+      }
+    }
+
+    if (shootHeld) tryShoot(t);
+    if (player.iframes > 0) player.iframes -= dt;
+
+    if (player.regen && t - lastRegen > 2000 && player.hp < player.maxHp) {
+      lastRegen = t;
+      player.hp = Math.min(player.maxHp, player.hp + 1);
+      updateHP();
+    }
+
+    updateEnemies(dt, t);
+    updateBosses(dt, t);
+    updateShots(dt);
+    updateCards(t);
+    updateParticles();
+
+    const targetCam = Math.max(0, Math.min(WORLD_W - W, player.x - W * 0.42));
+    camX += (targetCam - camX) * 0.08;
+  }
+
+  let ox = 0, oy = 0;
+  if (shakeT > 0) {
+    shakeT -= dt;
+    ox = (Math.random() - 0.5) * 8 * (shakeT / 300);
+    oy = (Math.random() - 0.5) * 8 * (shakeT / 300);
+  }
+
+  ctx.save();
+  ctx.translate(ox, oy);
+
+  // ===== MUNDO (lo que puede estar gris) =====
+  drawBackground(t);
+  drawGroundDecor(t);
+
+  const drawables = [];
+  for (const tr of TREES) drawables.push({ y: tr.y + 34 * tr.s, fn: () => drawTree(tr, t) });
+  for (const e of enemies) if (!e.dead) drawables.push({ y: e.y + 15, fn: () => drawEnemy(e, t) });
+  for (const b of bosses) {
+    for (const cage of b.cages) drawables.push({ y: cage.y + 52, fn: () => drawCage(b, cage, t) });
+    if (!b.dead) drawables.push({ y: b.y + 52, fn: () => drawBoss(b, t) });
+  }
+  drawables.sort((a, b) => a.y - b.y);
+  for (const d of drawables) d.fn();
+
+  // ===== EL VELO GRIS 🌫️ =====
+  drawGrayVeil();
+
+  // ===== LA MAGIA (siempre a color: Bruxa, cartas, guardianes libres) =====
+  for (const c of cards) drawCard(c, t);
+  drawBruxa(t);
+  drawFreedGuardians(t);
+  drawShots(t);
+  drawParticlesAll();
+  drawFireflies(t);
+  drawMist(t);
+  drawVignette();
+  drawGuideArrow(t);
+
+  ctx.restore();
+
+  requestAnimationFrame(loop);
+}
 
 // ---------------- INICIO ----------------
 buildWorld();
 buildHUD();
+playIntro();
 requestAnimationFrame(loop);
 </script>
 </body>
